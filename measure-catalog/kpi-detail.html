@@ -15,9 +15,192 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <!-- استایل‌های سفارشی -->
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        .card-shadow {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .form-section {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #334155;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.625rem 0.875rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            background-color: white;
+            font-family: inherit;
+            font-size: 0.875rem;
+            color: #334155;
+            transition: border-color 0.2s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .required-star {
+            color: #ef4444;
+        }
+        
+        .helper-text {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
+        
+        .tab-btn {
+            padding: 0.875rem 1.5rem;
+            border: none;
+            background: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #64748b;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        
+        .tab-btn:hover {
+            color: #3b82f6;
+        }
+        
+        .tab-btn.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+        
+        .option-card {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 1;
+        }
+        
+        .option-card:hover {
+            border-color: #cbd5e1;
+        }
+        
+        .option-card.selected {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        
+        .option-card input[type="radio"] {
+            margin: 0;
+        }
+        
+        .badge-tooltip {
+            position: relative;
+            display: inline-flex;
+            cursor: pointer;
+        }
+        
+        .badge-tooltip .tooltip {
+            visibility: hidden;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            z-index: 100;
+            min-width: 200px;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 0.75rem;
+            color: #334155;
+        }
+        
+        .badge-tooltip:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .upload-area:hover {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        
+        .option-description {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 0.5rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e2e8f0;
+            background-color: #f8fafc;
+        }
+        
+        .trend-option {
+            padding: 0.625rem 0.875rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 1;
+        }
+        
+        .trend-option:hover {
+            border-color: #cbd5e1;
+        }
+        
+        .trend-option.selected {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        
+        .version-badge {
+            padding: 0.375rem 0.75rem;
+            background-color: #dbeafe;
+            color: #1e40af;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+    </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="p-4 md:p-8 bg-slate-50">
     <!-- لینک بازگشت به لیست نسخه‌ها -->
     <div class="max-w-6xl mx-auto mb-4">
         <button onclick="window.location.href='index.html'" 
@@ -37,22 +220,37 @@
                 <div>
                     <!-- نام شاخص به جای عنوان قبلی -->
                     <h1 class="text-xl font-bold text-slate-800" id="kpi-name-display">نرخ رضایت مشتریان از خدمات پس از فروش</h1>
-                    <!-- کد شاخص و نسخه فرایند به جای توضیح قبلی -->
-                    <p class="text-sm text-slate-500 mt-1 flex items-center gap-2">
+                    <!-- فقط کد شاخص نمایش داده می‌شود -->
+                    <p class="text-sm text-slate-500 mt-1">
                         <span class="font-mono bg-slate-100 px-2 py-0.5 rounded" id="kpi-code-display">KPI-MKT-001</span>
-                        <i data-lucide="chevron-left" class="w-4 h-4 text-slate-400"></i>
-                        <span id="process-version-display">نسخه فرایند: v1.2</span>
+                        <span class="version-badge mr-2" id="kpi-version-display">نسخه ۲</span>
                     </p>
                 </div>
             </div>
-            <div class="flex flex-col items-end">
-                <div class="text-xs text-slate-400 mb-1">وضعیت این نسخه</div>
+            <div class="flex flex-col items-end gap-2">
+                <!-- دو بج جدید -->
                 <div class="flex gap-2">
-                    <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-bold flex items-center gap-1">
-                        <i data-lucide="check-circle" class="w-3 h-3"></i>
-                        فعال
-                    </span>
-                    <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold" id="kpi-version-display">نسخه v2.1</span>
+                    <div class="badge-tooltip">
+                        <span class="px-3 py-1 bg-violet-100 text-violet-700 rounded-full text-xs font-bold flex items-center gap-1">
+                            <i data-lucide="git-branch" class="w-3 h-3"></i>
+                            شاخص فرایندی
+                        </span>
+                        <div class="tooltip">
+                            <div class="font-medium mb-1">فرایند مرتبط:</div>
+                            <div>فرایند خدمات پس از فروش</div>
+                        </div>
+                    </div>
+                    
+                    <div class="badge-tooltip">
+                        <span class="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-bold flex items-center gap-1">
+                            <i data-lucide="target" class="w-3 h-3"></i>
+                            شاخص استراتژیک
+                        </span>
+                        <div class="tooltip">
+                            <div class="font-medium mb-1">هدف استراتژیک:</div>
+                            <div>افزایش رضایت مشتریان به بیش از ۹۰٪ تا پایان سال ۱۴۰۳</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -106,8 +304,117 @@
         </div>
     </div>
 
-    <!-- بارگذاری محتوای تب‌ها -->
     <script>
+        // تابع عمومی برای انتخاب گزینه
+        window.selectOption = function(element, type, value) {
+            console.log('انتخاب:', type, value);
+            
+            // حذف کلاس selected از همه گزینه‌های هم‌گروه
+            const parent = element.parentElement;
+            const groupElements = parent.querySelectorAll(`.trend-option, .option-card`);
+            
+            groupElements.forEach(el => {
+                el.classList.remove('selected');
+                const radio = el.querySelector('input[type="radio"]');
+                if (radio) radio.checked = false;
+            });
+            
+            // اضافه کردن کلاس selected به گزینه انتخاب شده
+            element.classList.add('selected');
+            const radio = element.querySelector('input[type="radio"]');
+            if (radio) radio.checked = true;
+            
+            // به‌روزرسانی توضیحات
+            updateDescription(type, value);
+        };
+
+        // تابع به‌روزرسانی توضیحات
+        function updateDescription(type, value) {
+            const descriptionElement = document.getElementById(`${type}-description`);
+            if (descriptionElement) {
+                // داده‌های توضیحات
+                const descriptions = {
+                    'trend': {
+                        'increase': '<span class="font-medium text-emerald-700">صعودی:</span> افزایش مقدار شاخص مطلوب است (مانند افزایش رضایت مشتری، رشد درآمد، بهبود کیفیت)',
+                        'decrease': '<span class="font-medium text-rose-700">نزولی:</span> کاهش مقدار شاخص مطلوب است (مانند کاهش هزینه‌ها، کاهش زمان انجام کار، کاهش شکایات)',
+                        'maintain': '<span class="font-medium text-blue-700">حفظ وضعیت موجود:</span> ثبات مقدار شاخص در محدوده مشخص مطلوب است (مانند حفظ سطح موجودی، حفظ نرخ بهره‌وری، ثبات در کیفیت)'
+                    },
+                    'kpi-type': {
+                        'performance': '<span class="font-medium text-blue-700">عملکردی:</span> شاخص‌هایی که نتایج عینی و کمی فعالیت‌ها را اندازه‌گیری می‌کنند. براساس داده‌های واقعی و قابل اندازه‌گیری محاسبه می‌شوند. مانند: تعداد محصولات تولیدی، زمان انجام فرایند، هزینه عملیاتی',
+                        'perceptual': '<span class="font-medium text-purple-700">برداشتی:</span> شاخص‌هایی که برداشت‌ها، ادراکات و نظرات ذهنی را اندازه‌گیری می‌کنند. معمولاً از طریق نظرسنجی، مصاحبه و پرسشنامه جمع‌آوری می‌شوند. مانند: رضایت مشتری، انگیزه کارکنان، تصویر برند'
+                    },
+                    'monitoring-type': {
+                        'efficiency': '<span class="font-medium text-green-700">کارایی:</span> نسبت خروجی به ورودی - اندازه‌گیری می‌کند که منابع چگونه به بهترین شکل ممکن استفاده شده‌اند. تمرکز بر فرایندها و روش‌های انجام کار',
+                        'effectiveness': '<span class="font-medium text-orange-700">اثربخشی:</span> میزان دستیابی به اهداف و نتایج مورد نظر - اندازه‌گیری می‌کند که آیا نتایج مورد انتظار حاصل شده‌اند یا خیر. تمرکز بر نتایج و خروجی‌ها'
+                    }
+                };
+                
+                if (descriptions[type] && descriptions[type][value]) {
+                    descriptionElement.innerHTML = descriptions[type][value];
+                }
+            }
+        }
+
+        // تابع برای تغییر تب‌ها
+        window.switchTab = function(tabName) {
+            // حذف کلاس active از همه تب‌ها
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // اضافه کردن کلاس active به تب انتخاب شده
+            document.getElementById(`btn-${tabName}`).classList.add('active');
+            
+            // بارگذاری محتوای تب
+            loadTabContent(tabName);
+        };
+        
+        // تابع برای بارگذاری محتوای تب
+        function loadTabContent(tabName) {
+            const container = document.getElementById('tab-container');
+            
+            // بارگذاری محتوای تب از فایل جداگانه
+            fetch(`tab-${tabName}.html`)
+                .then(response => response.text())
+                .then(html => {
+                    container.innerHTML = html;
+                    lucide.createIcons(); // آپدیت آیکون‌ها
+                    
+                    // مقداردهی اولیه انتخاب‌ها بعد از بارگذاری
+                    setTimeout(() => {
+                        initializeSelections();
+                    }, 100);
+                })
+                .catch(error => {
+                    console.error('خطا در بارگذاری تب:', error);
+                    container.innerHTML = '<div class="text-center text-slate-500 py-8">خطا در بارگذاری محتوا</div>';
+                });
+        }
+        
+        // تابع مقداردهی اولیه انتخاب‌ها
+        function initializeSelections() {
+            // مقداردهی اولیه روند مطلوب
+            const trendElement = document.querySelector('.trend-option.selected');
+            if (trendElement) {
+                const trendValue = trendElement.getAttribute('data-trend');
+                updateDescription('trend', trendValue);
+            }
+            
+            // مقداردهی اولیه نوع شاخص
+            const kpiTypeElement = document.querySelector('.option-card.selected[data-kpi-type]');
+            if (kpiTypeElement) {
+                const kpiTypeValue = kpiTypeElement.getAttribute('data-kpi-type');
+                updateDescription('kpi-type', kpiTypeValue);
+            }
+            
+            // مقداردهی اولیه نوع پایش
+            const monitoringTypeElement = document.querySelector('.option-card.selected[data-monitoring-type]');
+            if (monitoringTypeElement) {
+                const monitoringTypeValue = monitoringTypeElement.getAttribute('data-monitoring-type');
+                updateDescription('monitoring-type', monitoringTypeValue);
+            }
+        }
+        
         // بارگذاری تب اول هنگام لود صفحه
         document.addEventListener('DOMContentLoaded', function() {
             loadTabContent('basic');
@@ -118,15 +425,20 @@
             
             if (version) {
                 // بروزرسانی نمایش نسخه
-                document.getElementById('kpi-version-display').textContent = `نسخه ${version}`;
+                const versionElement = document.getElementById('kpi-version-display');
+                if (versionElement) {
+                    versionElement.textContent = `نسخه ${version}`;
+                }
                 
-                // اینجا می‌توانید داده‌های نسخه خاص را بارگذاری کنید
                 console.log(`بارگذاری داده‌های نسخه ${version}`);
+            }
+            
+            // مقداردهی اولیه آخرین ویرایش
+            const lastEditElement = document.getElementById('last-edit-date');
+            if (lastEditElement) {
+                lastEditElement.textContent = '۱۴۰۲/۱۰/۲۴';
             }
         });
     </script>
-    
-    <!-- اسکریپت‌های مشترک -->
-    <script src="scripts.js"></script>
 </body>
 </html>
