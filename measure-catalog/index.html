@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لیست نسخه‌های شاخص - سامانه همسو</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- فونت Vazirmatn -->
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    
+    <!-- آیکون‌های Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- استایل‌های سفارشی -->
+    <style>
+        /* استایل‌های سفارشی */
+        .card-shadow {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .line-clamp-2 {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .badge-success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        
+        .badge-warning {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        .badge-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .badge-info {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .row-hover {
+            transition: background-color 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .row-hover:hover {
+            background-color: #eff6ff !important;
+        }
+        
+        /* Tooltip Styles */
+        .tooltip-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip-content {
+            visibility: hidden;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            z-index: 100;
+            min-width: 280px;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            opacity: 0;
+            transition: opacity 0.2s, visibility 0.2s;
+        }
+        
+        .tooltip-container:hover .tooltip-content {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .tooltip-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .tooltip-item:last-child {
+            border-bottom: none;
+        }
+        
+        .tooltip-role {
+            font-weight: 500;
+            color: #475569;
+        }
+        
+        .tooltip-status {
+            font-size: 0.75rem;
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+        
+        .status-approved {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-waiting {
+            background-color: #e2e8f0;
+            color: #475569;
+        }
+        
+        .tooltip-date {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 0.125rem;
+        }
+        
+        .tooltip-person {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.25rem;
+        }
+        
+        .person-avatar {
+            width: 24px;
+            height: 24px;
+            background-color: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        
+        .person-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .person-unit {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        
+        .tooltip-header {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3b82f6;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 bg-slate-50">
+    <div class="max-w-6xl mx-auto">
+        <!-- هدر -->
+        <div class="bg-white rounded-xl p-6 mb-6 card-shadow">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="bg-blue-600 p-3 rounded-lg text-white">
+                        <i data-lucide="list-checks"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-800">مدیریت نسخه‌های شاخص</h1>
+                        <p class="text-sm text-slate-500 mt-1">نمایش و مدیریت نسخه‌های مختلف شاخص‌های عملکرد</p>
+                    </div>
+                </div>
+                <button onclick="window.location.href='kpi-detail.html'" 
+                        class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-all flex items-center gap-2">
+                    <i data-lucide="plus" class="w-5 h-5"></i>
+                    ایجاد نسخه جدید
+                </button>
+            </div>
+        </div>
+
+        <!-- اطلاعات شاخص اصلی -->
+        <div class="bg-white rounded-xl p-6 mb-6 card-shadow">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="p-3 bg-emerald-100 text-emerald-700 rounded-lg">
+                    <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-slate-800">نرخ رضایت مشتریان از خدمات پس از فروش</h2>
+                    <div class="flex items-center gap-3 mt-1">
+                        <span class="text-sm font-mono bg-slate-100 px-2 py-1 rounded">KPI-MKT-001</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- جدول نسخه‌ها -->
+        <div class="bg-white rounded-xl overflow-hidden card-shadow">
+            <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center">
+                <h3 class="text-lg font-bold text-slate-800">تاریخچه نسخه‌های شاخص</h3>
+                <div class="flex gap-2">
+                    <button class="px-4 py-2 text-sm border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
+                        <i data-lucide="filter" class="w-4 h-4 inline-block ml-1"></i>
+                        فیلتر
+                    </button>
+                    <button class="px-4 py-2 text-sm border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors">
+                        <i data-lucide="download" class="w-4 h-4 inline-block ml-1"></i>
+                        خروجی
+                    </button>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-slate-50">
+                        <tr>
+                            <th class="py-3 px-4 text-right text-sm font-bold text-slate-700">شماره نسخه</th>
+                            <th class="py-3 px-4 text-right text-sm font-bold text-slate-700">اعتبار</th>
+                            <th class="py-3 px-4 text-right text-sm font-bold text-slate-700">وضعیت تاییدات</th>
+                            <th class="py-3 px-4 text-right text-sm font-bold text-slate-700">تغییرات اصلی</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <!-- نسخه ۲ (در انتظار تایید) -->
+                        <tr class="row-hover" onclick="window.location.href='kpi-detail.html?version=2'">
+                            <td class="py-4 px-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-lg font-bold text-blue-600">۲</span>
+                                </div>
+                            </td>
+                            <td class="py-4 px-4">
+                                <div class="text-sm">
+                                    <div>از: <span class="font-bold">۱۴۰۲/۰۹/۰۱</span></div>
+                                    <div>تا: <span class="font-bold">۱۴۰۳/۰۸/۳۰</span></div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-4">
+                                <div class="tooltip-container">
+                                    <span class="badge badge-warning">
+                                        در انتظار تایید
+                                    </span>
+                                    <div class="tooltip-content">
+                                        <div class="tooltip-header">وضعیت تاییدات نسخه ۲</div>
+                                        
+                                        <div class="tooltip-item">
+                                            <div>
+                                                <div class="tooltip-role">متقاضی</div>
+                                                <div class="tooltip-person">
+                                                    <div class="person-avatar">م</div>
+                                                    <div>
+                                                        <div class="person-name">مریم محمدی</div>
+                                                        <div class="person-unit">واحد بازاریابی</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <span class="tooltip-status status-approved">تایید شده</span>
+                                                <div class="tooltip-date">۱۴۰۲/۰۸/۱۵</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="tooltip-item">
+                                            <div>
+                                                <div class="tooltip-role">مسئول پاسخگویی</div>
+                                                <div class="tooltip-person">
+                                                    <div class="person-avatar">ع</div>
+                                                    <div>
+                                                        <div class="person-name">علی احمدی</div>
+                                                        <div class="person-unit">مدیریت بازاریابی</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <span class="tooltip-status status-approved">تایید شده</span>
+                                                <div class="tooltip-date">۱۴۰۲/۰۸/۱۸</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="tooltip-item">
+                                            <div>
+                                                <div class="tooltip-role">رئیس فرایندها</div>
+                                                <div class="tooltip-person">
+                                                    <div class="person-avatar">ر</div>
+                                                    <div>
+                                                        <div class="person-name">رضا کریمی</div>
+                                                        <div class="person-unit">مدیریت فرایند</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <span class="tooltip-status status-pending">در حال بررسی</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="tooltip-item">
+                                            <div>
+                                                <div class="tooltip-role">مسئول پایش</div>
+                                                <div class="tooltip-person">
+                                                    <div class="person-avatar">ف</div>
+                                                    <div>
+                                                        <div class="person-name">فاطمه نظری</div>
+                                                        <div class="person-unit">واحد پایش</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <span class="tooltip-status status-waiting">در انتظار</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-4">
+                                <p class="text-sm text-slate-600 line-clamp-2">بهبود فرمول محاسبه با اضافه شدن پارامتر زمان پاسخگویی. تغییر واحد اندازه‌گیری از امتیاز به درصد.</p>
+                            </td>
+                        </tr>
+                        
+                        <!-- نسخه ۱ (تایید شده) -->
+                        <tr class="row-hover" onclick="window.location.href='kpi-detail.html?version=1'">
+                            <td class="py-4 px-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-lg font-bold text-slate-600">۱</span>
+                                </div>
+                            </td>
+                            <td class="py-4 px-4">
+                                <div class="text-sm">
+                                    <div>از: <span class="font-bold">۱۴۰۲/۰۳/۰۱</span></div>
+                                    <div>تا: <span class="font-bold">۱۴۰۲/۰۸/۳۰</span></div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-4">
+                                <div class="tooltip-container">
+                                    <span class="badge badge-success">
+                                        تایید شده
+                                    </span>
+                                    <div class="tooltip-content">
+                                        <div class="tooltip-header">وضعیت تاییدات نسخه ۱</div>
+                                        
+                                        <div class="tooltip-item">
+                                            <div>
+                                                <div class="tooltip-role">متقاضی</div>
+                                                <div class="tooltip-person">
+                                                    <div class="person-avatar">م</div>
+                                                    <div>
+                                                        <div class="person-name">مریم محمدی</div>
+                                                        <div class="person-unit">واحد بازاریابی</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <span class="tooltip-status status-approved">تایید شده</span>
+                                                <div class="tooltip-date">۱۴۰۲/۰۲/۲۰</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="tooltip-item">
+                                            <div>
+                                                <div class="tooltip-role">مسئول پاسخگویی</div>
+                                                <div class="tooltip-person">
+                                                    <div class="person-avatar">ع</div>
+                                                    <div>
+                                                        <div class="person-name">علی احمدی</div>
+                                                        <div class="person-unit">مدیریت بازاریابی</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <span class="tooltip-status status-approved">تایید شده</span>
+                                                <div class="tooltip-date">۱۴۰۲/۰۲/۲۲</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="tooltip-item">
+                                            <div>
+                                                <div class="tooltip-role">رئیس فرایندها</div>
+                                                <div class="tooltip-person">
+                                                    <div class="person-avatar">ر</div>
+                                                    <div>
+                                                        <div class="person-name">رضا کریمی</div>
+                                                        <div class="person-unit">مدیریت فرایند</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <span class="tooltip-status status-approved">تایید شده</span>
+                                                <div class="tooltip-date">۱۴۰۲/۰۲/۲۵</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="tooltip-item">
+                                            <div>
+                                                <div class="tooltip-role">مسئول پایش</div>
+                                                <div class="tooltip-person">
+                                                    <div class="person-avatar">ف</div>
+                                                    <div>
+                                                        <div class="person-name">فاطمه نظری</div>
+                                                        <div class="person-unit">واحد پایش</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <span class="tooltip-status status-approved">تایید شده</span>
+                                                <div class="tooltip-date">۱۴۰۲/۰۲/۲۸</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-4">
+                                <p class="text-sm text-slate-600 line-clamp-2">اولین نسخه شاخص با تعریف فرمول پایه</p>
+                            </td>
+                        </tr>
+                        
+                        <!-- نسخه ۳ (بدون تاییدات) -->
+                        <tr class="row-hover" onclick="window.location.href='kpi-detail.html?version=3'">
+                            <td class="py-4 px-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-lg font-bold text-amber-600">۳</span>
+                                </div>
+                            </td>
+                            <td class="py-4 px-4">
+                                <div class="text-sm text-slate-400">
+                                    هنوز تعیین نشده
+                                </div>
+                            </td>
+                            <td class="py-4 px-4">
+                                <div class="tooltip-container">
+                                    <span class="badge badge-danger">
+                                        بدون تاییدات
+                                    </span>
+                                    <div class="tooltip-content">
+                                        <div class="tooltip-header">وضعیت تاییدات نسخه ۳</div>
+                                        
+                                        <div class="tooltip-item">
+                                            <div class="tooltip-role">متقاضی</div>
+                                            <div>
+                                                <span class="tooltip-status status-waiting">در انتظار</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="tooltip-item">
+                                            <div class="tooltip-role">مسئول پاسخگویی</div>
+                                            <div>
+                                                <span class="tooltip-status status-waiting">در انتظار</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="tooltip-item">
+                                            <div class="tooltip-role">رئیس فرایندها</div>
+                                            <div>
+                                                <span class="tooltip-status status-waiting">در انتظار</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="tooltip-item">
+                                            <div class="tooltip-role">مسئول پایش</div>
+                                            <div>
+                                                <span class="tooltip-status status-waiting">در انتظار</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mt-3 text-sm text-slate-500 text-center">
+                                            هنوز هیچ تاییدی دریافت نشده است
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 px-4">
+                                <p class="text-sm text-slate-600 line-clamp-2">اضافه شدن پارامتر کیفیت خدمات به فرمول محاسبه</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- لینک بازگشت -->
+        <div class="mt-6 text-center">
+            <button onclick="window.location.href='kpi-list.html'" class="text-blue-600 hover:text-blue-800 transition-colors flex items-center gap-2 justify-center">
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                بازگشت به لیست همه شاخص‌ها
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+        
+        // برای مدیریت پارامترهای URL
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const version = urlParams.get('version');
+            
+            if (version) {
+                console.log(`بارگذاری نسخه ${version} از شاخص`);
+                // اینجا می‌توانید داده‌های نسخه خاص را بارگذاری کنید
+            }
+        });
+        
+        // مدیریت tooltip‌ها برای تلفن همراه
+        document.querySelectorAll('.tooltip-container').forEach(container => {
+            container.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                const tooltip = this.querySelector('.tooltip-content');
+                tooltip.style.visibility = 'visible';
+                tooltip.style.opacity = '1';
+            });
+            
+            document.addEventListener('touchstart', function(e) {
+                if (!e.target.closest('.tooltip-container')) {
+                    document.querySelectorAll('.tooltip-content').forEach(tooltip => {
+                        tooltip.style.visibility = 'hidden';
+                        tooltip.style.opacity = '0';
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

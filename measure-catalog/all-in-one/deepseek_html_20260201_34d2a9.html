@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شناسنامه شاخص - سامانه همسو</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- فونت Vazirmatn -->
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    
+    <!-- آیکون‌های Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* استایل‌های مشترک پروژه شناسنامه شاخص */
+        body { 
+            font-family: 'Vazirmatn', sans-serif; 
+            background-color: #f8fafc; 
+            color: #1e293b; 
+        }
+
+        .tab-btn { 
+            padding: 16px 20px; 
+            border-bottom: 3px solid transparent; 
+            transition: all 0.3s; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            font-size: 0.95rem; 
+            cursor: pointer; 
+            color: #64748b;
+            font-weight: 500;
+            background: none;
+            border: none;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .tab-btn.active { 
+            border-bottom-color: #2563eb; 
+            color: #2563eb; 
+            background-color: #eff6ff; 
+            font-weight: 600; 
+        }
+
+        .card-shadow { 
+            box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.05), 
+                        0 2px 6px -1px rgba(0, 0, 0, 0.06); 
+        }
+
+        .threshold-slider { 
+            height: 12px; 
+            border-radius: 6px; 
+            background: linear-gradient(to left, 
+                #22c55e 0%, 
+                #22c55e 50%, 
+                #eab308 50%, 
+                #eab308 80%, 
+                #ef4444 80%, 
+                #ef4444 100%
+            ); 
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            outline: none;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+            background-color: #ffffff;
+        }
+
+        .form-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-input.readonly {
+            background-color: #f8fafc;
+            color: #64748b;
+            cursor: not-allowed;
+            border-color: #e2e8f0;
+        }
+
+        .helper-text {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 0.35rem;
+            line-height: 1.4;
+        }
+
+        .form-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .required-star {
+            color: #ef4444;
+            font-size: 1.1rem;
+            margin-right: 2px;
+        }
+
+        .radio-card {
+            padding: 12px 16px;
+            border-radius: 0.75rem;
+            border: 2px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .radio-card:hover {
+            border-color: #cbd5e1;
+        }
+
+        .radio-card.selected {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+
+        .form-section {
+            border-top: 1px solid #f1f5f9;
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .badge-success {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-warning {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-info {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .approval-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .approval-status.pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .approval-status.approved {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .person-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+
+        .person-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .person-details {
+            flex: 1;
+        }
+
+        .person-name {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .person-unit {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-6xl mx-auto">
+        <!-- هدر -->
+        <div class="bg-white rounded-t-xl p-6 border-b border-slate-200 card-shadow flex justify-between items-center mb-0">
+            <div class="flex items-center gap-4">
+                <div class="bg-blue-600 p-3 rounded-lg text-white">
+                    <i data-lucide="bar-chart-3"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-slate-800">شناسنامه جزییات شاخص (KPI Profile)</h1>
+                    <p class="text-sm text-slate-500 mt-1 flex items-center gap-2">
+                        <span class="font-mono bg-slate-100 px-2 py-0.5 rounded">مدیریت و پیکربندی استانداردهای اندازه‌گیری عملکرد</span>
+                    </p>
+                </div>
+            </div>
+            <div class="flex flex-col items-end">
+                <div class="text-xs text-slate-400 mb-1">وضعیت شاخص</div>
+                <div class="flex gap-2">
+                    <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-bold flex items-center gap-1">
+                        <i data-lucide="check-circle" class="w-3 h-3"></i>
+                        فعال / در حال پایش
+                    </span>
+                    <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">استراتژیک</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- تب‌ها -->
+        <div class="bg-white border-b border-slate-200 flex overflow-x-auto">
+            <button onclick="switchTab('basic')" id="btn-basic" class="tab-btn active">
+                <i data-lucide="info" class="w-4 h-4"></i>
+                اطلاعات پایه و هویت
+            </button>
+            <button onclick="switchTab('monitoring')" id="btn-monitoring" class="tab-btn">
+                <i data-lucide="activity" class="w-4 h-4"></i>
+                پایش و مسئولیت‌ها
+            </button>
+            <button onclick="switchTab('formula')" id="btn-formula" class="tab-btn">
+                <i data-lucide="function-square" class="w-4 h-4"></i>
+                فرمول و مستندات محاسباتی
+            </button>
+            <button onclick="switchTab('thresholds')" id="btn-thresholds" class="tab-btn">
+                <i data-lucide="gauge" class="w-4 h-4"></i>
+                آستانه‌های عملکرد
+            </button>
+        </div>
+
+        <!-- محتوای فرم -->
+        <div class="bg-white p-8 rounded-b-xl card-shadow">
+            <form id="kpi-form">
+                <!-- تب 1: اطلاعات پایه -->
+                <div id="tab-basic" class="tab-content active">
+                    <!-- محتوای تب اول اینجا قرار می‌گیرد -->
+                    <div class="space-y-8">
+                        <!-- بخش اطلاعات اولیه شاخص (فقط خواندنی) -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <label class="form-label">نام شاخص</label>
+                                <input type="text" value="نرخ رضایت مشتریان از خدمات پس از فروش" class="form-input readonly" readonly>
+                            </div>
+                            <div>
+                                <label class="form-label">کد شاخص</label>
+                                <input type="text" value="KPI-MKT-001" class="form-input readonly" readonly>
+                            </div>
+                        </div>
+                        
+                        <!-- بخش نسخه‌بندی شاخص -->
+                        <div class="form-section">
+                            <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                                <i data-lucide="git-branch" class="w-5 h-5 text-blue-500"></i>
+                                اطلاعات نسخه‌بندی شاخص
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                <div>
+                                    <label class="form-label">شماره نسخه</label>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-2xl font-bold text-blue-600">v2.1</span>
+                                        <span class="badge badge-info flex items-center gap-1">
+                                            <i data-lucide="zap" class="w-3 h-3"></i>
+                                            آخرین نسخه
+                                        </span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="form-label">اعتبار از تاریخ</label>
+                                    <input type="text" value="۱۴۰۲/۰۹/۰۱" class="form-input readonly" readonly>
+                                </div>
+                                <div>
+                                    <label class="form-label">اعتبار تا تاریخ</label>
+                                    <input type="text" value="۱۴۰۳/۰۸/۳۰" class="form-input readonly" readonly>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6">
+                                <label class="form-label">شرح تغییرات نسخه</label>
+                                <textarea rows="3" class="form-input readonly" readonly>بهبود فرمول محاسبه با اضافه شدن پارامتر زمان پاسخگویی. تغییر واحد اندازه‌گیری از امتیاز به درصد.</textarea>
+                            </div>
+                        </div>
+                        
+                        <!-- بخش تاییدات شاخص -->
+                        <div class="form-section">
+                            <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                                <i data-lucide="shield-check" class="w-5 h-5 text-blue-500"></i>
+                                وضعیت تاییدات شاخص
+                            </h3>
+                            
+                            <div class="mb-4">
+                                <div class="approval-status pending">
+                                    <i data-lucide="clock" class="w-4 h-4"></i>
+                                    <span class="font-medium">وضعیت فعلی: پیش‌نویس</span>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="text-sm font-bold text-slate-700 mb-3">تاییدکنندگان</h4>
+                                    
+                                    <!-- متقاضی -->
+                                    <div class="mb-4">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="text-sm font-medium text-slate-600">متقاضی</span>
+                                            <span class="badge badge-success flex items-center gap-1">
+                                                <i data-lucide="check-circle" class="w-3 h-3"></i>
+                                                تایید شده
+                                            </span>
+                                        </div>
+                                        <div class="person-info">
+                                            <div class="person-avatar">م</div>
+                                            <div class="person-details">
+                                                <div class="person-name">مریم محمدی</div>
+                                                <div class="person-unit">واحد بازاریابی</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- مسئول پایش -->
+                                    <div class="mb-4">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="text-sm font-medium text-slate-600">مسئول پایش</span>
+                                            <span class="badge badge-danger flex items-center gap-1">
+                                                <i data-lucide="x-circle" class="w-3 h-3"></i>
+                                                در انتظار تایید
+                                            </span>
+                                        </div>
+                                        <div class="text-sm text-slate-500 italic p-3 bg-slate-50 rounded-lg">
+                                            هنوز تایید نشده است
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <!-- مسئول پاسخگویی -->
+                                    <div class="mb-4">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="text-sm font-medium text-slate-600">مسئول پاسخگویی</span>
+                                            <span class="badge badge-success flex items-center gap-1">
+                                                <i data-lucide="check-circle" class="w-3 h-3"></i>
+                                                تایید شده
+                                            </span>
+                                        </div>
+                                        <div class="person-info">
+                                            <div class="person-avatar">ع</div>
+                                            <div class="person-details">
+                                                <div class="person-name">علی احمدی</div>
+                                                <div class="person-unit">مدیریت بازاریابی</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- رئیس فرایندها و روش‌ها -->
+                                    <div class="mb-4">
+                                        <div class="flex items-center justify-between mb-2">
+                                            <span class="text-sm font-medium text-slate-600">رئیس فرایندها و روش‌ها</span>
+                                            <span class="badge badge-warning flex items-center gap-1">
+                                                <i data-lucide="clock" class="w-3 h-3"></i>
+                                                در حال بررسی
+                                            </span>
+                                        </div>
+                                        <div class="person-info">
+                                            <div class="person-avatar">ر</div>
+                                            <div class="person-details">
+                                                <div class="person-name">رضا کریمی</div>
+                                                <div class="person-unit">مدیریت فرایند</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- بخش تنظیمات فنی شاخص -->
+                        <div class="form-section">
+                            <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                                <i data-lucide="settings" class="w-5 h-5 text-blue-500"></i>
+                                تنظیمات فنی شاخص
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                <div>
+                                    <label class="form-label">واحد اندازه‌گیری <span class="required-star">*</span></label>
+                                    <select class="form-input">
+                                        <option>درصد (%)</option>
+                                        <option selected>عدد (تعداد)</option>
+                                        <option>ریال / ارز</option>
+                                        <option>نفر / ساعت</option>
+                                        <option>امتیاز (از ۱۰)</option>
+                                    </select>
+                                    <p class="helper-text">مبنای عددی گزارش‌دهی (کمی یا کیفی عددی).</p>
+                                </div>
+                                <div>
+                                    <label class="form-label">دوره پایش <span class="required-star">*</span></label>
+                                    <select class="form-input">
+                                        <option selected>ماهانه</option>
+                                        <option>فصلی (سه ماهه)</option>
+                                        <option>شش ماهه</option>
+                                        <option>سالانه</option>
+                                        <option>هفتگی</option>
+                                    </select>
+                                    <p class="helper-text">فواصل زمانی که مقدار شاخص باید بروزرسانی شود.</p>
+                                </div>
+                                <div>
+                                    <label class="form-label">روند مطلوب <span class="required-star">*</span></label>
+                                    <div class="flex gap-4 mt-1">
+                                        <div class="radio-card selected" onclick="selectRadio('increase')">
+                                            <input type="radio" name="trend" id="increase" class="text-emerald-600" checked>
+                                            <i data-lucide="trending-up" class="w-4 h-4 text-emerald-500"></i>
+                                            <span class="text-sm font-medium text-emerald-700">افزایشی</span>
+                                        </div>
+                                        <div class="radio-card" onclick="selectRadio('decrease')">
+                                            <input type="radio" name="trend" id="decrease" class="text-rose-600">
+                                            <i data-lucide="trending-down" class="w-4 h-4 text-rose-500"></i>
+                                            <span class="text-sm font-medium text-rose-700">کاهشی</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6">
+                                <label class="form-label">تعریف شاخص <span class="required-star">*</span></label>
+                                <textarea rows="3" class="form-input">این شاخص میزان رضایت مشتریان از خدمات پس از فروش ارائه شده در بازه زمانی مشخص را اندازه‌گیری می‌کند.</textarea>
+                                <p class="helper-text">بیان مفهوم و قلمرو شاخص به زبانی ساده برای جلوگیری از تفسیر اشتباه.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- تب 2: پایش و مسئولیت‌ها -->
+                <div id="tab-monitoring" class="tab-content">
+                    <!-- محتوای تب دوم -->
+                    <div class="space-y-8">
+                        <!-- بخش نقش‌ها و مسئولیت‌ها -->
+                        <div class="form-section">
+                            <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
+                                <i data-lucide="users" class="w-5 h-5 text-blue-500"></i>
+                                نقش‌ها و مسئولیت‌ها
+                            </h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                <!-- مسئول پاسخگویی (Owner) -->
+                                <div>
+                                    <label class="form-label">مسئول پاسخگویی (Owner) <span class="required-star">*</span></label>
+                                    <div class="mb-3">
+                                        <select id="owner-type" class="form-input mb-3" onchange="updateOwnerField()">
+                                            <option value="position">پست سازمانی</option>
+                                            <option value="person">فرد</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div id="owner-position-field">
+                                        <select class="form-input">
+                                            <option value="">انتخاب پست سازمانی...</option>
+                                            <option value="marketing-manager" selected>مدیر بازاریابی</option>
+                                            <option value="sales-manager">مدیر فروش</option>
+                                            <option value="customer-service-manager">مدیر خدمات مشتریان</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div id="owner-person-field" class="hidden">
+                                        <select class="form-input">
+                                            <option value="">انتخاب شخص...</option>
+                                            <option value="person1">علی احمدی</option>
+                                            <option value="person2">مریم محمدی</option>
+                                            <option value="person3">رضا کریمی</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- نمایش واحد به صورت خودکار -->
+                                    <div class="mt-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                                        <div class="text-xs text-slate-500 mb-1">واحد مرتبط:</div>
+                                        <div class="text-sm font-medium text-slate-700" id="owner-unit-display">واحد بازاریابی</div>
+                                    </div>
+                                    
+                                    <p class="helper-text mt-2">شخص یا پستی که در قبال رسیدن به هدف این شاخص مسئولیت اصلی را دارد.</p>
+                                </div>
+                                
+                                <!-- مسئول پایش -->
+                                <div>
+                                    <label class="form-label">مسئول پایش <span class="required-star">*</span></label>
+                                    <div class="mb-3">
+                                        <select id="monitor-type" class="form-input mb-3" onchange="updateMonitorField()">
+                                            <option value="position" selected>پست سازمانی</option>
+                                            <option value="person">فرد</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div id="monitor-position-field">
+                                        <select class="form-input">
+                                            <option value="">انتخاب پست سازمانی...</option>
+                                            <option value="quality-control">کنترل کیفیت</option>
+                                            <option value="process-monitor" selected>ناظر فرایند</option>
+                                            <option value="department-head">رئیس دپارتمان</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div id="monitor-person-field" class="hidden">
+                                        <select class="form-input">
+                                            <option value="">انتخاب شخص...</option>
+                                            <option value="person1">سارا نظری</option>
+                                            <option value="person2">حسین محمودی</option>
+                                            <option value="person3">فاطمه اکبری</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- نمایش واحد به صورت خودکار -->
+                                    <div class="mt-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                                        <div class="text-xs text-slate-500 mb-1">واحد مرتبط:</div>
+                                        <div class="text-sm font-medium text-slate-700" id="monitor-unit-display">واحد کنترل کیفیت</div>
+                                    </div>
+                                    
+                                    <p class="helper-text mt-2">واحدی که صحت داده‌های ورودی را بررسی و تایید نهایی می‌کند.</p>
+                                </div>
+                                
+                                <!-- تسهیلگر -->
+                                <div>
+                                    <label class="form-label">تسهیلگر <span class="required-star">*</span></label>
+                                    <select class="form-input">
+                                        <option value="">انتخاب تسهیلگر...</option>
+                                        <option value="facilitator1" selected>مریم محمدی</option>
+                                        <option value="facilitator2">احمد رضایی</option>
+                                        <option value="facilitator3">سمیه کرمانی</option>
+                                    </select>
+                                    
+                                    <!-- نمایش واحد به صورت خودکار -->
+                                    <div class="mt-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
+                                        <div class="text-xs text-slate-500 mb-1">واحد مرتبط:</div>
+                                        <div class="text-sm font-medium text-slate-700">واحد بازاریابی</div>
+                                    </div>
+                                    
+                                    <p class="helper-text mt-2">فردی که جمع‌آوری داده‌ها و ثبت در سیستم را تسهیل می‌کند.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- بخش منبع داده -->
+                        <div class="form-section">
+                            <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
+                                <i data-lucide="database" class="w-5 h-5 text-blue-500"></i>
+                                منبع داده
+                            </h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div>
+                                    <label class="form-label">نوع منبع داده <span class="required-star">*</span></label>
+                                    <div class="flex gap-4 mt-1">
+                                        <div class="radio-card selected" onclick="selectDataSource('system')">
+                                            <input type="radio" name="data_source" id="system" class="text-blue-600" checked>
+                                            <i data-lucide="server" class="w-4 h-4 text-blue-500"></i>
+                                            <span class="text-sm font-medium text-blue-700">سیستمی</span>
+                                        </div>
+                                        <div class="radio-card" onclick="selectDataSource('manual')">
+                                            <input type="radio" name="data_source" id="manual" class="text-slate-600">
+                                            <i data-lucide="clipboard" class="w-4 h-4 text-slate-500"></i>
+                                            <span class="text-sm font-medium text-slate-600">دستی</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- فیلدهای منبع سیستمی -->
+                                    <div id="system-fields" class="mt-6 space-y-4">
+                                        <div>
+                                            <label class="form-label">نام سیستم</label>
+                                            <input type="text" class="form-input" value="سیستم مدیریت ارتباط با مشتری (CRM)">
+                                        </div>
+                                        <div>
+                                            <label class="form-label">نام فرم / ماژول</label>
+                                            <input type="text" class="form-input" value="ماژول نظرسنجی رضایت">
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- فیلد منبع دستی -->
+                                    <div id="manual-fields" class="mt-6 hidden">
+                                        <div>
+                                            <label class="form-label">توضیحات منبع داده</label>
+                                            <textarea rows="4" placeholder="توضیح دهید منبع داده چیست و چگونه قابل دسترسی است..." class="form-input"></textarea>
+                                            <p class="helper-text">برای منابع داده غیرسیستمی، نحوه جمع‌آوری و مکان ذخیره‌سازی را شرح دهید.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 h-full">
+                                        <h4 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
+                                            <i data-lucide="clock" class="w-4 h-4 text-blue-500"></i>
+                                            زمان‌بندی به‌روزرسانی
+                                        </h4>
+                                        <div class="space-y-3">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                                                <span class="text-sm text-slate-600">دوره پایش: <span class="font-bold">ماهانه</span></span>
+                                            </div>
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                                                <span class="text-sm text-slate-600">تاریخ بروزرسانی بعدی: <span class="font-bold">۱۴۰۲/۱۱/۰۵</span></span>
+                                            </div>
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-2 h-2 rounded-full bg-slate-300"></div>
+                                                <span class="text-sm text-slate-600 font-bold">آخرین همگام‌سازی: ۱۴۰۲/۱۰/۱۲ - ۱۴:۳۰</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mt-6 pt-4 border-t border-slate-200">
+                                            <label class="form-label">فرکانس واکشی داده</label>
+                                            <select class="form-input">
+                                                <option>پس از هر به‌روزرسانی منبع</option>
+                                                <option selected>روزانه (پایان روز کاری)</option>
+                                                <option>هفتگی</option>
+                                                <option>ماهانه</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- تب 3: فرمول و مستندات -->
+                <div id="tab-formula" class="tab-content">
+                    <!-- محتوای تب سوم -->
+                    <div class="space-y-8">
+                        <div class="bg-blue-50 border border-blue-200 p-5 rounded-xl flex items-start gap-3">
+                            <i data-lucide="alert-circle" class="w-5 h-5 text-blue-600 mt-0.5"></i>
+                            <p class="text-sm text-blue-700 leading-relaxed">
+                                دقت در تعریف فرمول باعث یکپارچگی محاسبات در داشبوردهای مدیریتی همسو می‌شود. لطفاً از نمادهای استاندارد استفاده کنید.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <label class="form-label">تعاریف و نمادها</label>
+                                <textarea rows="4" class="form-input font-mono text-sm">N: تعداد کل نظرسنجی‌های ارسال شده
+R: تعداد نظرسنجی‌های پاسخ داده شده
+S: مجموع امتیازات دریافتی (از ۱ تا ۵)</textarea>
+                                <p class="helper-text">متغیرهای بکار رفته در فرمول را اینجا تعریف کنید.</p>
+                            </div>
+                            <div class="flex flex-col">
+                                <label class="form-label">فرمول محاسبه شاخص</label>
+                                <div class="bg-slate-900 text-slate-200 p-6 rounded-xl font-mono text-lg leading-relaxed h-full flex items-center justify-center relative group">
+                                    <code class="text-blue-300">(S / (R * 5)) * 100</code>
+                                    <button class="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-700 px-3 py-1.5 rounded text-xs" onclick="copyFormula()">کپی فرمول</button>
+                                </div>
+                                <p class="helper-text text-center mt-2 font-medium">رابطه ریاضی دقیق برای استخراج عدد شاخص.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="form-section">
+                            <label class="form-label">مستندات و مرجع فرمول</label>
+                            <div class="border-2 border-dashed border-slate-300 rounded-xl p-8 flex flex-col items-center justify-center gap-3 text-slate-400 hover:border-blue-400 hover:bg-blue-50 transition-colors cursor-pointer">
+                                <i data-lucide="upload-cloud" class="w-12 h-12 text-slate-300"></i>
+                                <span class="text-sm text-slate-500">فایل استاندارد یا مستند مرجع را اینجا رها کنید یا انتخاب نمایید</span>
+                                <button type="button" class="mt-3 text-xs bg-white border border-slate-300 px-4 py-2 rounded-lg hover:bg-slate-100 shadow-sm transition-colors">انتخاب فایل</button>
+                            </div>
+                            <p class="helper-text">تصویر فرمول دست‌نویس، استاندارد ایزو یا هر مستند تاییدکننده روش محاسبه.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- تب 4: آستانه‌های عملکرد -->
+                <div id="tab-thresholds" class="tab-content">
+                    <!-- محتوای تب چهارم -->
+                    <div class="space-y-8">
+                        <div class="bg-amber-50 border border-amber-200 p-5 rounded-xl flex items-start gap-3">
+                            <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-600 mt-0.5"></i>
+                            <p class="text-sm text-amber-700 leading-relaxed">
+                                تنظیمات این بخش تعیین‌کننده رنگ‌بندی «درصد تحقق» در صفحه برنامه‌ریزی و نظارت است. سیستم به صورت خودکار مقدار واقعی را با این بازه‌ها تطبیق می‌دهد.
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="form-label flex items-center justify-between">
+                                <span>تعریف حد آستانه (RAG)</span>
+                                <div class="flex gap-6 text-xs font-medium">
+                                    <span class="flex items-center gap-1">
+                                        <span class="w-3 h-3 bg-emerald-500 rounded-full"></span> 
+                                        مطلوب (سبز)
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        <span class="w-3 h-3 bg-yellow-500 rounded-full"></span> 
+                                        متوسط (زرد)
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        <span class="w-3 h-3 bg-red-500 rounded-full"></span> 
+                                        بحرانی (قرمز)
+                                    </span>
+                                </div>
+                            </label>
+                            
+                            <div class="space-y-6 mt-4">
+                                <div class="threshold-slider w-full shadow-inner"></div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+                                    <div class="p-5 border border-slate-200 rounded-xl space-y-5 shadow-sm hover:border-emerald-200 transition-colors">
+                                        <div class="flex items-center gap-2 text-emerald-600 border-b pb-2 mb-2">
+                                            <i data-lucide="check-circle" class="w-4 h-4"></i>
+                                            <span class="font-bold text-sm text-slate-800">حد مطلوب (سبز)</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-sm text-slate-600">از مقدار</span>
+                                            <input type="number" value="80" class="w-24 bg-slate-50 border border-slate-300 rounded-lg p-2 text-center font-bold text-emerald-600">
+                                        </div>
+                                        <p class="helper-text">مقداری که عملکرد در وضعیت مطلوب و قابل قبول قرار دارد.</p>
+                                    </div>
+                                    
+                                    <div class="p-5 border border-slate-200 rounded-xl space-y-5 shadow-sm hover:border-yellow-200 transition-colors">
+                                        <div class="flex items-center gap-2 text-yellow-600 border-b pb-2 mb-2">
+                                            <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                                            <span class="font-bold text-sm text-slate-800">حد متوسط (زرد)</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-sm text-slate-600">از مقدار</span>
+                                            <input type="number" value="60" class="w-24 bg-slate-50 border border-slate-300 rounded-lg p-2 text-center font-bold text-yellow-600">
+                                        </div>
+                                        <p class="helper-text">مقداری که عملکرد نیاز به توجه و پیگیری دارد.</p>
+                                    </div>
+                                    
+                                    <div class="p-5 border border-slate-200 rounded-xl space-y-5 shadow-sm hover:border-red-200 transition-colors">
+                                        <div class="flex items-center gap-2 text-red-600 border-b pb-2 mb-2">
+                                            <i data-lucide="x-circle" class="w-4 h-4"></i>
+                                            <span class="font-bold text-sm text-slate-800">حد بحرانی (قرمز)</span>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-sm text-slate-600">کمتر از</span>
+                                            <input type="number" value="60" class="w-24 bg-slate-50 border border-slate-300 rounded-lg p-2 text-center font-bold text-red-600">
+                                        </div>
+                                        <p class="helper-text">مقداری که عملکرد در وضعیت بحرانی و نیازمند اقدام فوری است.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 mt-8">
+                            <h4 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
+                                <i data-lucide="eye" class="w-4 h-4 text-blue-500"></i>
+                                پیش‌نمایش اعمال آستانه‌ها
+                            </h4>
+                            <div class="text-sm text-slate-500 text-center">
+                                این تنظیمات به صورت خودکار در تمامی گزارشات و داشبوردهای سامانه همسو اعمال خواهد شد.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- دکمه‌های فرم -->
+                <div class="mt-12 pt-8 border-t border-slate-100 flex justify-between items-center">
+                    <div class="text-slate-400 text-xs italic flex items-center gap-2">
+                        <i data-lucide="clock" class="w-3 h-3"></i>
+                        آخرین ویرایش توسط مدیر سیستم: ۱۴۰۲/۱۰/۲۴
+                    </div>
+                    <div class="flex gap-3">
+                        <button type="button" class="px-6 py-3 rounded-xl border border-slate-300 text-slate-600 font-medium hover:bg-slate-50 transition-all">
+                            انصراف
+                        </button>
+                        <button type="submit" class="px-10 py-3 rounded-xl bg-blue-600 text-white font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all flex items-center gap-2">
+                            <i data-lucide="save" class="w-5 h-5"></i>
+                            ذخیره نهایی شناسنامه
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+        
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show target content
+            document.getElementById('tab-' + tabId).classList.add('active');
+            
+            // Add active class to clicked button
+            document.getElementById('btn-' + tabId).classList.add('active');
+        }
+        
+        // Select Data Source
+        function selectDataSource(sourceType) {
+            const systemFields = document.getElementById('system-fields');
+            const manualFields = document.getElementById('manual-fields');
+            
+            if (sourceType === 'system') {
+                if (systemFields) systemFields.classList.remove('hidden');
+                if (manualFields) manualFields.classList.add('hidden');
+            } else {
+                if (systemFields) systemFields.classList.add('hidden');
+                if (manualFields) manualFields.classList.remove('hidden');
+            }
+            
+            // Update radio card UI
+            document.querySelectorAll('input[name="data_source"]').forEach(radio => {
+                const parentCard = radio.closest('.radio-card');
+                if (parentCard) {
+                    parentCard.classList.remove('selected');
+                }
+            });
+            
+            const selectedRadio = document.getElementById(sourceType);
+            if (selectedRadio) {
+                selectedRadio.checked = true;
+                const parentCard = selectedRadio.closest('.radio-card');
+                if (parentCard) {
+                    parentCard.classList.add('selected');
+                }
+            }
+        }
+        
+        // Update Owner Field based on selection
+        function updateOwnerField() {
+            const ownerTypeSelect = document.getElementById('owner-type');
+            if (!ownerTypeSelect) return;
+            
+            const ownerType = ownerTypeSelect.value;
+            const positionField = document.getElementById('owner-position-field');
+            const personField = document.getElementById('owner-person-field');
+            const unitDisplay = document.getElementById('owner-unit-display');
+            
+            if (ownerType === 'position') {
+                if (positionField) positionField.classList.remove('hidden');
+                if (personField) personField.classList.add('hidden');
+                if (unitDisplay) unitDisplay.textContent = 'واحد بازاریابی';
+            } else {
+                if (positionField) positionField.classList.add('hidden');
+                if (personField) personField.classList.remove('hidden');
+                if (unitDisplay) unitDisplay.textContent = 'واحد بازاریابی';
+            }
+        }
+        
+        // Update Monitor Field based on selection
+        function updateMonitorField() {
+            const monitorTypeSelect = document.getElementById('monitor-type');
+            if (!monitorTypeSelect) return;
+            
+            const monitorType = monitorTypeSelect.value;
+            const positionField = document.getElementById('monitor-position-field');
+            const personField = document.getElementById('monitor-person-field');
+            const unitDisplay = document.getElementById('monitor-unit-display');
+            
+            if (monitorType === 'position') {
+                if (positionField) positionField.classList.remove('hidden');
+                if (personField) personField.classList.add('hidden');
+                if (unitDisplay) unitDisplay.textContent = 'واحد کنترل کیفیت';
+            } else {
+                if (positionField) positionField.classList.add('hidden');
+                if (personField) personField.classList.remove('hidden');
+                if (unitDisplay) unitDisplay.textContent = 'واحد کنترل کیفیت';
+            }
+        }
+        
+        // Radio Card Selection Helper
+        function selectRadio(radioId) {
+            const radio = document.getElementById(radioId);
+            if (radio) {
+                radio.checked = true;
+                
+                // Update UI for radio cards
+                document.querySelectorAll('.radio-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                
+                // Find parent radio-card and add selected class
+                const parentCard = radio.closest('.radio-card');
+                if (parentCard) {
+                    parentCard.classList.add('selected');
+                }
+            }
+        }
+        
+        // Copy Formula
+        function copyFormula() {
+            const formula = "(S / (R * 5)) * 100";
+            navigator.clipboard.writeText(formula).then(() => {
+                alert("فرمول با موفقیت کپی شد!");
+            });
+        }
+        
+        // Form Submit Simulation
+        document.getElementById('kpi-form').onsubmit = (e) => {
+            e.preventDefault();
+            alert('اطلاعات شناسنامه شاخص با موفقیت در سیستم همسو ذخیره شد.');
+        };
+        
+        // Initialize form elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial radio card selection
+            document.querySelectorAll('input[type="radio"]:checked').forEach(radio => {
+                const parentCard = radio.closest('.radio-card');
+                if (parentCard) {
+                    parentCard.classList.add('selected');
+                }
+            });
+            
+            // Add click handlers to radio cards
+            document.querySelectorAll('.radio-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    const radio = this.querySelector('input[type="radio"]');
+                    if (radio) {
+                        radio.checked = true;
+                        
+                        // Update UI
+                        const name = radio.getAttribute('name');
+                        document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+                            const parent = r.closest('.radio-card');
+                            if (parent) {
+                                parent.classList.remove('selected');
+                            }
+                        });
+                        this.classList.add('selected');
+                        
+                        // Handle data source selection
+                        if (radio.name === 'data_source') {
+                            selectDataSource(radio.id);
+                        }
+                    }
+                });
+            });
+            
+            // Initialize owner and monitor fields
+            if (document.getElementById('owner-type')) {
+                updateOwnerField();
+            }
+            if (document.getElementById('monitor-type')) {
+                updateMonitorField();
+            }
+        });
+    </script>
+</body>
+</html>

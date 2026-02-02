@@ -1,0 +1,120 @@
+<div id="tab-basic" class="tab-content space-y-8">
+    <!-- بخش تنظیمات فنی شاخص - بدون اطلاعات نسخه‌بندی و تاییدات -->
+    <div class="form-section">
+        <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <i data-lucide="settings" class="w-5 h-5 text-blue-500"></i>
+            تنظیمات فنی شاخص
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+                <label class="form-label">واحد اندازه‌گیری <span class="required-star">*</span></label>
+                <select class="form-input">
+                    <option>درصد (%)</option>
+                    <option selected>عدد (تعداد)</option>
+                    <option>ریال / ارز</option>
+                    <option>نفر / ساعت</option>
+                    <option>امتیاز (از ۱۰)</option>
+                </select>
+                <p class="helper-text">مبنای عددی گزارش‌دهی (کمی یا کیفی عددی).</p>
+            </div>
+            <div>
+                <label class="form-label">دوره پایش <span class="required-star">*</span></label>
+                <select class="form-input">
+                    <option selected>ماهانه</option>
+                    <option>فصلی (سه ماهه)</option>
+                    <option>شش ماهه</option>
+                    <option>سالانه</option>
+                    <option>هفتگی</option>
+                </select>
+                <p class="helper-text">فواصل زمانی که مقدار شاخص باید بروزرسانی شود.</p>
+            </div>
+            <div>
+                <label class="form-label">روند مطلوب <span class="required-star">*</span></label>
+                <div class="flex gap-4 mt-1">
+                    <div class="radio-card selected" onclick="selectRadio('increase')">
+                        <input type="radio" name="trend" id="increase" class="text-emerald-600" checked>
+                        <i data-lucide="trending-up" class="w-4 h-4 text-emerald-500"></i>
+                        <span class="text-sm font-medium text-emerald-700">افزایشی</span>
+                    </div>
+                    <div class="radio-card" onclick="selectRadio('decrease')">
+                        <input type="radio" name="trend" id="decrease" class="text-rose-600">
+                        <i data-lucide="trending-down" class="w-4 h-4 text-rose-500"></i>
+                        <span class="text-sm font-medium text-rose-700">کاهشی</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-6">
+            <label class="form-label">تعریف شاخص <span class="required-star">*</span></label>
+            <textarea rows="3" class="form-input">این شاخص میزان رضایت مشتریان از خدمات پس از فروش ارائه شده در بازه زمانی مشخص را اندازه‌گیری می‌کند.</textarea>
+            <p class="helper-text">بیان مفهوم و قلمرو شاخص به زبانی ساده برای جلوگیری از تفسیر اشتباه.</p>
+        </div>
+    </div>
+    
+    <!-- بخش اطلاعات اضافی -->
+    <div class="form-section">
+        <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <i data-lucide="file-text" class="w-5 h-5 text-blue-500"></i>
+            اطلاعات تکمیلی
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                <label class="form-label">دسته‌بندی شاخص</label>
+                <select class="form-input">
+                    <option>شاخص استراتژیک</option>
+                    <option selected>شاخص فرایندی</option>
+                    <option>شاخص عملیاتی</option>
+                    <option>شاخص مالی</option>
+                </select>
+                <p class="helper-text">نوع شاخص براساس سطح سازمانی.</p>
+            </div>
+            <div>
+                <label class="form-label">فرایند مرتبط</label>
+                <input type="text" class="form-input" value="فرایند خدمات پس از فروش">
+                <p class="helper-text">فرایند اصلی که این شاخص آن را اندازه‌گیری می‌کند.</p>
+            </div>
+        </div>
+        
+        <div class="mt-6">
+            <label class="form-label">هدف شاخص</label>
+            <textarea rows="2" class="form-input">هدف از تعریف این شاخص، اندازه‌گیری و بهبود مستمر رضایت مشتریان از خدمات ارائه شده است.</textarea>
+            <p class="helper-text">بیان دلایل و اهداف تعریف این شاخص.</p>
+        </div>
+    </div>
+    
+    <!-- بخش لینک‌های مرتبط -->
+    <div class="form-section">
+        <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <i data-lucide="link" class="w-5 h-5 text-blue-500"></i>
+            لینک‌های مرتبط
+        </h3>
+        
+        <div class="space-y-3">
+            <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="file-text" class="w-4 h-4 text-slate-400"></i>
+                    <span class="text-sm text-slate-700">مستندات فرایند مرتبط</span>
+                </div>
+                <button class="text-blue-600 text-sm hover:text-blue-800">مشاهده</button>
+            </div>
+            
+            <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="bar-chart-3" class="w-4 h-4 text-slate-400"></i>
+                    <span class="text-sm text-slate-700">گزارشات تاریخی شاخص</span>
+                </div>
+                <button class="text-blue-600 text-sm hover:text-blue-800">مشاهده</button>
+            </div>
+            
+            <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
+                    <span class="text-sm text-slate-700">تیم مسئول شاخص</span>
+                </div>
+                <button class="text-blue-600 text-sm hover:text-blue-800">مشاهده</button>
+            </div>
+        </div>
+    </div>
+</div>

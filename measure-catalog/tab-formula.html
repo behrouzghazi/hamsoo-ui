@@ -1,0 +1,45 @@
+<div id="tab-formula" class="tab-content space-y-8">
+    <div class="bg-blue-50 border border-blue-200 p-5 rounded-xl flex items-start gap-3">
+        <i data-lucide="alert-circle" class="w-5 h-5 text-blue-600 mt-0.5"></i>
+        <p class="text-sm text-blue-700 leading-relaxed">
+            دقت در تعریف فرمول باعث یکپارچگی محاسبات در داشبوردهای مدیریتی همسو می‌شود. لطفاً از نمادهای استاندارد استفاده کنید.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+            <label class="form-label">تعاریف و نمادها</label>
+            <textarea rows="4" class="form-input font-mono text-sm">N: تعداد کل نظرسنجی‌های ارسال شده
+R: تعداد نظرسنجی‌های پاسخ داده شده
+S: مجموع امتیازات دریافتی (از ۱ تا ۵)</textarea>
+            <p class="helper-text">متغیرهای بکار رفته در فرمول را اینجا تعریف کنید.</p>
+        </div>
+        <div class="flex flex-col">
+            <label class="form-label">فرمول محاسبه شاخص</label>
+            <div class="bg-slate-900 text-slate-200 p-6 rounded-xl font-mono text-lg leading-relaxed h-full flex items-center justify-center relative group">
+                <code class="text-blue-300">(S / (R * 5)) * 100</code>
+                <button class="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-700 px-3 py-1.5 rounded text-xs" onclick="copyFormula()">کپی فرمول</button>
+            </div>
+            <p class="helper-text text-center mt-2 font-medium">رابطه ریاضی دقیق برای استخراج عدد شاخص.</p>
+        </div>
+    </div>
+    
+    <div class="form-section">
+        <label class="form-label">مستندات و مرجع فرمول</label>
+        <div class="border-2 border-dashed border-slate-300 rounded-xl p-8 flex flex-col items-center justify-center gap-3 text-slate-400 hover:border-blue-400 hover:bg-blue-50 transition-colors cursor-pointer">
+            <i data-lucide="upload-cloud" class="w-12 h-12 text-slate-300"></i>
+            <span class="text-sm text-slate-500">فایل استاندارد یا مستند مرجع را اینجا رها کنید یا انتخاب نمایید</span>
+            <button type="button" class="mt-3 text-xs bg-white border border-slate-300 px-4 py-2 rounded-lg hover:bg-slate-100 shadow-sm transition-colors">انتخاب فایل</button>
+        </div>
+        <p class="helper-text">تصویر فرمول دست‌نویس، استاندارد ایزو یا هر مستند تاییدکننده روش محاسبه.</p>
+    </div>
+</div>
+
+<script>
+function copyFormula() {
+    const formula = "(S / (R * 5)) * 100";
+    navigator.clipboard.writeText(formula).then(() => {
+        alert("فرمول با موفقیت کپی شد!");
+    });
+}
+</script>
