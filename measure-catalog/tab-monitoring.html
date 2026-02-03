@@ -16,16 +16,7 @@
                         <option value="person">فرد</option>
                     </select>
                 </div>
-                
-                <div id="owner-position-field">
-                    <select class="form-input">
-                        <option value="">انتخاب پست سازمانی...</option>
-                        <option value="marketing-manager" selected>مدیر بازاریابی</option>
-                        <option value="sales-manager">مدیر فروش</option>
-                        <option value="customer-service-manager">مدیر خدمات مشتریان</option>
-                    </select>
-                </div>
-                
+
                 <div id="owner-person-field" class="hidden">
                     <select class="form-input">
                         <option value="">انتخاب شخص...</option>
@@ -54,15 +45,6 @@
                     </select>
                 </div>
                 
-                <div id="monitor-position-field">
-                    <select class="form-input">
-                        <option value="">انتخاب پست سازمانی...</option>
-                        <option value="quality-control">کنترل کیفیت</option>
-                        <option value="process-monitor" selected>ناظر فرایند</option>
-                        <option value="department-head">رئیس دپارتمان</option>
-                    </select>
-                </div>
-                
                 <div id="monitor-person-field" class="hidden">
                     <select class="form-input">
                         <option value="">انتخاب شخص...</option>
@@ -78,7 +60,7 @@
                     <div class="text-sm font-medium text-slate-700" id="monitor-unit-display">واحد کنترل کیفیت</div>
                 </div>
                 
-                <p class="helper-text mt-2">واحدی که صحت داده‌های ورودی را بررسی و تایید نهایی می‌کند.</p>
+                <p class="helper-text mt-2">شخص یا پستی که در قبال رسیدن به هدف این شاخص مسئولیت اصلی را دارد.</p>
             </div>
             
             <!-- تسهیلگر -->
@@ -121,7 +103,7 @@
                     <div class="radio-card" onclick="selectDataSource('manual')">
                         <input type="radio" name="data_source" id="manual" class="text-slate-600">
                         <i data-lucide="clipboard" class="w-4 h-4 text-slate-500"></i>
-                        <span class="text-sm font-medium text-slate-600">دستی</span>
+                        <span class="text-sm font-medium text-slate-600">سایر</span>
                     </div>
                 </div>
                 
@@ -135,50 +117,177 @@
                         <label class="form-label">نام فرم / ماژول</label>
                         <input type="text" class="form-input" value="ماژول نظرسنجی رضایت">
                     </div>
+                    <div>
+                        <label class="form-label">نرخ بروز داده</label>
+                        <input type="text" class="form-input" placeholder="مثال: روزانه، هفتگی، ماهانه">
+                    </div>
                 </div>
                 
                 <!-- فیلد منبع دستی -->
                 <div id="manual-fields" class="mt-6 hidden">
                     <div>
-                        <label class="form-label">توضیحات منبع داده</label>
-                        <textarea rows="4" placeholder="توضیح دهید منبع داده چیست و چگونه قابل دسترسی است..." class="form-input"></textarea>
+                        <label class="form-label">توضیحات منبع داده <span class="required-star">*</span></label>
+                        <textarea rows="4" placeholder="در این فیلد باید در مورد منبع داده دستی توضیح داده شود..." class="form-input"></textarea>
                         <p class="helper-text">برای منابع داده غیرسیستمی، نحوه جمع‌آوری و مکان ذخیره‌سازی را شرح دهید.</p>
                     </div>
                 </div>
             </div>
             
             <div>
+                <!-- بخش نحوه پایش -->
                 <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 h-full">
                     <h4 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
-                        <i data-lucide="clock" class="w-4 h-4 text-blue-500"></i>
-                        زمان‌بندی به‌روزرسانی
+                        <i data-lucide="settings" class="w-4 h-4 text-blue-500"></i>
+                        نحوه پایش
                     </h4>
-                    <div class="space-y-3">
-                        <div class="flex items-center gap-3">
-                            <div class="w-2 h-2 rounded-full bg-blue-500"></div>
-                            <span class="text-sm text-slate-600">دوره پایش: <span class="font-bold">ماهانه</span></span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
-                            <span class="text-sm text-slate-600">تاریخ بروزرسانی بعدی: <span class="font-bold">۱۴۰۲/۱۱/۰۵</span></span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <div class="w-2 h-2 rounded-full bg-slate-300"></div>
-                            <span class="text-sm text-slate-600 font-bold">آخرین همگام‌سازی: ۱۴۰۲/۱۰/۱۲ - ۱۴:۳۰</span>
-                        </div>
-                    </div>
                     
-                    <div class="mt-6 pt-4 border-t border-slate-200">
-                        <label class="form-label">فرکانس واکشی داده</label>
-                        <select class="form-input">
-                            <option>پس از هر به‌روزرسانی منبع</option>
-                            <option selected>روزانه (پایان روز کاری)</option>
-                            <option>هفتگی</option>
-                            <option>ماهانه</option>
-                        </select>
+                    <div class="mb-6">
+                        <div class="flex gap-4 mb-4">
+                            <div class="radio-card" onclick="selectMonitoringMethod('manual')">
+                                <input type="radio" name="monitoring_method" id="manual-method" class="text-slate-600" checked>
+                                <i data-lucide="hand" class="w-4 h-4 text-slate-500"></i>
+                                <span class="text-sm font-medium text-slate-600">دستی</span>
+                            </div>
+                            <div class="radio-card" onclick="selectMonitoringMethod('auto')">
+                                <input type="radio" name="monitoring_method" id="auto-method" class="text-blue-600">
+                                <i data-lucide="zap" class="w-4 h-4 text-blue-500"></i>
+                                <span class="text-sm font-medium text-blue-600">اتوماتیک</span>
+                            </div>
+                        </div>
+                        
+                        <!-- لینک وب سرویس برای روش اتوماتیک -->
+                        <div id="webservice-link" class="hidden">
+                            <a href="#" onclick="showWebServiceDetails()" class="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center gap-2">
+                                <i data-lucide="link" class="w-4 h-4"></i>
+                                مشاهده جزییات وب سرویس
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- پاپ آپ جزییات وب سرویس -->
+<div id="webservice-popup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <i data-lucide="server" class="w-5 h-5 text-blue-500"></i>
+                    جزییات وب سرویس
+                </h3>
+                <button onclick="closeWebServicePopup()" class="text-slate-400 hover:text-slate-600">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-6">
+                <div>
+                    <h4 class="text-sm font-bold text-slate-700 mb-3">اطلاعات وب سرویس</h4>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="text-xs text-slate-500 mb-1">URL وب سرویس:</div>
+                            <div class="text-sm font-medium text-slate-800 bg-slate-50 p-3 rounded-lg">https://api.example.com/kpi-monitoring/v1/data-fetch</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-slate-500 mb-1">متد درخواست:</div>
+                            <div class="text-sm font-medium text-slate-800">GET</div>
+                        </div>
+                        <div>
+                            <div class="text-xs text-slate-500 mb-1">فرمت پاسخ:</div>
+                            <div class="text-sm font-medium text-slate-800">JSON</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-sm font-bold text-slate-700 mb-3">اطلاعات واکشی داده</h4>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                            <span class="text-sm text-slate-600">فرکانس واکشی: <span class="font-bold">روزانه</span></span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+                            <span class="text-sm text-slate-600">تاریخ واکشی بعدی: <span class="font-bold">۱۴۰۲/۱۱/۰۵</span></span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 rounded-full bg-slate-300"></div>
+                            <span class="text-sm text-slate-600 font-bold">آخرین واکشی: ۱۴۰۲/۱۰/۱۲ - ۱۴:۳۰</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-sm font-bold text-slate-700 mb-3">پارامترهای درخواست</h4>
+                    <div class="bg-slate-50 p-4 rounded-lg">
+                        <code class="text-sm text-slate-800">
+                            {<br>
+                            &nbsp;&nbsp;"kpi_id": "KPI-2023-001",<br>
+                            &nbsp;&nbsp;"period": "monthly",<br>
+                            &nbsp;&nbsp;"start_date": "1402/10/01",<br>
+                            &nbsp;&nbsp;"end_date": "1402/10/30"<br>
+                            }
+                        </code>
+                    </div>
+                </div>
+                
+                <div class="pt-4 border-t border-slate-200">
+                    <button onclick="closeWebServicePopup()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
+                        بستن
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function selectDataSource(type) {
+    if (type === 'system') {
+        document.getElementById('system-fields').classList.remove('hidden');
+        document.getElementById('manual-fields').classList.add('hidden');
+        document.querySelector('#system').checked = true;
+        document.querySelector('.radio-card[onclick*="system"]').classList.add('selected');
+        document.querySelector('.radio-card[onclick*="manual"]').classList.remove('selected');
+    } else {
+        document.getElementById('system-fields').classList.add('hidden');
+        document.getElementById('manual-fields').classList.remove('hidden');
+        document.querySelector('#manual').checked = true;
+        document.querySelector('.radio-card[onclick*="manual"]').classList.add('selected');
+        document.querySelector('.radio-card[onclick*="system"]').classList.remove('selected');
+    }
+}
+
+function selectMonitoringMethod(method) {
+    const webserviceLink = document.getElementById('webservice-link');
+    
+    if (method === 'auto') {
+        webserviceLink.classList.remove('hidden');
+        document.querySelector('#auto-method').checked = true;
+        document.querySelector('.radio-card[onclick*="auto"]').classList.add('selected');
+        document.querySelector('.radio-card[onclick*="manual"]').classList.remove('selected');
+    } else {
+        webserviceLink.classList.add('hidden');
+        document.querySelector('#manual-method').checked = true;
+        document.querySelector('.radio-card[onclick*="manual"]').classList.add('selected');
+        document.querySelector('.radio-card[onclick*="auto"]').classList.remove('selected');
+    }
+}
+
+function showWebServiceDetails() {
+    document.getElementById('webservice-popup').classList.remove('hidden');
+}
+
+function closeWebServicePopup() {
+    document.getElementById('webservice-popup').classList.add('hidden');
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    selectDataSource('system');
+    selectMonitoringMethod('manual');
+});
+</script>
