@@ -1,0 +1,211 @@
+<div id="tab-basic" class="tab-content space-y-8">
+    <!-- بخش تنظیمات فنی شاخص -->
+    <div class="form-section">
+        <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <i data-lucide="settings" class="w-5 h-5 text-blue-500"></i>
+            تنظیمات فنی شاخص
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+                <label class="form-label">واحد اندازه‌گیری <span class="required-star">*</span></label>
+                <select class="form-input">
+                    <option>درصد (%)</option>
+                    <option selected>عدد (تعداد)</option>
+                    <option>ریال / ارز</option>
+                    <option>نفر / ساعت</option>
+                    <option>امتیاز (از ۱۰)</option>
+                </select>
+                <p class="helper-text">مبنای عددی گزارش‌دهی (کمی یا کیفی عددی).</p>
+            </div>
+            <div>
+                <label class="form-label">دوره پایش <span class="required-star">*</span></label>
+                <select class="form-input">
+                    <option selected>ماهانه</option>
+                    <option>فصلی (سه ماهه)</option>
+                    <option>شش ماهه</option>
+                    <option>سالانه</option>
+                    <option>هفتگی</option>
+                </select>
+                <p class="helper-text">فواصل زمانی که مقدار شاخص باید بروزرسانی شود.</p>
+            </div>
+            <div>
+                <label class="form-label">روند مطلوب <span class="required-star">*</span></label>
+                <div class="flex gap-2 mt-1">
+                    <div class="trend-option selected" data-trend="increase" onclick="selectOption(this, 'trend', 'increase')">
+                        <input type="radio" name="trend" class="text-emerald-600" checked>
+                        <i data-lucide="trending-up" class="w-4 h-4 text-emerald-500"></i>
+                        <span class="text-sm font-medium text-emerald-700">صعودی</span>
+                    </div>
+                    <div class="trend-option" data-trend="decrease" onclick="selectOption(this, 'trend', 'decrease')">
+                        <input type="radio" name="trend" class="text-rose-600">
+                        <i data-lucide="trending-down" class="w-4 h-4 text-rose-500"></i>
+                        <span class="text-sm font-medium text-rose-700">نزولی</span>
+                    </div>
+                    <div class="trend-option" data-trend="maintain" onclick="selectOption(this, 'trend', 'maintain')">
+                        <input type="radio" name="trend" class="text-blue-600">
+                        <i data-lucide="minus" class="w-4 h-4 text-blue-500"></i>
+                        <span class="text-sm font-medium text-blue-700">حفظ وضعیت</span>
+                    </div>
+                </div>
+                <div class="option-description mt-2">
+                    <div id="trend-description">
+                        <!-- توضیحات اینجا نمایش داده می‌شود -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-6">
+            <label class="form-label">تعریف شاخص <span class="required-star">*</span></label>
+            <textarea rows="3" class="form-input">این شاخص میزان رضایت مشتریان از خدمات پس از فروش ارائه شده در بازه زمانی مشخص را اندازه‌گیری می‌کند.</textarea>
+            <p class="helper-text">بیان مفهوم و قلمرو شاخص به زبانی ساده برای جلوگیری از تفسیر اشتباه.</p>
+        </div>
+    </div>
+    
+    <!-- بخش اطلاعات تکمیلی -->
+    <div class="form-section">
+        <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <i data-lucide="file-text" class="w-5 h-5 text-blue-500"></i>
+            اطلاعات تکمیلی
+        </h3>
+        
+        <!-- نوع شاخص و نوع پایش در یک ردیف -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+            <!-- نوع شاخص -->
+            <div>
+                <label class="form-label">نوع شاخص <span class="required-star">*</span></label>
+                <div class="flex gap-2 mt-1">
+                    <div class="option-card selected" data-kpi-type="performance" onclick="selectOption(this, 'kpi-type', 'performance')">
+                        <input type="radio" name="kpi-type" class="text-blue-600" checked>
+                        <i data-lucide="activity" class="w-4 h-4 text-blue-500"></i>
+                        <span class="text-sm font-medium text-blue-700">عملکردی</span>
+                    </div>
+                    <div class="option-card" data-kpi-type="perceptual" onclick="selectOption(this, 'kpi-type', 'perceptual')">
+                        <input type="radio" name="kpi-type" class="text-purple-600">
+                        <i data-lucide="brain" class="w-4 h-4 text-purple-500"></i>
+                        <span class="text-sm font-medium text-purple-700">برداشتی</span>
+                    </div>
+                </div>
+                <div class="option-description mt-2">
+                    <div id="kpi-type-description">
+                        <!-- توضیحات اینجا نمایش داده می‌شود -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- نوع پایش -->
+            <div>
+                <label class="form-label">نوع پایش <span class="required-star">*</span></label>
+                <div class="flex gap-2 mt-1">
+                    <div class="option-card selected" data-monitoring-type="efficiency" onclick="selectOption(this, 'monitoring-type', 'efficiency')">
+                        <input type="radio" name="monitoring-type" class="text-green-600" checked>
+                        <i data-lucide="zap" class="w-4 h-4 text-green-500"></i>
+                        <span class="text-sm font-medium text-green-700">کارایی</span>
+                    </div>
+                    <div class="option-card" data-monitoring-type="effectiveness" onclick="selectOption(this, 'monitoring-type', 'effectiveness')">
+                        <input type="radio" name="monitoring-type" class="text-orange-600">
+                        <i data-lucide="target" class="w-4 h-4 text-orange-500"></i>
+                        <span class="text-sm font-medium text-orange-700">اثربخشی</span>
+                    </div>
+                </div>
+                <div class="option-description mt-2">
+                    <div id="monitoring-type-description">
+                        <!-- توضیحات اینجا نمایش داده می‌شود -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- نکات و ملاحظات -->
+        <div class="mb-6">
+            <label class="form-label">نکات، ملاحظات و فرض‌ها</label>
+            <textarea rows="3" class="form-input" placeholder="نکات مهم، محدودیت‌ها، پیش‌فرض‌ها و ملاحظات خاص این شاخص را وارد کنید..."></textarea>
+            <p class="helper-text">اطلاعات تکمیلی که در تفسیر و استفاده از شاخص باید مورد توجه قرار گیرد.</p>
+        </div>
+        
+        <!-- آپلود مستندات -->
+        <div>
+            <label class="form-label">سایر مستندات</label>
+            <div class="upload-area" onclick="document.getElementById('file-upload').click()">
+                <i data-lucide="upload" class="w-8 h-8 text-slate-400 mx-auto mb-2"></i>
+                <div class="text-slate-600 font-medium">برای آپلود کلیک کنید یا فایل را اینجا رها کنید</div>
+                <div class="text-slate-400 text-sm mt-1">فرمت‌های مجاز: PDF, DOC, DOCX, XLS, XLSX, JPG, PNG</div>
+                <input type="file" id="file-upload" class="hidden" multiple>
+            </div>
+            <div id="file-list" class="mt-3 space-y-2">
+                <!-- لیست فایل‌های آپلود شده اینجا نمایش داده می‌شود -->
+            </div>
+            <p class="helper-text">آپلود مستندات تکمیلی مرتبط با شاخص</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // مدیریت آپلود فایل
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileUpload = document.getElementById('file-upload');
+        const fileList = document.getElementById('file-list');
+        
+        if (fileUpload && fileList) {
+            fileUpload.addEventListener('change', function(e) {
+                const files = e.target.files;
+                fileList.innerHTML = '';
+                
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'flex items-center justify-between p-2 bg-slate-50 rounded-lg border border-slate-200';
+                    fileItem.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="file" class="w-4 h-4 text-slate-400"></i>
+                            <span class="text-sm text-slate-700">${file.name}</span>
+                            <span class="text-xs text-slate-400">(${(file.size / 1024).toFixed(1)} KB)</span>
+                        </div>
+                        <button type="button" onclick="this.parentElement.remove()" class="text-rose-600 hover:text-rose-800">
+                            <i data-lucide="x" class="w-4 h-4"></i>
+                        </button>
+                    `;
+                    fileList.appendChild(fileItem);
+                }
+                
+                // آپدیت آیکون‌ها
+                lucide.createIcons();
+            });
+            
+            // کشیدن و رها کردن فایل
+            const uploadArea = document.querySelector('.upload-area');
+            
+            if (uploadArea) {
+                uploadArea.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    uploadArea.style.borderColor = '#3b82f6';
+                    uploadArea.style.backgroundColor = '#eff6ff';
+                });
+                
+                uploadArea.addEventListener('dragleave', function() {
+                    uploadArea.style.borderColor = '#cbd5e1';
+                    uploadArea.style.backgroundColor = '';
+                });
+                
+                uploadArea.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    uploadArea.style.borderColor = '#cbd5e1';
+                    uploadArea.style.backgroundColor = '';
+                    
+                    const files = e.dataTransfer.files;
+                    
+                    // ایجاد DataTransfer جدید
+                    const dataTransfer = new DataTransfer();
+                    for (let i = 0; i < files.length; i++) {
+                        dataTransfer.items.add(files[i]);
+                    }
+                    fileUpload.files = dataTransfer.files;
+                    
+                    // ایجاد رویداد change برای پردازش فایل‌ها
+                    const event = new Event('change', { bubbles: true });
+                    fileUpload.dispatchEvent(event);
+                });
+            }
+        }
+    });
+</script>
