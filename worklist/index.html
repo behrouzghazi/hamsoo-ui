@@ -48,7 +48,6 @@
         <aside class="w-80 bg-white border-l border-slate-200 flex flex-col shadow-sm z-20">
             <div class="p-6">
                 <h2 class="text-xl font-bold text-slate-800 tracking-tight">مدیریت درخواست‌ها</h2>
-                <p class="text-xs text-slate-500 mt-1">فرآیندهای قابل اجرا</p>
             </div>
 
             <div class="px-4 py-2">
@@ -59,164 +58,58 @@
             </div>
 
             <div class="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-2">
-                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest px-2 mb-2">فرآیندهای شاخص</div>
+                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest px-2 mb-2">فرآیندهای همسو</div>
                 
                 <a href="kpi-change/index.html" class="w-full group flex items-center justify-between p-3 rounded-xl bg-blue-50 text-blue-700 border border-blue-100 transition-all text-right shadow-sm shadow-blue-100/50">
                     <div class="flex items-center gap-3">
                         <div class="p-2 bg-blue-500 rounded-lg text-white group-hover:scale-110 transition-transform">
                             <i data-lucide="file-edit" class="w-4 h-4"></i>
                         </div>
-                        <span class="text-sm font-semibold">تغییر / تأیید شاخص</span>
+                        <span class="text-sm font-semibold">تغییر/تایید شاخص</span>
                     </div>
                     <i data-lucide="chevron-left" class="w-4 h-4 opacity-50"></i>
                 </a>
-
-                <button class="w-full group flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 text-slate-600 transition-all text-right">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 bg-slate-100 rounded-lg text-slate-500 group-hover:bg-slate-200 transition-colors">
-                            <i data-lucide="plus-square" class="w-4 h-4"></i>
-                        </div>
-                        <span class="text-sm font-medium">تعریف شاخص جدید</span>
-                    </div>
-                </button>
-
-                <div class="pt-4 text-[11px] font-bold text-slate-400 uppercase tracking-widest px-2 mb-2">فرآیندهای سازمانی</div>
-
-                <button class="w-full group flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 text-slate-600 transition-all text-right">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 bg-slate-100 rounded-lg text-slate-500">
-                            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-                        </div>
-                        <span class="text-sm font-medium">بازنگری SIPOC</span>
-                    </div>
-                </button>
-
-                <button class="w-full group flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 text-slate-600 transition-all text-right">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 bg-slate-100 rounded-lg text-slate-500">
-                            <i data-lucide="git-branch" class="w-4 h-4"></i>
-                        </div>
-                        <span class="text-sm font-medium">اصلاح ساختار سازمانی</span>
-                    </div>
-                </button>
             </div>
         </aside>
 
         <!-- ۳. محتوای اصلی (Inbox) -->
         <main class="flex-1 flex flex-col min-w-0 bg-slate-50 overflow-hidden">
-            <header class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-8 shrink-0">
+            <header class="h-20 bg-white border-b border-slate-200 flex items-center px-8 shrink-0">
                 <div class="flex items-center gap-4">
                     <div class="bg-blue-600/10 p-2.5 rounded-xl text-blue-600">
                         <i data-lucide="inbox" class="w-7 h-7"></i>
                     </div>
                     <div>
                         <h1 class="text-lg font-extrabold text-slate-800">صندوق ورودی وظایف (Inbox)</h1>
-                        <div class="flex items-center gap-2 mt-0.5">
-                            <span class="flex h-2 w-2 rounded-full bg-blue-500"></span>
-                            <p class="text-xs text-slate-500">۳ وظیفه جدید برای بررسی وجود دارد</p>
-                        </div>
                     </div>
-                </div>
-                
-                <div class="flex items-center gap-3">
-                    <div class="flex bg-slate-100 p-1 rounded-xl">
-                        <button class="px-4 py-1.5 text-xs font-bold bg-white text-blue-600 rounded-lg shadow-sm">همه</button>
-                        <button class="px-4 py-1.5 text-xs font-bold text-slate-500 hover:text-slate-700">فوری</button>
-                        <button class="px-4 py-1.5 text-xs font-bold text-slate-500 hover:text-slate-700">بایگانی</button>
-                    </div>
-                    <div class="h-8 w-px bg-slate-200 mx-2"></div>
-                    <button class="flex items-center gap-2 bg-white border border-slate-200 text-slate-600 px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-50 transition-all">
-                        <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
-                        فیلتر پیشرفته
-                    </button>
                 </div>
             </header>
 
             <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
                 <div class="grid grid-cols-1 gap-4">
-                    <a href="kpi-change/index.html" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group flex items-center gap-6">
-                        <div class="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center text-red-500 shrink-0">
-                            <i data-lucide="alert-circle" class="w-6 h-6"></i>
-                        </div>
+                    <a href="kpi-change/index.html" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group flex items-center justify-between gap-6">
                         <div class="flex-1 min-w-0">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="px-2 py-0.5 bg-red-100 text-red-600 text-[10px] font-black rounded uppercase tracking-tighter">فوری</span>
-                                <h3 class="text-sm font-bold text-slate-800 truncate">تأیید نهایی شاخص بهره‌وری کل عوامل تولید (TFP)</h3>
-                            </div>
-                            <div class="flex items-center gap-4 text-xs text-slate-400 font-medium">
-                                <div class="flex items-center gap-1">
-                                    <i data-lucide="user" class="w-3.5 h-3.5 text-slate-300"></i>
-                                    فرستنده: <span class="text-slate-600">مهندس حمیدی</span>
-                                </div>
-                                <div class="flex items-center gap-1">
-                                    <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-300"></i>
-                                    تاریخ ارجاع: <span class="text-slate-600">۱۴۰۲/۱۱/۱۵</span>
-                                </div>
-                            </div>
+                            <h3 class="text-sm font-bold text-slate-800 truncate">تأیید نهایی شاخص بهره‌وری کل عوامل تولید (TFP)</h3>
                         </div>
                         <div class="text-left shrink-0">
-                            <div class="flex items-center gap-1.5 text-red-600 text-xs font-black mb-2 bg-red-50 px-3 py-1 rounded-lg">
-                                <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-                                ۲ روز مانده
-                            </div>
                             <span class="text-blue-600 text-xs font-bold hover:underline">مشاهده جزئیات</span>
                         </div>
                     </a>
 
-                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group flex items-center gap-6">
-                        <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-500 shrink-0">
-                            <i data-lucide="refresh-ccw" class="w-6 h-6"></i>
-                        </div>
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group flex items-center justify-between gap-6">
                         <div class="flex-1 min-w-0">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="px-2 py-0.5 bg-blue-100 text-blue-600 text-[10px] font-black rounded uppercase tracking-tighter">عادی</span>
-                                <h3 class="text-sm font-bold text-slate-800 truncate">بررسی بازنگری فرآیند تأمین کالا (SIPOC)</h3>
-                            </div>
-                            <div class="flex items-center gap-4 text-xs text-slate-400 font-medium">
-                                <div class="flex items-center gap-1">
-                                    <i data-lucide="user" class="w-3.5 h-3.5 text-slate-300"></i>
-                                    فرستنده: <span class="text-slate-600">واحد تضمین کیفیت</span>
-                                </div>
-                                <div class="flex items-center gap-1">
-                                    <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-300"></i>
-                                    تاریخ ارجاع: <span class="text-slate-600">۱۴۰۲/۱۱/۱۴</span>
-                                </div>
-                            </div>
+                            <h3 class="text-sm font-bold text-slate-800 truncate">بررسی بازنگری فرآیند تأمین کالا (SIPOC)</h3>
                         </div>
                         <div class="text-left shrink-0">
-                            <div class="flex items-center gap-1.5 text-slate-500 text-xs font-black mb-2 bg-slate-50 px-3 py-1 rounded-lg">
-                                <i data-lucide="clock" class="w-3.5 h-3.5"></i>
-                                ۵ روز مانده
-                            </div>
                             <span class="text-blue-600 text-xs font-bold hover:underline">مشاهده جزئیات</span>
                         </div>
                     </div>
 
-                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group flex items-center gap-6">
-                        <div class="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 shrink-0">
-                            <i data-lucide="git-branch" class="w-6 h-6"></i>
-                        </div>
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group flex items-center justify-between gap-6">
                         <div class="flex-1 min-w-0">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="px-2 py-0.5 bg-slate-100 text-slate-600 text-[10px] font-black rounded uppercase tracking-tighter">پیش‌نویس</span>
-                                <h3 class="text-sm font-bold text-slate-800 truncate">درخواست اصلاح چارت سازمانی معاونت برنامه‌ریزی</h3>
-                            </div>
-                            <div class="flex items-center gap-4 text-xs text-slate-400 font-medium">
-                                <div class="flex items-center gap-1">
-                                    <i data-lucide="user" class="w-3.5 h-3.5 text-slate-300"></i>
-                                    فرستنده: <span class="text-slate-600">مدیر منابع انسانی</span>
-                                </div>
-                                <div class="flex items-center gap-1">
-                                    <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-300"></i>
-                                    تاریخ ارجاع: <span class="text-slate-600">۱۴۰۲/۱۱/۱۲</span>
-                                </div>
-                            </div>
+                            <h3 class="text-sm font-bold text-slate-800 truncate">درخواست اصلاح چارت سازمانی معاونت برنامه‌ریزی</h3>
                         </div>
                         <div class="text-left shrink-0">
-                            <div class="flex items-center gap-1.5 text-slate-500 text-xs font-black mb-2 bg-slate-50 px-3 py-1 rounded-lg">
-                            	<i data-lucide="clock" class="w-3.5 h-3.5"></i>
-                                منقضی شده
-                            </div>
                             <span class="text-blue-600 text-xs font-bold hover:underline">مشاهده جزئیات</span>
                         </div>
                     </div>
