@@ -1,4 +1,38 @@
 <div id="tab-monitoring" class="tab-content space-y-8">
+    <!-- بخش تنظیمات پایش -->
+    <div class="form-section">
+        <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
+            <i data-lucide="sliders-horizontal" class="w-5 h-5 text-blue-500"></i>
+            تنظیمات پایش
+        </h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                <label class="form-label">دوره پایش <span class="required-star">*</span></label>
+                <select id="monitoring-period" class="form-input">
+                    <option selected>ماهانه</option>
+                    <option>فصلی (سه ماهه)</option>
+                    <option>شش ماهه</option>
+                    <option>سالانه</option>
+                    <option>هفتگی</option>
+                </select>
+                <p class="helper-text">فواصل زمانی که مقدار شاخص باید به‌روزرسانی شود.</p>
+            </div>
+
+            <div>
+                <label class="form-label">نوع پایش <span class="required-star">*</span></label>
+                <select id="monitoring-display-type" class="form-input" onchange="updateMonitoringDisplayTypeDescription()">
+                    <option value="periodic" selected>دوره‌ای</option>
+                    <option value="cumulative">تجمعی</option>
+                    <option value="average">میانگینی</option>
+                </select>
+                <div class="option-description mt-2">
+                    <div id="monitoring-display-type-description"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- بخش نقش‌ها و مسئولیت‌ها -->
     <div class="form-section">
         <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
@@ -106,6 +140,9 @@
                         <span class="text-sm font-medium text-slate-600">سایر</span>
                     </div>
                 </div>
+                <div class="option-description mt-2">
+                    <div id="data-source-description"></div>
+                </div>
                 
                 <!-- فیلدهای منبع سیستمی -->
                 <div id="system-fields" class="mt-6 space-y-4">
@@ -153,6 +190,9 @@
                                 <i data-lucide="zap" class="w-4 h-4 text-blue-500"></i>
                                 <span class="text-sm font-medium text-blue-600">اتوماتیک</span>
                             </div>
+                        </div>
+                        <div class="option-description mt-2 mb-4">
+                            <div id="monitoring-method-description"></div>
                         </div>
                         
                         <!-- لینک وب سرویس برای روش اتوماتیک -->
@@ -246,34 +286,49 @@
 
 <script>
 function selectDataSource(type) {
+    const dataSourceDescription = document.getElementById('data-source-description');
+
     if (type === 'system') {
         document.getElementById('system-fields').classList.remove('hidden');
         document.getElementById('manual-fields').classList.add('hidden');
         document.querySelector('#system').checked = true;
         document.querySelector('.radio-card[onclick*="system"]').classList.add('selected');
         document.querySelector('.radio-card[onclick*="manual"]').classList.remove('selected');
+        if (dataSourceDescription) {
+            dataSourceDescription.innerHTML = '<span class="font-medium text-blue-700">سیستمی:</span> اطلاعات شاخص در یک سامانه نرم‌افزاری موجود است.';
+        }
     } else {
         document.getElementById('system-fields').classList.add('hidden');
         document.getElementById('manual-fields').classList.remove('hidden');
         document.querySelector('#manual').checked = true;
         document.querySelector('.radio-card[onclick*="manual"]').classList.add('selected');
         document.querySelector('.radio-card[onclick*="system"]').classList.remove('selected');
+        if (dataSourceDescription) {
+            dataSourceDescription.innerHTML = '<span class="font-medium text-slate-700">سایر:</span> اطلاعات شاخص در سامانه نرم‌افزاری ذخیره نمی‌گردد.';
+        }
     }
 }
 
 function selectMonitoringMethod(method) {
     const webserviceLink = document.getElementById('webservice-link');
+    const monitoringMethodDescription = document.getElementById('monitoring-method-description');
     
     if (method === 'auto') {
         webserviceLink.classList.remove('hidden');
         document.querySelector('#auto-method').checked = true;
         document.querySelector('.radio-card[onclick*="auto"]').classList.add('selected');
         document.querySelector('.radio-card[onclick*="manual"]').classList.remove('selected');
+        if (monitoringMethodDescription) {
+            monitoringMethodDescription.innerHTML = '<span class="font-medium text-blue-700">اتوماتیک:</span> همسو به‌صورت اتوماتیک مقادیر شاخص را از سامانه مدنظر فراخوانی می‌کند.';
+        }
     } else {
         webserviceLink.classList.add('hidden');
         document.querySelector('#manual-method').checked = true;
         document.querySelector('.radio-card[onclick*="manual"]').classList.add('selected');
         document.querySelector('.radio-card[onclick*="auto"]').classList.remove('selected');
+        if (monitoringMethodDescription) {
+            monitoringMethodDescription.innerHTML = '<span class="font-medium text-slate-700">دستی:</span> مقادیر شاخص توسط تسهیلگر در سامانه همسو وارد می‌گردد.';
+        }
     }
 }
 

@@ -102,6 +102,7 @@ function initializeTabEvents(tabName) {
     if (tabName === 'monitoring') {
         const ownerTypeSelect = document.getElementById('owner-type');
         const monitorTypeSelect = document.getElementById('monitor-type');
+        const monitoringDisplayTypeSelect = document.getElementById('monitoring-display-type');
 
         if (ownerTypeSelect) {
             ownerTypeSelect.addEventListener('change', updateOwnerField);
@@ -112,8 +113,90 @@ function initializeTabEvents(tabName) {
 
         updateOwnerField();
         updateMonitorField();
+        updateMonitoringDisplayTypeDescription();
+
+        const selectedDataSource = document.querySelector('input[name="data_source"]:checked');
+        selectDataSource(selectedDataSource ? selectedDataSource.id : 'system');
+
+        const selectedMonitoringMethod = document.querySelector('input[name="monitoring_method"]:checked');
+        selectMonitoringMethod(selectedMonitoringMethod && selectedMonitoringMethod.id === 'auto-method' ? 'auto' : 'manual');
+
+        if (monitoringDisplayTypeSelect) {
+            monitoringDisplayTypeSelect.addEventListener('change', updateMonitoringDisplayTypeDescription);
+        }
     }
 }
+
+window.updateMonitoringDisplayTypeDescription = function() {
+    const monitoringDisplayType = document.getElementById('monitoring-display-type');
+    const descriptionElement = document.getElementById('monitoring-display-type-description');
+    if (!monitoringDisplayType || !descriptionElement) return;
+
+    const descriptions = {
+        periodic: '<span class="font-medium text-slate-700">دوره‌ای:</span> در هنگام پایش، مقادیر فقط به صورت دوره‌ای نمایش داده می‌شود.',
+        cumulative: '<span class="font-medium text-slate-700">تجمعی:</span> در هنگام پایش، مقادیر به صورت تجمعی نمایش داده می‌شود.',
+        average: '<span class="font-medium text-slate-700">میانگینی:</span> در هنگام پایش، مقادیر به صورت تجمعی نمایش داده می‌شود.'
+    };
+
+    descriptionElement.innerHTML = descriptions[monitoringDisplayType.value] || descriptions.periodic;
+};
+
+window.selectDataSource = function(type) {
+    const systemFields = document.getElementById('system-fields');
+    const manualFields = document.getElementById('manual-fields');
+    const systemRadio = document.getElementById('system');
+    const manualRadio = document.getElementById('manual');
+    const systemCard = document.querySelector('.radio-card[onclick*="system"]');
+    const manualCard = document.querySelector('.radio-card[onclick*="manual"]');
+    const dataSourceDescription = document.getElementById('data-source-description');
+
+    if (type === 'system') {
+        if (systemFields) systemFields.classList.remove('hidden');
+        if (manualFields) manualFields.classList.add('hidden');
+        if (systemRadio) systemRadio.checked = true;
+        if (systemCard) systemCard.classList.add('selected');
+        if (manualCard) manualCard.classList.remove('selected');
+        if (dataSourceDescription) {
+            dataSourceDescription.innerHTML = '<span class="font-medium text-blue-700">سیستمی:</span> اطلاعات شاخص در یک سامانه نرم‌افزاری موجود است.';
+        }
+    } else {
+        if (systemFields) systemFields.classList.add('hidden');
+        if (manualFields) manualFields.classList.remove('hidden');
+        if (manualRadio) manualRadio.checked = true;
+        if (manualCard) manualCard.classList.add('selected');
+        if (systemCard) systemCard.classList.remove('selected');
+        if (dataSourceDescription) {
+            dataSourceDescription.innerHTML = '<span class="font-medium text-slate-700">سایر:</span> اطلاعات شاخص در سامانه نرم‌افزاری ذخیره نمی‌گردد.';
+        }
+    }
+};
+
+window.selectMonitoringMethod = function(method) {
+    const webserviceLink = document.getElementById('webservice-link');
+    const manualMethod = document.getElementById('manual-method');
+    const autoMethod = document.getElementById('auto-method');
+    const manualCard = document.querySelector('.radio-card[onclick*="selectMonitoringMethod(\'manual\')"]');
+    const autoCard = document.querySelector('.radio-card[onclick*="selectMonitoringMethod(\'auto\')"]');
+    const monitoringMethodDescription = document.getElementById('monitoring-method-description');
+
+    if (method === 'auto') {
+        if (webserviceLink) webserviceLink.classList.remove('hidden');
+        if (autoMethod) autoMethod.checked = true;
+        if (autoCard) autoCard.classList.add('selected');
+        if (manualCard) manualCard.classList.remove('selected');
+        if (monitoringMethodDescription) {
+            monitoringMethodDescription.innerHTML = '<span class="font-medium text-blue-700">اتوماتیک:</span> همسو به‌صورت اتوماتیک مقادیر شاخص را از سامانه مدنظر فراخوانی می‌کند.';
+        }
+    } else {
+        if (webserviceLink) webserviceLink.classList.add('hidden');
+        if (manualMethod) manualMethod.checked = true;
+        if (manualCard) manualCard.classList.add('selected');
+        if (autoCard) autoCard.classList.remove('selected');
+        if (monitoringMethodDescription) {
+            monitoringMethodDescription.innerHTML = '<span class="font-medium text-slate-700">دستی:</span> مقادیر شاخص توسط تسهیلگر در سامانه همسو وارد می‌گردد.';
+        }
+    }
+};
 
 function updateOwnerField() {
     const ownerTypeSelect = document.getElementById('owner-type');
