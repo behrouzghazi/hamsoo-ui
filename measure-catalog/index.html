@@ -180,8 +180,72 @@
         }
     </style>
 </head>
-<body class="p-4 md:p-8 bg-slate-50">
-    <div class="max-w-6xl mx-auto">
+<body class="bg-slate-50 text-slate-800">
+    <div class="flex h-screen w-full overflow-hidden">
+        <aside class="w-16 bg-slate-900 flex flex-col items-center py-6 gap-6 z-30">
+            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white mb-4">
+                <a href="/index.html" aria-label="صفحه اصلی">
+                    <i data-lucide="layers" class="w-6 h-6"></i>
+                </a>
+            </div>
+            <nav class="flex flex-col gap-4">
+                <a href="/index.html" class="p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all" title="خانه">
+                    <i data-lucide="house" class="w-6 h-6"></i>
+                </a>
+                <a href="/worklist/index.html" class="p-3 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-xl transition-all" title="مدیریت درخواست‌ها">
+                    <i data-lucide="git-pull-request" class="w-6 h-6"></i>
+                </a>
+                <button class="p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all" title="گزارش">
+                    <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+                </button>
+                <button class="p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all" title="اطلاعات پایه">
+                    <i data-lucide="settings" class="w-6 h-6"></i>
+                </button>
+            </nav>
+        </aside>
+
+        <aside class="w-80 bg-white border-l border-slate-200 flex flex-col shadow-sm z-20">
+            <div class="p-6">
+                <h2 class="text-xl font-bold text-slate-800 tracking-tight">مدیریت شاخص‌ها</h2>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4 space-y-2">
+                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest px-2 mb-2">فرآیندهای همسو</div>
+                <a href="/worklist/index.html" class="w-full group flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all text-right">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-blue-500 rounded-lg text-white">
+                            <i data-lucide="inbox" class="w-4 h-4"></i>
+                        </div>
+                        <span class="text-sm font-semibold text-slate-700">صندوق ورودی وظایف</span>
+                    </div>
+                    <i data-lucide="chevron-left" class="w-4 h-4 opacity-50"></i>
+                </a>
+                <a href="/measure-catalog/index.html" class="w-full group flex items-center justify-between p-3 rounded-xl bg-blue-50 text-blue-700 border border-blue-100 transition-all text-right shadow-sm shadow-blue-100/50">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-blue-500 rounded-lg text-white">
+                            <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+                        </div>
+                        <span class="text-sm font-semibold">مدیریت نسخه‌های شاخص</span>
+                    </div>
+                    <i data-lucide="chevron-left" class="w-4 h-4 opacity-50"></i>
+                </a>
+            </div>
+        </aside>
+
+        <main class="flex-1 flex flex-col min-w-0 bg-slate-50 overflow-hidden">
+            <header class="h-16 bg-blue-700 text-white border-b border-blue-800 flex items-center justify-between px-6 shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center">
+                        <i data-lucide="layers" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold">سامانه همسو</div>
+                        <div class="text-[11px] text-blue-100">مدیریت فرآیندها و شاخص‌ها</div>
+                    </div>
+                </div>
+                <span class="text-xs bg-white/15 px-3 py-1 rounded-full">نسخه آزمایشی</span>
+            </header>
+            <div class="flex-1 overflow-y-auto p-6">
+                <div class="max-w-6xl mx-auto">
         <!-- هدر -->
         <div class="bg-white rounded-xl p-6 mb-6 card-shadow">
             <div class="flex items-center justify-between">
@@ -374,6 +438,9 @@
                 بازگشت به لیست همه شاخص‌ها
             </button>
         </div>
+                </div>
+            </div>
+        </main>
     </div>
 
     <script>
