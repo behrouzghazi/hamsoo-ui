@@ -69,16 +69,54 @@
             </header>
 
             <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
-                <div class="grid grid-cols-1 gap-4">
+                <div class="mb-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div>
+                        <h2 class="text-base font-extrabold text-slate-800">درخواست‌های من</h2>
+                    </div>
+                    <div class="inline-flex self-start md:self-auto rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
+                        <button type="button" data-inbox-tab="active" onclick="switchInboxTab('active')" class="inbox-tab-btn px-4 py-2 rounded-lg text-xs font-bold transition-all bg-blue-600 text-white shadow-sm">
+                            فعال
+                            <span class="mr-1 inline-flex min-w-5 h-5 px-1.5 rounded-full bg-white/20 text-white leading-5 justify-center">۳</span>
+                        </button>
+                        <button type="button" data-inbox-tab="completed" onclick="switchInboxTab('completed')" class="inbox-tab-btn px-4 py-2 rounded-lg text-xs font-bold transition-all text-slate-500 hover:text-slate-800">
+                            تکمیل‌شده
+                            <span class="mr-1 inline-flex min-w-5 h-5 px-1.5 rounded-full bg-slate-100 text-slate-600 leading-5 justify-center">۲</span>
+                        </button>
+                    </div>
+                </div>
 
-                    <a href="kpi-change/detail.html?mode=edit" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group flex items-center justify-between gap-6">
+                <div class="mb-5 grid grid-cols-1 md:grid-cols-[1fr_260px] gap-3">
+                    <div class="relative group">
+                        <i data-lucide="search" class="absolute right-3 top-3 w-4 h-4 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
+                        <input id="request-search" type="text" oninput="filterInboxRequests()" placeholder="جستجوی عنوان درخواست..." class="w-full bg-white border border-slate-200 rounded-xl pr-10 pl-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+                    </div>
+                    <div class="relative">
+                        <i data-lucide="workflow" class="absolute right-3 top-3 w-4 h-4 text-slate-400"></i>
+                        <select id="process-filter" onchange="filterInboxRequests()" class="w-full appearance-none bg-white border border-slate-200 rounded-xl pr-10 pl-9 py-2.5 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+                            <option value="">همه فرایندها</option>
+                            <option value="درخواست تغییر شاخص">درخواست تغییر شاخص</option>
+                        </select>
+                        <i data-lucide="chevron-down" class="absolute left-3 top-3 w-4 h-4 text-slate-400 pointer-events-none"></i>
+                    </div>
+                </div>
+                <div data-inbox-panel="active" class="grid grid-cols-1 gap-4">
+
+                    <a href="kpi-change/detail.html?mode=edit" data-request-card data-title="تأیید نهایی شاخص بهره‌وری کل عوامل تولید (TFP)" data-process="درخواست تغییر شاخص" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group flex items-center justify-between gap-6">
                         <div class="flex items-center gap-4 flex-1 min-w-0">
                             <div class="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                                 <i data-lucide="clipboard-check" class="w-5 h-5"></i>
                             </div>
                             <div class="flex-1 min-w-0">
                                 <h3 class="text-sm font-bold text-slate-800 truncate">تأیید نهایی شاخص بهره‌وری کل عوامل تولید (TFP)</h3>
+                                <div class="mt-1 inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-bold text-blue-700">
+                                    <i data-lucide="workflow" class="w-3.5 h-3.5"></i>
+                                    درخواست تغییر شاخص
+                                </div>
                                 <div class="mt-2 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-slate-500">
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <i data-lucide="user-round-check" class="w-4 h-4 text-emerald-500"></i>
+                                        ارجاع‌دهنده: <strong class="font-bold text-slate-700">رضا حمیدی</strong>
+                                    </span>
                                     <span class="inline-flex items-center gap-1.5">
                                         <i data-lucide="calendar-days" class="w-4 h-4 text-slate-400"></i>
                                         تاریخ ارجاع: <strong class="font-bold text-slate-700">۱۴۰۲/۱۱/۱۵</strong>
@@ -86,10 +124,6 @@
                                     <span class="inline-flex items-center gap-1.5">
                                         <i data-lucide="calendar-clock" class="w-4 h-4 text-amber-500"></i>
                                         مهلت انجام: <strong class="font-bold text-slate-700">۱۴۰۲/۱۱/۱۸</strong>
-                                    </span>
-                                    <span class="inline-flex items-center gap-1.5">
-                                        <i data-lucide="user-round-check" class="w-4 h-4 text-emerald-500"></i>
-                                        ارجاع‌دهنده: <strong class="font-bold text-slate-700">رضا حمیدی</strong>
                                     </span>
                                 </div>
                             </div>
@@ -100,14 +134,22 @@
                     </a>
 
                     <!-- <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group flex items-center justify-between gap-6"> -->
-                        <a href="kpi-change/detail.html?mode=edit" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group flex items-center justify-between gap-6">
+                        <a href="kpi-change/detail.html?mode=edit" data-request-card data-title="بررسی بازنگری فرآیند تأمین کالا (SIPOC)" data-process="درخواست تغییر شاخص" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group flex items-center justify-between gap-6">
                         <div class="flex items-center gap-4 flex-1 min-w-0">
                             <div class="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                                 <i data-lucide="clipboard-check" class="w-5 h-5"></i>
                             </div>
                             <div class="flex-1 min-w-0">
                                 <h3 class="text-sm font-bold text-slate-800 truncate">بررسی بازنگری فرآیند تأمین کالا (SIPOC)</h3>
+                                <div class="mt-1 inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-bold text-blue-700">
+                                    <i data-lucide="workflow" class="w-3.5 h-3.5"></i>
+                                    درخواست تغییر شاخص
+                                </div>
                                 <div class="mt-2 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-slate-500">
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <i data-lucide="user-round-check" class="w-4 h-4 text-emerald-500"></i>
+                                        ارجاع‌دهنده: <strong class="font-bold text-slate-700">سارا کریمی</strong>
+                                    </span>
                                     <span class="inline-flex items-center gap-1.5">
                                         <i data-lucide="calendar-days" class="w-4 h-4 text-slate-400"></i>
                                         تاریخ ارجاع: <strong class="font-bold text-slate-700">۱۴۰۲/۱۱/۱۴</strong>
@@ -115,10 +157,6 @@
                                     <span class="inline-flex items-center gap-1.5">
                                         <i data-lucide="calendar-clock" class="w-4 h-4 text-amber-500"></i>
                                         مهلت انجام: <strong class="font-bold text-slate-700">۱۴۰۲/۱۱/۲۰</strong>
-                                    </span>
-                                    <span class="inline-flex items-center gap-1.5">
-                                        <i data-lucide="user-round-check" class="w-4 h-4 text-emerald-500"></i>
-                                        ارجاع‌دهنده: <strong class="font-bold text-slate-700">سارا کریمی</strong>
                                     </span>
                                 </div>
                             </div>
@@ -130,14 +168,22 @@
                     <!-- </div> -->
                         
                     <!-- <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group flex items-center justify-between gap-6"> -->
-                        <a href="kpi-change/detail.html?mode=edit" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group flex items-center justify-between gap-6">
+                        <a href="kpi-change/detail.html?mode=edit" data-request-card data-title="درخواست اصلاح چارت سازمانی معاونت برنامه‌ریزی" data-process="درخواست تغییر شاخص" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group flex items-center justify-between gap-6">
                         <div class="flex items-center gap-4 flex-1 min-w-0">
                             <div class="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                                 <i data-lucide="clipboard-check" class="w-5 h-5"></i>
                             </div>
                             <div class="flex-1 min-w-0">
                                 <h3 class="text-sm font-bold text-slate-800 truncate">درخواست اصلاح چارت سازمانی معاونت برنامه‌ریزی</h3>
+                                <div class="mt-1 inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-bold text-blue-700">
+                                    <i data-lucide="workflow" class="w-3.5 h-3.5"></i>
+                                    درخواست تغییر شاخص
+                                </div>
                                 <div class="mt-2 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-slate-500">
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <i data-lucide="user-round-check" class="w-4 h-4 text-emerald-500"></i>
+                                        ارجاع‌دهنده: <strong class="font-bold text-slate-700">مریم نادری</strong>
+                                    </span>
                                     <span class="inline-flex items-center gap-1.5">
                                         <i data-lucide="calendar-days" class="w-4 h-4 text-slate-400"></i>
                                         تاریخ ارجاع: <strong class="font-bold text-slate-700">۱۴۰۲/۱۱/۱۲</strong>
@@ -145,10 +191,6 @@
                                     <span class="inline-flex items-center gap-1.5">
                                         <i data-lucide="calendar-clock" class="w-4 h-4 text-amber-500"></i>
                                         مهلت انجام: <strong class="font-bold text-slate-700">۱۴۰۲/۱۱/۲۲</strong>
-                                    </span>
-                                    <span class="inline-flex items-center gap-1.5">
-                                        <i data-lucide="user-round-check" class="w-4 h-4 text-emerald-500"></i>
-                                        ارجاع‌دهنده: <strong class="font-bold text-slate-700">مریم نادری</strong>
                                     </span>
                                 </div>
                             </div>
@@ -158,13 +200,78 @@
                         </div>
                         </a>
                     <!-- </div> -->
-                </div>
-
-                <div class="mt-8 flex justify-center">
+                <div class="mt-4 flex justify-center">
                     <button class="text-sm font-bold text-slate-400 hover:text-blue-600 flex items-center gap-2 transition-colors">
                         <i data-lucide="arrow-down" class="w-4 h-4"></i>
                         مشاهده وظایف قدیمی‌تر
                     </button>
+                </div>
+                </div>
+
+                <div data-inbox-panel="completed" class="hidden grid-cols-1 gap-4">
+                    <a href="kpi-change/detail.html?mode=view" data-request-card data-title="تأیید تغییرات شاخص نرخ ضایعات تولید" data-process="درخواست تغییر شاخص" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all cursor-pointer group flex items-center justify-between gap-6">
+                        <div class="flex items-center gap-4 flex-1 min-w-0">
+                            <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                                <i data-lucide="check-check" class="w-5 h-5"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-sm font-bold text-slate-800 truncate">تأیید تغییرات شاخص نرخ ضایعات تولید</h3>
+                                <div class="mt-1 inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-700">
+                                    <i data-lucide="workflow" class="w-3.5 h-3.5"></i>
+                                    درخواست تغییر شاخص
+                                </div>
+                                <div class="mt-2 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-slate-500">
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <i data-lucide="user-round-check" class="w-4 h-4 text-emerald-500"></i>
+                                        ارجاع‌دهنده: <strong class="font-bold text-slate-700">علی مرادی</strong>
+                                    </span>
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <i data-lucide="calendar-days" class="w-4 h-4 text-slate-400"></i>
+                                        تاریخ ارجاع: <strong class="font-bold text-slate-700">۱۴۰۲/۱۱/۰۸</strong>
+                                    </span>
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <i data-lucide="calendar-check" class="w-4 h-4 text-emerald-500"></i>
+                                        تاریخ تکمیل: <strong class="font-bold text-slate-700">۱۴۰۲/۱۱/۱۰</strong>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-left shrink-0">
+                            <span class="text-emerald-600 text-xs font-bold hover:underline">مشاهده نتیجه</span>
+                        </div>
+                    </a>
+
+                    <a href="kpi-change/detail.html?mode=view" data-request-card data-title="بازنگری دوره پایش شاخص رضایت مشتریان" data-process="درخواست تغییر شاخص" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all cursor-pointer group flex items-center justify-between gap-6">
+                        <div class="flex items-center gap-4 flex-1 min-w-0">
+                            <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                                <i data-lucide="check-check" class="w-5 h-5"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-sm font-bold text-slate-800 truncate">بازنگری دوره پایش شاخص رضایت مشتریان</h3>
+                                <div class="mt-1 inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-bold text-emerald-700">
+                                    <i data-lucide="workflow" class="w-3.5 h-3.5"></i>
+                                    درخواست تغییر شاخص
+                                </div>
+                                <div class="mt-2 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-slate-500">
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <i data-lucide="user-round-check" class="w-4 h-4 text-emerald-500"></i>
+                                        ارجاع‌دهنده: <strong class="font-bold text-slate-700">لیلا محمدی</strong>
+                                    </span>
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <i data-lucide="calendar-days" class="w-4 h-4 text-slate-400"></i>
+                                        تاریخ ارجاع: <strong class="font-bold text-slate-700">۱۴۰۲/۱۱/۰۵</strong>
+                                    </span>
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <i data-lucide="calendar-check" class="w-4 h-4 text-emerald-500"></i>
+                                        تاریخ تکمیل: <strong class="font-bold text-slate-700">۱۴۰۲/۱۱/۰۷</strong>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-left shrink-0">
+                            <span class="text-emerald-600 text-xs font-bold hover:underline">مشاهده نتیجه</span>
+                        </div>
+                    </a>
                 </div>
             </div>
         </main>
@@ -172,6 +279,46 @@
     </div>
 
     <script>
+        function switchInboxTab(tab) {
+            document.querySelectorAll('[data-inbox-panel]').forEach((panel) => {
+                const isActive = panel.dataset.inboxPanel === tab;
+                panel.classList.toggle('hidden', !isActive);
+                panel.classList.toggle('grid', isActive);
+            });
+
+            document.querySelectorAll('[data-inbox-tab]').forEach((button) => {
+                const isActive = button.dataset.inboxTab === tab;
+                const badge = button.querySelector('span');
+                button.classList.toggle('bg-blue-600', isActive);
+                button.classList.toggle('text-white', isActive);
+                button.classList.toggle('shadow-sm', isActive);
+                button.classList.toggle('text-slate-500', !isActive);
+                button.classList.toggle('hover:text-slate-800', !isActive);
+
+                if (badge) {
+                    badge.classList.toggle('bg-white/20', isActive);
+                    badge.classList.toggle('text-white', isActive);
+                    badge.classList.toggle('bg-slate-100', !isActive);
+                    badge.classList.toggle('text-slate-600', !isActive);
+                }
+            });
+
+            filterInboxRequests();
+        }
+
+        function filterInboxRequests() {
+            const searchValue = document.getElementById('request-search')?.value.trim().toLowerCase() || '';
+            const processValue = document.getElementById('process-filter')?.value || '';
+
+            document.querySelectorAll('[data-request-card]').forEach((card) => {
+                const title = (card.dataset.title || '').toLowerCase();
+                const process = card.dataset.process || '';
+                const matchesTitle = !searchValue || title.includes(searchValue);
+                const matchesProcess = !processValue || process === processValue;
+                card.classList.toggle('hidden', !(matchesTitle && matchesProcess));
+            });
+        }
+
         lucide.createIcons();
     </script>
 </body>

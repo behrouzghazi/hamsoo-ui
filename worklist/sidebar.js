@@ -3,16 +3,14 @@
     const processItems = [
         {
             id: 'kpi-change',
-            title: 'تغییر/تایید شاخص',
+            title: 'درخواست تغییر شاخص',
             href: '/worklist/kpi-change/detail.html?mode=edit',
             icon: 'file-edit'
         }
     ];
 
-    function navItemClasses(isActive) {
-        return isActive
-            ? 'w-full flex items-center justify-between p-3 rounded-xl bg-slate-900 text-white transition-all text-right shadow-sm'
-            : 'w-full group flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all text-right';
+    function navItemClasses() {
+        return 'w-full group flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:bg-slate-50 transition-all text-right';
     }
 
     function processItemClasses(isActive) {
@@ -51,12 +49,12 @@
             </div>
 
             <div class="px-4 py-3 border-b border-slate-100">
-                <a href="/worklist/index.html" class="${navItemClasses(active === 'inbox')}">
+                <a href="/worklist/index.html" class="${navItemClasses()}">
                     <div class="flex items-center gap-3">
-                        <div class="p-2 ${active === 'inbox' ? 'bg-white/10 text-white' : 'bg-blue-500 text-white'} rounded-lg">
+                        <div class="p-2 bg-blue-500 text-white rounded-lg">
                             <i data-lucide="inbox" class="w-4 h-4"></i>
                         </div>
-                        <span class="text-sm font-semibold ${active === 'inbox' ? '' : 'text-slate-700'}">صندوق ورودی وظایف</span>
+                        <span class="text-sm font-semibold text-slate-700">صندوق ورودی وظایف</span>
                     </div>
                     <span class="min-w-6 h-6 px-2 rounded-full bg-rose-500 text-white text-xs font-bold leading-6 text-center">${inboxCount}</span>
                 </a>
