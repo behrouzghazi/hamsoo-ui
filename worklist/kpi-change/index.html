@@ -6,6 +6,7 @@
     <title>تغییر/تأیید شاخص | لیست شاخص‌ها</title>
     <script src="/node_modules/@tailwindcss/browser/dist/index.global.js"></script>
     <script src="/node_modules/lucide/dist/umd/lucide.min.js"></script>
+    <script src="/worklist/sidebar.js" defer></script>
     <link href="/node_modules/@fontsource/vazirmatn/index.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="styles.css" />
 </head>
@@ -32,32 +33,7 @@
             </nav>
         </aside>
 
-        <aside class="w-80 bg-white border-l border-slate-200 flex flex-col shadow-sm z-20">
-            <div class="p-6">
-                <h2 class="text-xl font-bold text-slate-800 tracking-tight">مدیریت درخواست‌ها</h2>
-            </div>
-
-            <div class="px-4 py-2">
-                <div class="relative group">
-                    <i data-lucide="search" class="absolute right-3 top-2.5 w-4 h-4 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
-                    <input type="text" placeholder="جستجوی فرآیند..." class="w-full bg-slate-50 border border-slate-100 rounded-xl pr-10 pl-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
-                </div>
-            </div>
-
-            <div class="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-2">
-                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest px-2 mb-2">فرآیندهای همسو</div>
-
-                <a href="index.html" class="w-full group flex items-center justify-between p-3 rounded-xl bg-blue-50 text-blue-700 border border-blue-100 transition-all text-right shadow-sm shadow-blue-100/50">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 bg-blue-500 rounded-lg text-white group-hover:scale-110 transition-transform">
-                            <i data-lucide="file-edit" class="w-4 h-4"></i>
-                        </div>
-                        <span class="text-sm font-semibold">تغییر/تایید شاخص</span>
-                    </div>
-                    <i data-lucide="chevron-left" class="w-4 h-4 opacity-50"></i>
-                </a>
-            </div>
-        </aside>
+        <aside data-worklist-sidebar data-active="kpi-change" class="w-80 bg-white border-l border-slate-200 flex flex-col shadow-sm z-20"></aside>
 
         <main class="flex-1 flex flex-col min-w-0 bg-slate-50 overflow-hidden">
             <header class="h-20 bg-white border-b border-slate-200 flex items-center px-8 shrink-0">

@@ -6,6 +6,7 @@
     <title>مدیریت درخواست‌ها | سامانه همسو</title>
     <script src="/node_modules/@tailwindcss/browser/dist/index.global.js"></script>
     <script src="/node_modules/lucide/dist/umd/lucide.min.js"></script>
+    <script src="/worklist/sidebar.js" defer></script>
     <link href="/node_modules/@fontsource/vazirmatn/index.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="styles.css" />
 </head>
@@ -25,8 +26,9 @@
                 <a href="/index.html" class="p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all" title="خانه">
                     <i data-lucide="house" class="w-6 h-6"></i>
                 </a>
-                <a href="/worklist/index.html" class="p-3 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-xl transition-all" title="مدیریت درخواست‌ها">
+                <a href="/worklist/index.html" class="relative p-3 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-xl transition-all" title="مدیریت درخواست‌ها">
                     <i data-lucide="git-pull-request" class="w-6 h-6"></i>
+                    <span class="absolute -top-2 -left-2 min-w-5 h-5 px-1.5 rounded-full bg-rose-500 text-white text-[11px] font-bold leading-5 text-center shadow-sm shadow-rose-900/30">۳</span>
                 </a>
                 <button class="p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all" title="گزارش">
                     <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
@@ -38,32 +40,7 @@
         </aside>
 
         <!-- ۲. سایدبار لیست فرآیندها (Content Bar) -->
-        <aside class="w-80 bg-white border-l border-slate-200 flex flex-col shadow-sm z-20">
-            <div class="p-6">
-                <h2 class="text-xl font-bold text-slate-800 tracking-tight">مدیریت درخواست‌ها</h2>
-            </div>
-
-            <div class="px-4 py-2">
-                <div class="relative group">
-                    <i data-lucide="search" class="absolute right-3 top-2.5 w-4 h-4 text-slate-400 group-focus-within:text-blue-500 transition-colors"></i>
-                    <input type="text" placeholder="جستجوی فرآیند..." class="w-full bg-slate-50 border border-slate-100 rounded-xl pr-10 pl-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
-                </div>
-            </div>
-
-            <div class="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-2">
-                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-widest px-2 mb-2">فرآیندهای همسو</div>
-                
-                <a href="kpi-change/detail.html?mode=edit" class="w-full group flex items-center justify-between p-3 rounded-xl bg-blue-50 text-blue-700 border border-blue-100 transition-all text-right shadow-sm shadow-blue-100/50">
-                    <div class="flex items-center gap-3">
-                        <div class="p-2 bg-blue-500 rounded-lg text-white group-hover:scale-110 transition-transform">
-                            <i data-lucide="file-edit" class="w-4 h-4"></i>
-                        </div>
-                        <span class="text-sm font-semibold">تغییر/تایید شاخص</span>
-                    </div>
-                    <i data-lucide="chevron-left" class="w-4 h-4 opacity-50"></i>
-                </a>
-            </div>
-        </aside>
+        <aside data-worklist-sidebar data-active="inbox" class="w-80 bg-white border-l border-slate-200 flex flex-col shadow-sm z-20"></aside>
 
         <!-- ۳. محتوای اصلی (Inbox) -->
         <main class="flex-1 flex flex-col min-w-0 bg-slate-50 overflow-hidden">
@@ -95,8 +72,27 @@
                 <div class="grid grid-cols-1 gap-4">
 
                     <a href="kpi-change/detail.html?mode=edit" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group flex items-center justify-between gap-6">
-                        <div class="flex-1 min-w-0">
-                            <h3 class="text-sm font-bold text-slate-800 truncate">تأیید نهایی شاخص بهره‌وری کل عوامل تولید (TFP)</h3>
+                        <div class="flex items-center gap-4 flex-1 min-w-0">
+                            <div class="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                <i data-lucide="clipboard-check" class="w-5 h-5"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-sm font-bold text-slate-800 truncate">تأیید نهایی شاخص بهره‌وری کل عوامل تولید (TFP)</h3>
+                                <div class="mt-2 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-slate-500">
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <i data-lucide="calendar-days" class="w-4 h-4 text-slate-400"></i>
+                                        تاریخ ارجاع: <strong class="font-bold text-slate-700">۱۴۰۲/۱۱/۱۵</strong>
+                                    </span>
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <i data-lucide="calendar-clock" class="w-4 h-4 text-amber-500"></i>
+                                        مهلت انجام: <strong class="font-bold text-slate-700">۱۴۰۲/۱۱/۱۸</strong>
+                                    </span>
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <i data-lucide="user-round-check" class="w-4 h-4 text-emerald-500"></i>
+                                        ارجاع‌دهنده: <strong class="font-bold text-slate-700">رضا حمیدی</strong>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                         <div class="text-left shrink-0">
                             <span class="text-blue-600 text-xs font-bold hover:underline">مشاهده جزئیات</span>
@@ -105,8 +101,27 @@
 
                     <!-- <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group flex items-center justify-between gap-6"> -->
                         <a href="kpi-change/detail.html?mode=edit" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group flex items-center justify-between gap-6">
-                        <div class="flex-1 min-w-0">
-                            <h3 class="text-sm font-bold text-slate-800 truncate">بررسی بازنگری فرآیند تأمین کالا (SIPOC)</h3>
+                        <div class="flex items-center gap-4 flex-1 min-w-0">
+                            <div class="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                <i data-lucide="clipboard-check" class="w-5 h-5"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-sm font-bold text-slate-800 truncate">بررسی بازنگری فرآیند تأمین کالا (SIPOC)</h3>
+                                <div class="mt-2 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-slate-500">
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <i data-lucide="calendar-days" class="w-4 h-4 text-slate-400"></i>
+                                        تاریخ ارجاع: <strong class="font-bold text-slate-700">۱۴۰۲/۱۱/۱۴</strong>
+                                    </span>
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <i data-lucide="calendar-clock" class="w-4 h-4 text-amber-500"></i>
+                                        مهلت انجام: <strong class="font-bold text-slate-700">۱۴۰۲/۱۱/۲۰</strong>
+                                    </span>
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <i data-lucide="user-round-check" class="w-4 h-4 text-emerald-500"></i>
+                                        ارجاع‌دهنده: <strong class="font-bold text-slate-700">سارا کریمی</strong>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                         <div class="text-left shrink-0">
                             <span class="text-blue-600 text-xs font-bold hover:underline">مشاهده جزئیات</span>
@@ -116,8 +131,27 @@
                         
                     <!-- <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group flex items-center justify-between gap-6"> -->
                         <a href="kpi-change/detail.html?mode=edit" class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all cursor-pointer group flex items-center justify-between gap-6">
-                        <div class="flex-1 min-w-0">
-                            <h3 class="text-sm font-bold text-slate-800 truncate">درخواست اصلاح چارت سازمانی معاونت برنامه‌ریزی</h3>
+                        <div class="flex items-center gap-4 flex-1 min-w-0">
+                            <div class="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                <i data-lucide="clipboard-check" class="w-5 h-5"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-sm font-bold text-slate-800 truncate">درخواست اصلاح چارت سازمانی معاونت برنامه‌ریزی</h3>
+                                <div class="mt-2 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-slate-500">
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <i data-lucide="calendar-days" class="w-4 h-4 text-slate-400"></i>
+                                        تاریخ ارجاع: <strong class="font-bold text-slate-700">۱۴۰۲/۱۱/۱۲</strong>
+                                    </span>
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <i data-lucide="calendar-clock" class="w-4 h-4 text-amber-500"></i>
+                                        مهلت انجام: <strong class="font-bold text-slate-700">۱۴۰۲/۱۱/۲۲</strong>
+                                    </span>
+                                    <span class="inline-flex items-center gap-1.5">
+                                        <i data-lucide="user-round-check" class="w-4 h-4 text-emerald-500"></i>
+                                        ارجاع‌دهنده: <strong class="font-bold text-slate-700">مریم نادری</strong>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                         <div class="text-left shrink-0">
                             <span class="text-blue-600 text-xs font-bold hover:underline">مشاهده جزئیات</span>
