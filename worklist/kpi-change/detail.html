@@ -229,6 +229,72 @@
                         </div>
                     </div>
                 </div>
+                <section id="role-validation-section" class="p-6 border-b border-slate-100 bg-slate-50/60">
+                    <div class="mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                        <div>
+                            <div class="text-xs font-bold text-blue-600 mb-1">اعتبارسنجی مسئولین مرحله بعد</div>
+                            <h2 class="text-base font-extrabold text-slate-800">مسئول پایش و مسئول عملکرد</h2>
+                        </div>
+                        <div id="role-validation-status" class="inline-flex items-center gap-2 self-start md:self-auto rounded-full bg-rose-50 px-3 py-1.5 text-xs font-bold text-rose-700 border border-rose-100">
+                            <i data-lucide="circle-alert" class="w-4 h-4"></i>
+                            نیازمند تکمیل
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <div class="rounded-xl border border-emerald-200 bg-white p-4 shadow-sm">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                                    <i data-lucide="eye" class="w-5 h-5"></i>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <label for="monitoring-responsible" class="text-sm font-extrabold text-slate-800">مسئول پایش</label>
+                                        <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-1 text-[11px] font-bold text-emerald-700">
+                                            <i data-lucide="check" class="w-3 h-3"></i>
+                                            استخراج شد
+                                        </span>
+                                    </div>
+                                    <p class="mt-1 text-xs leading-6 text-slate-500">سیستم از پست «مسئول پایش شاخص» این فرد را پیشنهاد کرده است.</p>
+                                    <select id="monitoring-responsible" class="form-input mt-3" onchange="validateRoleAssignments()">
+                                        <option value="amir-sadeghi" selected>آقای امیر صادقی</option>
+                                        <option value="sara-karimi">خانم سارا کریمی</option>
+                                        <option value="leila-mohammadi">خانم لیلا محمدی</option>
+                                    </select>
+                                    <div class="mt-2 text-xs text-slate-500">در صورت نیاز می‌توانید مسئول پایش را تغییر دهید.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="performance-responsible-card" class="rounded-xl border-2 border-rose-200 bg-rose-50 p-4 shadow-sm">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-white text-rose-600 flex items-center justify-center shrink-0 border border-rose-100">
+                                    <i data-lucide="activity" class="w-5 h-5"></i>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <label for="performance-responsible" class="text-sm font-extrabold text-slate-800">مسئول عملکرد</label>
+                                        <span id="performance-responsible-badge" class="inline-flex items-center gap-1 rounded-full bg-white px-2 py-1 text-[11px] font-bold text-rose-700 border border-rose-100">
+                                            <i data-lucide="circle-alert" class="w-3 h-3"></i>
+                                            خطای اعتبارسنجی
+                                        </span>
+                                    </div>
+                                    <p id="performance-responsible-message" class="mt-1 text-xs leading-6 text-rose-700">در پست مسئول عملکرد فردی پیدا نشد. برای ارسال درخواست به مرحله بعد، یک نفر را به عنوان مسئول عملکرد انتخاب کنید.</p>
+                                    <select id="performance-responsible" class="form-input mt-3 border-rose-300 bg-white" onchange="validateRoleAssignments()">
+                                        <option value="" selected>انتخاب مسئول عملکرد</option>
+                                        <option value="leila-mohammadi">خانم لیلا محمدی</option>
+                                        <option value="ali-moradi">دکتر علی مرادی</option>
+                                        <option value="sara-karimi">خانم سارا کریمی</option>
+                                    </select>
+                                    <div id="performance-responsible-error" class="mt-2 flex items-center gap-1.5 text-xs font-bold text-rose-600">
+                                        <i data-lucide="circle-alert" class="w-3.5 h-3.5"></i>
+                                        انتخاب مسئول عملکرد الزامی است.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
                 <div class="border-b border-slate-200 flex overflow-x-auto">
                     <button onclick="switchTab('basic')" id="btn-basic" class="tab-btn active">
                         <i data-lucide="info" class="w-4 h-4"></i>
@@ -297,6 +363,69 @@
             alert('درخواست حذف شاخص ثبت شد و برای بررسی ارسال گردید.');
         };
 
+        window.validateRoleAssignments = function() {
+            const monitoringResponsible = document.getElementById('monitoring-responsible');
+            const performanceResponsible = document.getElementById('performance-responsible');
+            const performanceCard = document.getElementById('performance-responsible-card');
+            const performanceBadge = document.getElementById('performance-responsible-badge');
+            const performanceMessage = document.getElementById('performance-responsible-message');
+            const performanceError = document.getElementById('performance-responsible-error');
+            const status = document.getElementById('role-validation-status');
+
+            const hasMonitoringResponsible = Boolean(monitoringResponsible?.value);
+            const hasPerformanceResponsible = Boolean(performanceResponsible?.value);
+            const isValid = hasMonitoringResponsible && hasPerformanceResponsible;
+
+            if (performanceCard) {
+                performanceCard.className = hasPerformanceResponsible
+                    ? 'rounded-xl border border-emerald-200 bg-white p-4 shadow-sm'
+                    : 'rounded-xl border-2 border-rose-200 bg-rose-50 p-4 shadow-sm';
+            }
+            if (performanceBadge) {
+                performanceBadge.className = hasPerformanceResponsible
+                    ? 'inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-1 text-[11px] font-bold text-emerald-700'
+                    : 'inline-flex items-center gap-1 rounded-full bg-white px-2 py-1 text-[11px] font-bold text-rose-700 border border-rose-100';
+                performanceBadge.innerHTML = hasPerformanceResponsible
+                    ? '<i data-lucide="check" class="w-3 h-3"></i> تکمیل شد'
+                    : '<i data-lucide="circle-alert" class="w-3 h-3"></i> خطای اعتبارسنجی';
+            }
+            if (performanceMessage) {
+                performanceMessage.className = hasPerformanceResponsible
+                    ? 'mt-1 text-xs leading-6 text-slate-500'
+                    : 'mt-1 text-xs leading-6 text-rose-700';
+                performanceMessage.textContent = hasPerformanceResponsible
+                    ? 'مسئول عملکرد به صورت دستی انتخاب شد و درخواست آماده ارسال به مرحله بعد است.'
+                    : 'در پست مسئول عملکرد فردی پیدا نشد. برای ارسال درخواست به مرحله بعد، یک نفر را به عنوان مسئول عملکرد انتخاب کنید.';
+            }
+            if (performanceResponsible) {
+                performanceResponsible.classList.toggle('border-rose-300', !hasPerformanceResponsible);
+                performanceResponsible.classList.toggle('bg-white', !hasPerformanceResponsible);
+            }
+            if (performanceError) {
+                performanceError.classList.toggle('hidden', hasPerformanceResponsible);
+            }
+            if (status) {
+                status.className = isValid
+                    ? 'inline-flex items-center gap-2 self-start md:self-auto rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700 border border-emerald-100'
+                    : 'inline-flex items-center gap-2 self-start md:self-auto rounded-full bg-rose-50 px-3 py-1.5 text-xs font-bold text-rose-700 border border-rose-100';
+                status.innerHTML = isValid
+                    ? '<i data-lucide="check-circle-2" class="w-4 h-4"></i> آماده ارسال'
+                    : '<i data-lucide="circle-alert" class="w-4 h-4"></i> نیازمند تکمیل';
+            }
+
+            if (window.lucide) lucide.createIcons();
+            return isValid;
+        };
+
+        window.approveTask = function() {
+            if (!validateRoleAssignments()) {
+                alert('برای ارسال درخواست به مرحله بعد، مسئول پایش و مسئول عملکرد را کامل کنید.');
+                return;
+            }
+
+            alert('درخواست تایید شد و به مرحله بعدی ارسال گردید.');
+        };
+
         (function() {
             const urlParams = new URLSearchParams(window.location.search);
             const mode = urlParams.get('mode');
@@ -320,6 +449,10 @@
 
             lucide.createIcons();
         })();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            validateRoleAssignments();
+        });
     </script>
 </body>
 </html>
