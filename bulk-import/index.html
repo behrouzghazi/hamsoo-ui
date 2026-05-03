@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ورود دسته‌ای اطلاعات | همسو</title>
+    <script src="/node_modules/@tailwindcss/browser/dist/index.global.js"></script>
+    <script src="/node_modules/lucide/dist/umd/lucide.min.js"></script>
+    <link href="/node_modules/@fontsource/vazirmatn/index.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/worklist/styles.css" />
+    <link rel="stylesheet" href="/bulk-import/styles.css" />
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <div class="flex h-screen w-full overflow-hidden">
+        <aside class="w-16 bg-slate-900 flex flex-col items-center py-6 gap-6 z-30">
+            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white mb-4">
+                <a href="/index.html" aria-label="صفحه اصلی">
+                    <i data-lucide="layers" class="w-6 h-6"></i>
+                </a>
+            </div>
+
+            <nav class="flex flex-col gap-4">
+                <a href="/index.html" class="p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all" title="خانه">
+                    <i data-lucide="house" class="w-6 h-6"></i>
+                </a>
+                <a href="/worklist/index.html" class="p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all" title="مدیریت درخواست‌ها">
+                    <i data-lucide="git-pull-request" class="w-6 h-6"></i>
+                </a>
+                <button class="p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all" title="گزارش">
+                    <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+                </button>
+                <button class="p-3 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-xl transition-all" title="اطلاعات پایه">
+                    <i data-lucide="settings" class="w-6 h-6"></i>
+                </button>
+            </nav>
+        </aside>
+
+        <main class="flex-1 flex flex-col min-w-0 bg-slate-50 overflow-hidden">
+            <header class="h-16 bg-blue-700 text-white border-b border-blue-800 flex items-center justify-between px-6 shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center">
+                        <i data-lucide="upload-cloud" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold">ورود دسته‌ای اطلاعات</div>
+                        <div class="text-[11px] text-blue-100">مدیریت فرایندها و شاخص‌ها</div>
+                    </div>
+                </div>
+                <a href="/index.html" class="text-xs bg-white/15 hover:bg-white/20 px-3 py-1 rounded-full transition-all">بازگشت</a>
+            </header>
+
+            <div class="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar">
+                <div class="max-w-7xl mx-auto space-y-6">
+                    <section class="grid grid-cols-1 xl:grid-cols-[1fr_360px] gap-6">
+                        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+                            <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                                <div>
+                                    <h1 class="text-2xl font-extrabold text-slate-800">ورود دسته‌ای اطلاعات</h1>
+                                    <p class="text-sm text-slate-500 mt-2 leading-7">
+                                        ابتدا نوع داده را انتخاب کنید، قالب استاندارد را دریافت کنید، فایل تکمیل‌شده را بارگذاری کنید و پس از اعتبارسنجی نتیجه ردیف‌به‌ردیف را دریافت کنید.
+                                    </p>
+                                </div>
+                                <div class="flex items-center gap-2 text-emerald-700 bg-emerald-50 border border-emerald-100 px-3 py-2 rounded-lg shrink-0">
+                                    <i data-lucide="file-spreadsheet" class="w-5 h-5"></i>
+                                    <span class="text-xs font-bold">قالب صفحه‌گسترده</span>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                                <button class="import-type-card selected" data-import-type="sipoc">
+                                    <span class="w-11 h-11 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0">
+                                        <i data-lucide="arrow-right-left" class="w-5 h-5"></i>
+                                    </span>
+                                    <span class="min-w-0 text-right">
+                                        <span class="block text-sm font-extrabold text-slate-800">ورود دسته‌ای اطلاعات SIPOC فرایند</span>
+                                        <span class="block text-xs text-slate-500 mt-1 leading-6">تأمین‌کننده، ورودی، فعالیت، خروجی، مشتری و ارتباطات فرایند</span>
+                                    </span>
+                                </button>
+
+                                <button class="import-type-card" data-import-type="indicators">
+                                    <span class="w-11 h-11 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0">
+                                        <i data-lucide="gauge" class="w-5 h-5"></i>
+                                    </span>
+                                    <span class="min-w-0 text-right">
+                                        <span class="block text-sm font-extrabold text-slate-800">ورود دسته‌ای اطلاعات شاخص‌های فرایندی</span>
+                                        <span class="block text-xs text-slate-500 mt-1 leading-6">مشخصات شاخص، مالک، دوره پایش، فرمول، حدود هدف و وضعیت</span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <aside class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+                            <h2 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+                                <i data-lucide="route" class="w-4 h-4 text-blue-600"></i>
+                                مسیر انجام کار
+                            </h2>
+                            <div class="mt-5 space-y-4">
+                                <div class="flow-step active" data-step-indicator="1">
+                                    <span>۱</span>
+                                    <div>
+                                        <div>دریافت قالب استاندارد</div>
+                                        <p>قالب مربوط به نوع داده انتخاب‌شده دریافت می‌شود.</p>
+                                    </div>
+                                </div>
+                                <div class="flow-step" data-step-indicator="2">
+                                    <span>۲</span>
+                                    <div>
+                                        <div>بارگذاری فایل تکمیل‌شده</div>
+                                        <p>فایل پس از تکمیل اطلاعات به سیستم داده می‌شود.</p>
+                                    </div>
+                                </div>
+                                <div class="flow-step" data-step-indicator="3">
+                                    <span>۳</span>
+                                    <div>
+                                        <div>اعتبارسنجی اولیه</div>
+                                        <p>ساختار، ستون‌ها و خطاهای ردیفی بررسی می‌شوند.</p>
+                                    </div>
+                                </div>
+                                <div class="flow-step" data-step-indicator="4">
+                                    <span>۴</span>
+                                    <div>
+                                        <div>ثبت و دریافت نتیجه</div>
+                                        <p>نتیجه هر ردیف همراه با توضیح قابل دریافت است.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </aside>
+                    </section>
+
+                    <section class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="border-b border-slate-200 px-6 py-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                            <div>
+                                <h2 class="text-sm font-extrabold text-slate-800">شروع ورود دسته‌ای</h2>
+                                <p class="text-xs text-slate-500 mt-1" id="selected-type-description">قالب استاندارد SIPOC فرایند آماده دریافت است.</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button class="wizard-nav active" data-step="1">قالب</button>
+                                <button class="wizard-nav" data-step="2">بارگذاری</button>
+                                <button class="wizard-nav" data-step="3">اعتبارسنجی</button>
+                                <button class="wizard-nav" data-step="4">نتیجه</button>
+                            </div>
+                        </div>
+
+                        <div class="p-6">
+                            <div class="wizard-step" data-step-panel="1">
+                                <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
+                                    <div class="rounded-xl border border-slate-200 bg-slate-50 p-5">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
+                                                <i data-lucide="file-spreadsheet" class="w-6 h-6"></i>
+                                            </div>
+                                            <div>
+                                                <h3 class="text-base font-extrabold text-slate-800" id="template-title">قالب استاندارد SIPOC فرایند</h3>
+                                                <p class="text-xs text-slate-500 mt-1">نسخه قالب: ۱۴۰۳.۰۲ - مناسب ورود اطلاعات جدید و بروزرسانی رکوردهای موجود</p>
+                                            </div>
+                                        </div>
+                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-5">
+                                            <div class="template-rule">
+                                                <i data-lucide="columns-3" class="w-4 h-4"></i>
+                                                <span>نام ستون‌ها تغییر نکند</span>
+                                            </div>
+                                            <div class="template-rule">
+                                                <i data-lucide="asterisk" class="w-4 h-4"></i>
+                                                <span>ستون‌های اجباری تکمیل شوند</span>
+                                            </div>
+                                            <div class="template-rule">
+                                                <i data-lucide="list-checks" class="w-4 h-4"></i>
+                                                <span>کدهای مرجع معتبر باشند</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="rounded-xl border border-slate-200 p-5 flex flex-col justify-between gap-4">
+                                        <div>
+                                            <div class="text-xs font-bold text-slate-500">اقدام اصلی</div>
+                                            <div class="text-sm font-extrabold text-slate-800 mt-1">دریافت قالب خالی برای تکمیل اطلاعات</div>
+                                        </div>
+                                        <button class="primary-action">
+                                            <i data-lucide="download" class="w-4 h-4"></i>
+                                            دانلود قالب استاندارد
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="wizard-step hidden" data-step-panel="2">
+                                <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
+                                    <label class="upload-zone">
+                                        <input type="file" class="hidden" accept=".xlsx,.xls,.csv">
+                                        <span class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                                            <i data-lucide="upload-cloud" class="w-8 h-8"></i>
+                                        </span>
+                                        <span class="text-sm font-extrabold text-slate-800">فایل تکمیل‌شده را اینجا رها کنید یا انتخاب کنید</span>
+                                        <span class="text-xs text-slate-500">فرمت‌های قابل قبول: xlsx، xls، csv</span>
+                                    </label>
+                                    <div class="rounded-xl border border-slate-200 p-5 space-y-4">
+                                        <div>
+                                            <div class="text-xs font-bold text-slate-500">فایل انتخاب‌شده</div>
+                                            <div class="mt-2 rounded-lg bg-slate-50 border border-slate-100 p-3 text-xs text-slate-500">هنوز فایلی انتخاب نشده است.</div>
+                                        </div>
+                                        <button class="primary-action">
+                                            <i data-lucide="scan-search" class="w-4 h-4"></i>
+                                            بررسی اولیه فایل
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="wizard-step hidden" data-step-panel="3">
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                    <div class="validation-card">
+                                        <span class="text-slate-500">کل ردیف‌ها</span>
+                                        <strong>۱۲۸</strong>
+                                    </div>
+                                    <div class="validation-card success">
+                                        <span>آماده ثبت</span>
+                                        <strong>۱۱۸</strong>
+                                    </div>
+                                    <div class="validation-card danger">
+                                        <span>دارای خطا</span>
+                                        <strong>۱۰</strong>
+                                    </div>
+                                    <div class="validation-card warning">
+                                        <span>هشدار</span>
+                                        <strong>۶</strong>
+                                    </div>
+                                </div>
+                                <div class="mt-5 rounded-xl border border-slate-200 overflow-hidden">
+                                    <table class="w-full text-right text-sm">
+                                        <thead class="bg-slate-50 border-b border-slate-200">
+                                            <tr>
+                                                <th class="p-3">ردیف</th>
+                                                <th class="p-3">نوع پیام</th>
+                                                <th class="p-3">ستون</th>
+                                                <th class="p-3">توضیح</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-slate-100">
+                                            <tr>
+                                                <td class="p-3">۲۴</td>
+                                                <td class="p-3"><span class="status-badge danger">خطا</span></td>
+                                                <td class="p-3">کد فرایند</td>
+                                                <td class="p-3 text-slate-600">کد واردشده در سامانه یافت نشد.</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="p-3">۳۷</td>
+                                                <td class="p-3"><span class="status-badge warning">هشدار</span></td>
+                                                <td class="p-3">مالک</td>
+                                                <td class="p-3 text-slate-600">مالک واردشده غیرفعال است و نیازمند بررسی است.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="wizard-step hidden" data-step-panel="4">
+                                <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-5">
+                                    <div class="flex items-start gap-3">
+                                        <div class="w-11 h-11 rounded-xl bg-emerald-600 text-white flex items-center justify-center">
+                                            <i data-lucide="check-check" class="w-5 h-5"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-base font-extrabold text-emerald-800">عملیات ورود دسته‌ای تکمیل شد</h3>
+                                            <p class="text-sm text-emerald-700 mt-1">فایل نتیجه شامل ستون وضعیت هر ردیف و توضیح خطاهای احتمالی آماده دریافت است.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
+                                    <div class="result-card"><span>ثبت موفق</span><strong>۱۱۲</strong></div>
+                                    <div class="result-card"><span>بروزرسانی موفق</span><strong>۶</strong></div>
+                                    <div class="result-card danger"><span>ناموفق</span><strong>۱۰</strong></div>
+                                </div>
+                                <button class="primary-action mt-5">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                    دانلود فایل نتیجه
+                                </button>
+                            </div>
+
+                            <div class="mt-6 flex items-center justify-between border-t border-slate-100 pt-5">
+                                <button class="secondary-action" id="prev-step">مرحله قبل</button>
+                                <button class="primary-action" id="next-step">مرحله بعد</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+                            <div>
+                                <h2 class="text-sm font-extrabold text-slate-800">وضعیت ورودهای قبلی</h2>
+                                <p class="text-xs text-slate-500 mt-1">آخرین عملیات‌های ثبت‌شده و فایل نتیجه هرکدام</p>
+                            </div>
+                            <button class="secondary-action">
+                                <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                                بروزرسانی
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto custom-scrollbar">
+                            <table class="w-full min-w-[920px] text-right text-sm">
+                                <thead class="bg-slate-50 border-b border-slate-200 text-xs text-slate-500">
+                                    <tr>
+                                        <th class="p-4">نوع ورود</th>
+                                        <th class="p-4">نام فایل</th>
+                                        <th class="p-4">ثبت‌کننده</th>
+                                        <th class="p-4">تاریخ</th>
+                                        <th class="p-4">وضعیت</th>
+                                        <th class="p-4">کل</th>
+                                        <th class="p-4">موفق</th>
+                                        <th class="p-4">ناموفق</th>
+                                        <th class="p-4">عملیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-4 font-bold text-slate-700">SIPOC فرایند</td>
+                                        <td class="p-4 text-slate-600">sipoc-procurement-1403-02.xlsx</td>
+                                        <td class="p-4 text-slate-600">سارا کریمی</td>
+                                        <td class="p-4 text-slate-500">۱۴۰۳/۰۲/۱۲</td>
+                                        <td class="p-4"><span class="status-badge success">ثبت موفق</span></td>
+                                        <td class="p-4">۱۲۸</td>
+                                        <td class="p-4 text-emerald-700 font-bold">۱۱۸</td>
+                                        <td class="p-4 text-rose-700 font-bold">۱۰</td>
+                                        <td class="p-4"><button class="table-action">دانلود نتیجه</button></td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-4 font-bold text-slate-700">شاخص‌های فرایندی</td>
+                                        <td class="p-4 text-slate-600">process-kpis-q1.xlsx</td>
+                                        <td class="p-4 text-slate-600">رضا حمیدی</td>
+                                        <td class="p-4 text-slate-500">۱۴۰۳/۰۲/۰۹</td>
+                                        <td class="p-4"><span class="status-badge warning">آماده ثبت</span></td>
+                                        <td class="p-4">۴۲</td>
+                                        <td class="p-4 text-emerald-700 font-bold">۳۹</td>
+                                        <td class="p-4 text-rose-700 font-bold">۳</td>
+                                        <td class="p-4"><button class="table-action">ادامه فرایند</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/bulk-import/scripts.js"></script>
+</body>
+</html>
