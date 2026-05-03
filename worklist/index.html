@@ -6,6 +6,7 @@
     <title>مدیریت درخواست‌ها | سامانه همسو</title>
     <script src="/node_modules/@tailwindcss/browser/dist/index.global.js"></script>
     <script src="/node_modules/lucide/dist/umd/lucide.min.js"></script>
+    <script src="/layout/shell.js" defer></script>
     <script src="/worklist/sidebar.js" defer></script>
     <link href="/node_modules/@fontsource/vazirmatn/index.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="styles.css" />
@@ -15,47 +16,14 @@
     <div class="flex h-screen w-full overflow-hidden">
         
         <!-- ۱. سایدبار ناوبری اصلی (سمت راست - باریک) -->
-        <aside class="w-16 bg-slate-900 flex flex-col items-center py-6 gap-6 z-30">
-            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white mb-4">
- <a href="/index.html" aria-label="صفحه اصلی">
-     <i data-lucide="layers" class="w-6 h-6"></i>
- </a>
-            </div>
-            
-            <nav class="flex flex-col gap-4">
-                <a href="/index.html" class="p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all" title="خانه">
-                    <i data-lucide="house" class="w-6 h-6"></i>
-                </a>
-                <a href="/worklist/index.html" class="relative p-3 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-xl transition-all" title="مدیریت درخواست‌ها">
-                    <i data-lucide="git-pull-request" class="w-6 h-6"></i>
-                    <span class="absolute -top-2 -left-2 min-w-5 h-5 px-1.5 rounded-full bg-rose-500 text-white text-[11px] font-bold leading-5 text-center shadow-sm shadow-rose-900/30">۳</span>
-                </a>
-                <button class="p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all" title="گزارش">
-                    <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
-                </button>
-                <button class="p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all" title="اطلاعات پایه">
-                    <i data-lucide="settings" class="w-6 h-6"></i>
-                </button>
-            </nav>
-        </aside>
+        <aside data-hamsoo-primary-sidebar data-active="worklist" data-worklist-badge="۳"></aside>
 
         <!-- ۲. سایدبار لیست فرآیندها (Content Bar) -->
         <aside data-worklist-sidebar data-active="inbox" class="w-80 bg-white border-l border-slate-200 flex flex-col shadow-sm z-20"></aside>
 
         <!-- ۳. محتوای اصلی (Inbox) -->
         <main class="flex-1 flex flex-col min-w-0 bg-slate-50 overflow-hidden">
-            <header class="h-16 bg-blue-700 text-white border-b border-blue-800 flex items-center justify-between px-6 shrink-0">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center">
-                        <i data-lucide="layers" class="w-5 h-5"></i>
-                    </div>
-                    <div>
-                        <div class="text-sm font-bold">سامانه همسو</div>
-                        <div class="text-[11px] text-blue-100">مدیریت فرآیندها و شاخص‌ها</div>
-                    </div>
-                </div>
-                <span class="text-xs bg-white/15 px-3 py-1 rounded-full">نسخه آزمایشی</span>
-            </header>
+            <header data-hamsoo-header></header>
 
             <header class="h-20 bg-white border-b border-slate-200 flex items-center px-8 shrink-0">
                 <div class="flex items-center gap-4">
