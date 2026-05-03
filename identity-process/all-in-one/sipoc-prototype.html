@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نمایشگر SIPOC همسو</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    
+    <!-- آیکون‌ها -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        /* اسکرول‌بار زیبا */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        .card-hovering {
+            opacity: 0.4;
+            transition: opacity 0.3s ease;
+            filter: grayscale(100%);
+        }
+
+        .card-active {
+            opacity: 1 !important;
+            transform: scale(1.02);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: currentColor;
+            z-index: 10;
+            filter: grayscale(0%);
+        }
+
+        /* خط اتصال برای نمایش جریان */
+        .flow-line {
+            position: absolute;
+            height: 2px;
+            background-color: #cbd5e1;
+            z-index: 0;
+            top: 50%;
+            left: 0;
+            right: 0;
+            display: none; /* در حالت عادی مخفی است */
+        }
+        
+        .sipoc-col {
+            min-width: 280px;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden text-slate-700">
+
+    <!-- هدر -->
+    <header class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center shadow-sm z-20">
+        <div>
+            <h1 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                <i data-lucide="layers" class="w-6 h-6 text-indigo-600"></i>
+                مدیریت فرایند همسو
+            </h1>
+            <p class="text-sm text-slate-500 mt-1">نمایش نمودار SIPOC: فرایند "خرید داخلی کالا"</p>
+        </div>
+        <div class="flex gap-3">
+            <button class="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg text-sm font-medium hover:bg-indigo-100 transition flex items-center gap-2">
+                <i data-lucide="share-2" class="w-4 h-4"></i>
+                اشتراک‌گذاری
+            </button>
+            <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 flex items-center gap-2">
+                <i data-lucide="edit-3" class="w-4 h-4"></i>
+                ویرایش دیاگرام
+            </button>
+        </div>
+    </header>
+
+    <!-- محیط اصلی نمودار -->
+    <main class="flex-1 overflow-x-auto overflow-y-hidden p-6 relative" id="canvas">
+        
+        <!-- راهنما -->
+        <div class="absolute top-6 left-6 bg-white/80 backdrop-blur p-3 rounded-lg border border-slate-200 text-xs text-slate-500 shadow-sm z-30">
+            <p class="flex items-center gap-2 mb-1"><span class="w-2 h-2 rounded-full bg-blue-500"></span> تامین‌کننده</p>
+            <p class="flex items-center gap-2 mb-1"><span class="w-2 h-2 rounded-full bg-cyan-500"></span> ورودی</p>
+            <p class="flex items-center gap-2 mb-1"><span class="w-2 h-2 rounded-full bg-indigo-600"></span> فرایند اصلی</p>
+            <p class="flex items-center gap-2 mb-1"><span class="w-2 h-2 rounded-full bg-amber-500"></span> خروجی</p>
+            <p class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-rose-500"></span> مشتری</p>
+        </div>
+
+        <div class="flex gap-6 h-full min-w-max mx-auto items-center justify-center" id="sipoc-container">
+
+            <!-- ستون Suppliers -->
+            <div class="sipoc-col flex flex-col gap-4 h-full py-8">
+                <div class="text-center mb-2">
+                    <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-bold border border-blue-200">Suppliers (تامین‌کنندگان)</span>
+                </div>
+                <!-- کارت نمونه -->
+                <div class="sipoc-card group relative bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-r-4 border-r-blue-500 hover:shadow-md transition-all cursor-pointer"
+                     data-id="s1" data-connects="i1,i2">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">واحد داخلی</span>
+                        <i data-lucide="users" class="w-4 h-4 text-slate-400"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800">واحد متقاضی</h3>
+                    <p class="text-xs text-slate-500 mt-1">شروع‌کننده درخواست خرید</p>
+                </div>
+
+                <div class="sipoc-card group relative bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-r-4 border-r-blue-500 hover:shadow-md transition-all cursor-pointer"
+                     data-id="s2" data-connects="i3">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-xs font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">سازمان خارجی</span>
+                        <i data-lucide="truck" class="w-4 h-4 text-slate-400"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800">تامین‌کننده کالا</h3>
+                    <p class="text-xs text-slate-500 mt-1">فروشندگان بازار</p>
+                </div>
+            </div>
+
+            <!-- جداکننده -->
+            <div class="h-full w-px bg-slate-200 border-l border-dashed border-slate-300 relative top-8">
+                <i data-lucide="arrow-left" class="absolute top-1/2 -left-3 bg-white text-slate-300 p-0.5 rounded-full border border-slate-200 w-6 h-6"></i>
+            </div>
+
+            <!-- ستون Inputs -->
+            <div class="sipoc-col flex flex-col gap-4 h-full py-12 justify-center">
+                <div class="text-center mb-2">
+                    <span class="bg-cyan-100 text-cyan-700 px-3 py-1 rounded-full text-sm font-bold border border-cyan-200">Inputs (ورودی‌ها)</span>
+                </div>
+
+                <div class="sipoc-card bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-r-4 border-r-cyan-500 hover:shadow-md transition-all cursor-pointer"
+                     data-id="i1" data-connects="p1,s1">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i data-lucide="file-text" class="w-4 h-4 text-cyan-500"></i>
+                        <span class="text-xs text-slate-500">فرم سیستمی</span>
+                    </div>
+                    <h3 class="font-bold text-slate-800">درخواست خرید (PR)</h3>
+                </div>
+
+                <div class="sipoc-card bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-r-4 border-r-cyan-500 hover:shadow-md transition-all cursor-pointer"
+                     data-id="i2" data-connects="p1,s1">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i data-lucide="file-check" class="w-4 h-4 text-cyan-500"></i>
+                        <span class="text-xs text-slate-500">سند</span>
+                    </div>
+                    <h3 class="font-bold text-slate-800">تاییدیه بودجه</h3>
+                </div>
+
+                <div class="sipoc-card bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-r-4 border-r-cyan-500 hover:shadow-md transition-all cursor-pointer"
+                     data-id="i3" data-connects="p1,s2">
+                     <div class="flex items-center gap-2 mb-2">
+                        <i data-lucide="receipt" class="w-4 h-4 text-cyan-500"></i>
+                        <span class="text-xs text-slate-500">سند مالی</span>
+                    </div>
+                    <h3 class="font-bold text-slate-800">پیش‌فاکتور</h3>
+                </div>
+            </div>
+
+             <!-- جداکننده -->
+             <div class="h-full w-px bg-slate-200 border-l border-dashed border-slate-300 relative top-8">
+                <i data-lucide="arrow-left" class="absolute top-1/2 -left-3 bg-white text-slate-300 p-0.5 rounded-full border border-slate-200 w-6 h-6"></i>
+            </div>
+
+            <!-- ستون Process (مرکزی) -->
+            <div class="sipoc-col flex flex-col justify-center h-full py-8">
+                <div class="text-center mb-6">
+                    <span class="bg-indigo-600 text-white px-4 py-1.5 rounded-full text-base font-bold shadow-lg shadow-indigo-200">Process (فرایند)</span>
+                </div>
+
+                <!-- کارت فرایند اصلی - بزرگتر و متمایز -->
+                <div class="sipoc-card bg-white p-6 rounded-2xl shadow-xl border-t-8 border-indigo-600 border-x border-b border-slate-200 relative z-10 transform transition hover:scale-105"
+                     data-id="p1" data-connects="i1,i2,i3,o1,o2">
+                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-indigo-100 text-indigo-700 text-[10px] px-2 py-0.5 rounded-full border border-indigo-200 uppercase tracking-wider font-bold">
+                        Core Business
+                    </div>
+                    
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-10 h-10 bg-indigo-50 rounded-lg flex items-center justify-center">
+                            <i data-lucide="settings-2" class="w-6 h-6 text-indigo-600"></i>
+                        </div>
+                        <span class="text-xs text-slate-400">Owner: مدیر تدارکات</span>
+                    </div>
+                    
+                    <h2 class="text-lg font-bold text-slate-800 mb-2">بررسی و صدور سفارش خرید</h2>
+                    <p class="text-sm text-slate-500 leading-relaxed">
+                        دریافت درخواست‌ها، استعلام قیمت از تامین‌کنندگان، انتخاب بهترین پیشنهاد و صدور نهایی سفارش خرید در سیستم.
+                    </p>
+
+                    <div class="mt-4 pt-4 border-t border-slate-100 flex gap-2">
+                        <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-1 rounded">BPMN 2.0</span>
+                        <span class="text-[10px] bg-green-100 text-green-700 px-2 py-1 rounded">Automated</span>
+                    </div>
+                </div>
+            </div>
+
+             <!-- جداکننده -->
+             <div class="h-full w-px bg-slate-200 border-l border-dashed border-slate-300 relative top-8">
+                <i data-lucide="arrow-left" class="absolute top-1/2 -left-3 bg-white text-slate-300 p-0.5 rounded-full border border-slate-200 w-6 h-6"></i>
+            </div>
+
+            <!-- ستون Outputs -->
+            <div class="sipoc-col flex flex-col gap-4 h-full py-12 justify-center">
+                <div class="text-center mb-2">
+                    <span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-bold border border-amber-200">Outputs (خروجی‌ها)</span>
+                </div>
+
+                <div class="sipoc-card bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-r-4 border-r-amber-500 hover:shadow-md transition-all cursor-pointer"
+                     data-id="o1" data-connects="p1,c1">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i data-lucide="file-check-2" class="w-4 h-4 text-amber-500"></i>
+                        <span class="text-xs text-slate-500">سند رسمی</span>
+                    </div>
+                    <h3 class="font-bold text-slate-800">سفارش خرید (PO)</h3>
+                </div>
+
+                <div class="sipoc-card bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-r-4 border-r-amber-500 hover:shadow-md transition-all cursor-pointer"
+                     data-id="o2" data-connects="p1,c2">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i data-lucide="database" class="w-4 h-4 text-amber-500"></i>
+                        <span class="text-xs text-slate-500">رکورد سیستم</span>
+                    </div>
+                    <h3 class="font-bold text-slate-800">آپدیت بودجه</h3>
+                </div>
+            </div>
+
+             <!-- جداکننده -->
+             <div class="h-full w-px bg-slate-200 border-l border-dashed border-slate-300 relative top-8">
+                <i data-lucide="arrow-left" class="absolute top-1/2 -left-3 bg-white text-slate-300 p-0.5 rounded-full border border-slate-200 w-6 h-6"></i>
+            </div>
+
+            <!-- ستون Customers -->
+            <div class="sipoc-col flex flex-col gap-4 h-full py-8">
+                <div class="text-center mb-2">
+                    <span class="bg-rose-100 text-rose-700 px-3 py-1 rounded-full text-sm font-bold border border-rose-200">Customers (مشتریان)</span>
+                </div>
+
+                <div class="sipoc-card bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-r-4 border-r-rose-500 hover:shadow-md transition-all cursor-pointer"
+                     data-id="c1" data-connects="o1">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-xs font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-100">واحد مالی</span>
+                        <i data-lucide="landmark" class="w-4 h-4 text-slate-400"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800">حسابداری</h3>
+                    <p class="text-xs text-slate-500 mt-1">جهت پرداخت وجه</p>
+                </div>
+
+                <div class="sipoc-card bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-r-4 border-r-rose-500 hover:shadow-md transition-all cursor-pointer"
+                     data-id="c2" data-connects="o2">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-xs font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-100">واحد داخلی</span>
+                        <i data-lucide="bar-chart-3" class="w-4 h-4 text-slate-400"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800">کنترل بودجه</h3>
+                    <p class="text-xs text-slate-500 mt-1">جهت کسر اعتبار</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- جاوااسکریپت برای تعامل -->
+    <script>
+        // فعال‌سازی آیکون‌ها
+        lucide.createIcons();
+
+        const container = document.getElementById('sipoc-container');
+        const cards = document.querySelectorAll('.sipoc-card');
+
+        // تابع برای مدیریت هاور
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const cardId = card.getAttribute('data-id');
+                const connects = card.getAttribute('data-connects').split(',');
+                
+                // افزودن کلاس کم‌رنگ به همه کارت‌ها
+                cards.forEach(c => {
+                    c.classList.add('card-hovering');
+                    c.classList.remove('card-active');
+                });
+
+                // روشن نگه داشتن کارت فعلی
+                card.classList.remove('card-hovering');
+                card.classList.add('card-active');
+
+                // روشن کردن کارت‌های متصل
+                connects.forEach(targetId => {
+                    const targetCard = document.querySelector(`[data-id="${targetId}"]`);
+                    if (targetCard) {
+                        targetCard.classList.remove('card-hovering');
+                        targetCard.classList.add('card-active');
+                    }
+                });
+            });
+
+            // بازگشت به حالت عادی
+            card.addEventListener('mouseleave', () => {
+                cards.forEach(c => {
+                    c.classList.remove('card-hovering');
+                    c.classList.remove('card-active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

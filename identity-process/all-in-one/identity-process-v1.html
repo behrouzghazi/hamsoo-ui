@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شناسنامه فرایند همسو - نسخه ارتقا یافته</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #f1f5f9;
+            color: #334155;
+        }
+        .tab-btn {
+            padding: 12px 16px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+        .tab-btn.active {
+            border-bottom-color: #2563eb;
+            color: #2563eb;
+            background-color: #eff6ff;
+            font-weight: bold;
+        }
+        .completion-badge {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            background: #e2e8f0;
+        }
+        .alert-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #ef4444;
+            border-radius: 50%;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="p-4">
+
+    <div class="max-w-[1400px] mx-auto">
+        <!-- Top Status Bar: Completion Progress -->
+        <div class="bg-white rounded-2xl p-4 mb-4 shadow-sm flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="bg-blue-600 text-white p-2 rounded-lg">
+                    <i data-lucide="file-check"></i>
+                </div>
+                <div>
+                    <h2 class="font-bold text-sm text-slate-700">وضعیت تکمیل شناسنامه فرایند</h2>
+                    <p class="text-xs text-slate-400">۷ تب از ۹ تب با موفقیت تکمیل شده است.</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4 w-1/3">
+                <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-blue-600" style="width: 78%"></div>
+                </div>
+                <span class="text-sm font-bold text-blue-600">۷۸٪</span>
+            </div>
+        </div>
+
+        <!-- Tabs Navigation (The 9 Traditional Tabs) -->
+        <div class="bg-white rounded-t-2xl shadow-sm border-b overflow-x-auto">
+            <nav class="flex px-2">
+                <button onclick="switchTab('tab-general')" class="tab-btn active" id="btn-general">
+                    <i data-lucide="info" size="16"></i> کلیات و نمودار
+                </button>
+                <button onclick="switchTab('tab-sipoc')" class="tab-btn" id="btn-sipoc">
+                    <i data-lucide="arrow-right-left" size="16"></i> SIPOC (تامین/مشتری)
+                </button>
+                <button onclick="switchTab('tab-indicators')" class="tab-btn" id="btn-indicators">
+                    <i data-lucide="gauge" size="16"></i> شاخص‌ها <span class="completion-badge">۱۰۰٪</span>
+                </button>
+                <button onclick="switchTab('tab-docs')" class="tab-btn" id="btn-docs">
+                    <i data-lucide="files" size="16"></i> مستندات <span class="completion-badge">۴۰٪</span>
+                </button>
+                <button onclick="switchTab('tab-resources')" class="tab-btn" id="btn-resources">
+                    <i data-lucide="database" size="16"></i> منابع
+                </button>
+                <button onclick="switchTab('tab-complications')" class="tab-btn" id="btn-complications">
+                    <i data-lucide="bug" size="16"></i> عارضه <span class="alert-dot"></span>
+                </button>
+                <button onclick="switchTab('tab-risks')" class="tab-btn" id="btn-risks">
+                    <i data-lucide="alert-triangle" size="16"></i> ریسک <span class="alert-dot"></span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Tab Contents -->
+        <div class="bg-white rounded-b-2xl p-6 shadow-sm min-h-[500px]">
+            
+            <!-- Tab: General Overview -->
+            <div id="tab-general" class="tab-content">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Basic Info Card -->
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                        <h3 class="font-bold text-sm mb-4 border-b pb-2">اطلاعات پایه (از شناسنامه)</h3>
+                        <div class="space-y-3">
+                            <div><label class="text-[10px] text-slate-400 block">نام فرایند:</label><span class="text-sm">مدیریت تدارکات داخلی</span></div>
+                            <div><label class="text-[10px] text-slate-400 block">کد فرایند:</label><span class="text-sm">PR-102-PROC</span></div>
+                            <div><label class="text-[10px] text-slate-400 block">مالک فرایند:</label><span class="text-sm">مدیر زنجیره تأمین</span></div>
+                        </div>
+                        <button class="mt-4 text-xs text-blue-600 font-bold flex items-center gap-1 hover:underline">
+                             ویرایش جزئیات <i data-lucide="edit-3" size="12"></i>
+                        </button>
+                    </div>
+
+                    <!-- Visual Summary of Risks/Indicators -->
+                    <div class="md:col-span-2 grid grid-cols-2 gap-4">
+                        <div class="bg-rose-50 border border-rose-100 p-4 rounded-xl">
+                            <h4 class="text-xs font-bold text-rose-700 mb-3 flex items-center gap-2">
+                                <i data-lucide="alert-circle" size="14"></i> وضعیت ریسک‌های بحرانی
+                            </h4>
+                            <div class="flex items-end gap-2">
+                                <span class="text-2xl font-black text-rose-600">۲</span>
+                                <span class="text-[10px] text-rose-400 mb-1">ریسک سطح بالا نیاز به اقدام فوری</span>
+                            </div>
+                        </div>
+                        <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-xl">
+                            <h4 class="text-xs font-bold text-emerald-700 mb-3 flex items-center gap-2">
+                                <i data-lucide="trending-up" size="14"></i> عملکرد شاخص‌ها
+                            </h4>
+                            <div class="flex items-end gap-2">
+                                <span class="text-2xl font-black text-emerald-600">۸۵٪</span>
+                                <span class="text-[10px] text-emerald-400 mb-1">انطباق با اهداف تعیین شده</span>
+                            </div>
+                        </div>
+                        <!-- Miniature Chart Area -->
+                        <div class="col-span-2 bg-slate-50 border border-slate-100 p-4 rounded-xl flex items-center justify-center text-slate-400 italic text-xs h-32">
+                             [پیش‌نمایش کوچک نمودار BPMN فرایند]
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: SIPOC Placeholder -->
+            <div id="tab-sipoc" class="tab-content hidden">
+                <div class="bg-blue-50 border-2 border-dashed border-blue-200 rounded-3xl p-12 text-center">
+                    <i data-lucide="layout" size="48" class="mx-auto text-blue-300 mb-4"></i>
+                    <h3 class="text-blue-800 font-bold">نمای تعاملی SIPOC</h3>
+                    <p class="text-blue-500 text-sm mt-2">این بخش جایگزین ۴ تب (تامین‌کننده، ورودی، خروجی، مشتری) شده است.</p>
+                    <button class="mt-6 bg-blue-600 text-white px-6 py-2 rounded-xl text-sm font-bold shadow-lg shadow-blue-200">مشاهده ماتریس تعاملی</button>
+                </div>
+            </div>
+
+            <!-- Tab: Complications (Refined Version of your image_db2b54.png) -->
+            <div id="tab-complications" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-bold flex items-center gap-2"><i data-lucide="bug" class="text-rose-500"></i> لیست عارضه‌های شناسایی شده</h3>
+                    <button class="bg-slate-900 text-white px-4 py-2 rounded-lg text-xs font-bold">+ ثبت عارضه جدید</button>
+                </div>
+                <div class="overflow-hidden border rounded-xl">
+                    <table class="w-full text-right text-sm">
+                        <thead class="bg-slate-50 border-b">
+                            <tr>
+                                <th class="p-4">عنوان عارضه</th>
+                                <th class="p-4">علت ریشه‌ای</th>
+                                <th class="p-4">اهمیت</th>
+                                <th class="p-4">وضعیت</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-4 font-medium italic">طولانی بودن زمان تایید استعلام</td>
+                                <td class="p-4 text-slate-500">متمرکز بودن تاییدات در مدیریت عامل</td>
+                                <td class="p-4"><span class="bg-rose-100 text-rose-600 px-2 py-1 rounded text-[10px] font-bold">خیلی زیاد</span></td>
+                                <td class="p-4 text-xs">در حال پیگیری</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="p-4 font-medium italic">عدم شفافیت در معیارهای ارزیابی</td>
+                                <td class="p-4 text-slate-500">ناقص بودن آیین‌نامه معاملات</td>
+                                <td class="p-4"><span class="bg-amber-100 text-amber-600 px-2 py-1 rounded text-[10px] font-bold">متوسط</span></td>
+                                <td class="p-4 text-xs">رفع شده</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function switchTab(tabId) {
+            // Hide all
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+            // Show target
+            document.getElementById(tabId).classList.remove('hidden');
+            document.getElementById('btn-' + tabId.replace('tab-', '')).classList.add('active');
+        }
+    </script>
+</body>
+</html>
