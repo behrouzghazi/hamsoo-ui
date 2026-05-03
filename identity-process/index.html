@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شناسنامه فرایند | همسو</title>
+    <script src="/node_modules/@tailwindcss/browser/dist/index.global.js"></script>
+    <script src="/node_modules/lucide/dist/umd/lucide.min.js"></script>
+    <link href="/node_modules/@fontsource/vazirmatn/index.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="/worklist/styles.css" />
+    <link rel="stylesheet" href="/identity-process/styles.css" />
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <div class="flex h-screen w-full overflow-hidden">
+        <aside class="w-16 bg-slate-900 flex flex-col items-center py-6 gap-6 z-30">
+            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white mb-4">
+                <a href="/index.html" aria-label="صفحه اصلی">
+                    <i data-lucide="layers" class="w-6 h-6"></i>
+                </a>
+            </div>
+
+            <nav class="flex flex-col gap-4">
+                <a href="/index.html" class="p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all" title="خانه">
+                    <i data-lucide="house" class="w-6 h-6"></i>
+                </a>
+                <a href="/worklist/index.html" class="p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all" title="مدیریت درخواست‌ها">
+                    <i data-lucide="git-pull-request" class="w-6 h-6"></i>
+                </a>
+                <button class="p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all" title="گزارش">
+                    <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+                </button>
+                <button class="p-3 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-xl transition-all" title="اطلاعات پایه">
+                    <i data-lucide="settings" class="w-6 h-6"></i>
+                </button>
+            </nav>
+        </aside>
+
+        <main class="flex-1 flex flex-col min-w-0 bg-slate-50 overflow-hidden">
+            <header class="h-16 bg-blue-700 text-white border-b border-blue-800 flex items-center justify-between px-6 shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center">
+                        <i data-lucide="file-check" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <div class="text-sm font-bold">شناسنامه فرایند</div>
+                        <div class="text-[11px] text-blue-100">مدیریت فرایندها و شاخص‌ها</div>
+                    </div>
+                </div>
+                <a href="/index.html" class="text-xs bg-white/15 hover:bg-white/20 px-3 py-1 rounded-full transition-all">بازگشت</a>
+            </header>
+
+            <div class="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar">
+                <div class="max-w-[1400px] mx-auto space-y-4">
+                    <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-blue-600 text-white p-2 rounded-lg">
+                                <i data-lucide="file-check" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h1 class="font-bold text-sm text-slate-700">وضعیت تکمیل شناسنامه فرایند</h1>
+                                <p class="text-xs text-slate-400 mt-1">۷ تب از ۹ تب با موفقیت تکمیل شده است.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 lg:w-1/3">
+                            <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-blue-600" style="width: 78%"></div>
+                            </div>
+                            <span class="text-sm font-bold text-blue-600">۷۸٪</span>
+                        </div>
+                    </section>
+
+                    <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="border-b border-slate-200 overflow-x-auto custom-scrollbar">
+                            <nav class="flex px-2 min-w-max" aria-label="تب‌های شناسنامه فرایند">
+                                <button class="identity-tab-btn active" id="btn-general" data-tab="general">
+                                    <i data-lucide="info" class="w-4 h-4"></i>
+                                    کلیات
+                                </button>
+                                <button class="identity-tab-btn" id="btn-diagram" data-tab="diagram">
+                                    <i data-lucide="workflow" class="w-4 h-4"></i>
+                                    نمودار
+                                </button>
+                                <button class="identity-tab-btn" id="btn-sipoc" data-tab="sipoc">
+                                    <i data-lucide="arrow-right-left" class="w-4 h-4"></i>
+                                    SIPOC
+                                </button>
+                                <button class="identity-tab-btn" id="btn-indicators" data-tab="indicators">
+                                    <i data-lucide="gauge" class="w-4 h-4"></i>
+                                    شاخص‌ها
+                                    <span class="completion-badge">۱۰۰٪</span>
+                                </button>
+                                <button class="identity-tab-btn" id="btn-docs" data-tab="docs">
+                                    <i data-lucide="files" class="w-4 h-4"></i>
+                                    مستندات
+                                    <span class="completion-badge">۴۰٪</span>
+                                </button>
+                                <button class="identity-tab-btn" id="btn-resources" data-tab="resources">
+                                    <i data-lucide="database" class="w-4 h-4"></i>
+                                    منابع
+                                </button>
+                                <button class="identity-tab-btn" id="btn-complications" data-tab="complications">
+                                    <i data-lucide="bug" class="w-4 h-4"></i>
+                                    عارضه
+                                    <span class="alert-dot"></span>
+                                </button>
+                                <button class="identity-tab-btn" id="btn-risks" data-tab="risks">
+                                    <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                                    ریسک
+                                    <span class="alert-dot"></span>
+                                </button>
+                            </nav>
+                        </div>
+
+                        <div id="identity-tab-container" class="p-4 md:p-6 min-h-[520px]"></div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/identity-process/scripts.js"></script>
+</body>
+</html>

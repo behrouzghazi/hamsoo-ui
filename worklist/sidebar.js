@@ -4,7 +4,7 @@
         {
             id: 'kpi-change',
             title: 'درخواست تغییر شاخص',
-            href: '/worklist/kpi-change/detail.html?mode=edit',
+            href: '/worklist/kpi-change/index.html',
             icon: 'file-edit'
         }
     ];

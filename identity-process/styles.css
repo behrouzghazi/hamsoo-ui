@@ -1,0 +1,92 @@
+.identity-tab-btn {
+    padding: 12px 16px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.identity-tab-btn:hover {
+    background-color: #f8fafc;
+    color: #1d4ed8;
+}
+
+.identity-tab-btn.active {
+    border-bottom-color: #2563eb;
+    color: #2563eb;
+    background-color: #eff6ff;
+    font-weight: 800;
+}
+
+.completion-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 999px;
+    background: #e2e8f0;
+    color: #475569;
+}
+
+.alert-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #ef4444;
+    border-radius: 999px;
+    display: inline-block;
+}
+
+.identity-panel {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.bpmn-canvas {
+    direction: ltr;
+    background-color: #ffffff;
+    background-image:
+        linear-gradient(#eef2f7 1px, transparent 1px),
+        linear-gradient(90deg, #eef2f7 1px, transparent 1px);
+    background-size: 24px 24px;
+}
+
+.bpmn-node {
+    fill: #ffffff;
+    stroke: #1f2937;
+    stroke-width: 1.4;
+}
+
+.bpmn-task {
+    fill: #ffffff;
+    stroke: #1f2937;
+    stroke-width: 1.4;
+    rx: 8;
+    ry: 8;
+}
+
+.bpmn-flow {
+    stroke: #1f2937;
+    stroke-width: 1.5;
+    fill: none;
+    marker-end: url(#arrow);
+}
+
+.bpmn-label {
+    direction: rtl;
+    unicode-bidi: plaintext;
+    fill: #111827;
+    font-family: Vazirmatn, sans-serif;
+    font-size: 12px;
+}
+
+.bpmn-small-label {
+    direction: rtl;
+    unicode-bidi: plaintext;
+    fill: #475569;
+    font-family: Vazirmatn, sans-serif;
+    font-size: 10px;
+}
