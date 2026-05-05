@@ -42,8 +42,25 @@ function setStep(step) {
     });
 
     document.getElementById('prev-step').disabled = currentStep === 1;
-    document.getElementById('next-step').textContent = currentStep === 4 ? 'پایان' : 'مرحله بعد';
+    const nextButton = document.getElementById('next-step');
+    if (currentStep === 3) {
+        nextButton.textContent = 'ثبت نهایی در سیستم';
+    } else {
+        nextButton.textContent = currentStep === 4 ? 'پایان' : 'مرحله بعد';
+    }
     renderIcons();
+}
+
+function confirmFinalImport() {
+    return window.confirm(
+        'آیا از ثبت نهایی اطلاعات تاییدشده در سیستم مطمئن هستید؟\n\n' +
+        'این تغییرات مستقیما در سیستم اعمال می‌شود و امکان بازگشت وجود ندارد.'
+    );
+}
+
+function navigateToStep(step) {
+    if (currentStep === 3 && step >= 4 && !confirmFinalImport()) return;
+    setStep(step);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -52,11 +69,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.querySelectorAll('.wizard-nav').forEach((button) => {
-        button.addEventListener('click', () => setStep(Number(button.dataset.step)));
+        button.addEventListener('click', () => navigateToStep(Number(button.dataset.step)));
     });
 
-    document.getElementById('prev-step').addEventListener('click', () => setStep(currentStep - 1));
-    document.getElementById('next-step').addEventListener('click', () => setStep(currentStep + 1));
+    document.getElementById('prev-step').addEventListener('click', () => navigateToStep(currentStep - 1));
+    document.getElementById('next-step').addEventListener('click', () => navigateToStep(currentStep + 1));
 
     setImportType(currentImportType);
     setStep(currentStep);
