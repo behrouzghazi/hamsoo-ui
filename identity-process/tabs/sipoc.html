@@ -1,5 +1,36 @@
-<div class="bg-blue-50 border-2 border-dashed border-blue-200 rounded-3xl p-12 text-center">
-    <i data-lucide="layout" class="w-12 h-12 mx-auto text-blue-300 mb-4"></i>
-    <h2 class="text-blue-800 font-bold">نمای تعاملی SIPOC</h2>
-    <p class="text-blue-500 text-sm mt-2">این بخش در ادامه برای تأمین‌کننده، ورودی، فعالیت، خروجی و مشتری بازطراحی می‌شود.</p>
+<div class="sipoc-workspace" id="sipoc-workspace">
+    <section class="sipoc-toolbar">
+        <div>
+            <div class="flex items-center gap-2 text-[11px] font-bold text-blue-600 mb-2">
+                <i data-lucide="arrow-right-left" class="w-4 h-4"></i>
+                نقشه SIPOC فرایند
+            </div>
+            <h2 class="text-base font-extrabold text-slate-800">مدیریت تدارکات داخلی</h2>
+            <p class="text-xs text-slate-500 mt-1 leading-6">نمای فشرده برای مشاهده، افزودن و ویرایش تأمین‌کننده، ورودی، فعالیت، خروجی و مشتری.</p>
+        </div>
+
+        <div class="sipoc-toolbar-actions">
+            <div class="sipoc-view-switch" aria-label="تغییر نمای SIPOC">
+                <button class="active" data-sipoc-view="board">
+                    <i data-lucide="columns-3" class="w-4 h-4"></i>
+                    برد
+                </button>
+                <button data-sipoc-view="table">
+                    <i data-lucide="table-2" class="w-4 h-4"></i>
+                    جدول
+                </button>
+            </div>
+            <button class="sipoc-primary-btn" data-add-sipoc="suppliers">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                افزودن مورد SIPOC
+            </button>
+        </div>
+    </section>
+
+    <section class="sipoc-summary" id="sipoc-summary"></section>
+
+    <section class="sipoc-board" id="sipoc-board"></section>
+    <section class="sipoc-table hidden" id="sipoc-table"></section>
+
+    <aside class="sipoc-drawer hidden" id="sipoc-drawer" aria-label="ویرایش آیتم SIPOC"></aside>
 </div>
