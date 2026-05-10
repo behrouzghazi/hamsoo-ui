@@ -9,6 +9,7 @@
     
     <!-- آیکون‌ها -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="/layout/shell.js" defer></script>
 
     <style>
         body {
@@ -64,7 +65,10 @@
         }
     </style>
 </head>
-<body class="h-screen flex flex-col overflow-hidden text-slate-700">
+<body class="h-screen flex overflow-hidden text-slate-700">
+    <aside data-hamsoo-primary-sidebar data-active="base-data"></aside>
+
+    <div class="flex-1 min-w-0 flex flex-col overflow-hidden">
 
     <!-- هدر -->
     <header class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center shadow-sm z-20">
@@ -268,6 +272,7 @@
 
         </div>
     </main>
+    </div>
 
     <!-- جاوااسکریپت برای تعامل -->
     <script>

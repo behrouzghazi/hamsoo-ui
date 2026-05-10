@@ -1,9 +1,14 @@
 (function () {
     const navItems = [
-        { id: 'home', title: 'خانه', href: '/index.html', icon: 'house' },
-        { id: 'worklist', title: 'مدیریت درخواست‌ها', href: '/worklist/index.html', icon: 'git-pull-request' },
-        { id: 'reports', title: 'گزارش', href: '#', icon: 'bar-chart-3', button: true },
-        { id: 'settings', title: 'اطلاعات پایه', href: '#', icon: 'settings', button: true }
+        { id: 'root', title: 'روت', href: 'http://127.0.0.1:5500/index.html', icon: 'layers' },
+        { id: 'home', title: 'خانه', href: '#', icon: 'house' },
+        { id: 'dashboard', title: 'داشبورد', href: '#', icon: 'layout-dashboard' },
+        { id: 'worklist', title: 'کارتابل وظایف', href: '/worklist/index.html', icon: 'clipboard-list' },
+        { id: 'measure', title: 'مدیریت شاخص', href: '#', icon: 'bar-chart-3' },
+        { id: 'advanced-search', title: 'جستجوی پیشرفته', href: '#', icon: 'search' },
+        { id: 'pcf-tree', title: 'درخت PCF', href: '#', icon: 'git-branch' },
+        { id: 'reports', title: 'گزارش ها', href: '#', icon: 'file-text' },
+        { id: 'base-data', title: 'اطلاعات پایه', href: '#', icon: 'settings' }
     ];
 
     function renderIcons() {
@@ -14,8 +19,16 @@
 
     function navClasses(isActive) {
         return isActive
-            ? 'p-3 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-xl transition-all'
-            : 'p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all';
+            ? 'group/nav relative p-3 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-xl transition-all'
+            : 'group/nav relative p-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all';
+    }
+
+    function renderTooltip(title) {
+        return `
+            <span class="pointer-events-none absolute right-full mr-3 top-1/2 -translate-y-1/2 whitespace-nowrap rounded-md bg-slate-950 px-3 py-1.5 text-xs font-semibold text-white opacity-0 shadow-lg shadow-slate-900/20 transition-opacity group-hover/nav:opacity-100 group-focus-visible/nav:opacity-100">
+                ${title}
+            </span>
+        `;
     }
 
     function renderPrimarySidebar(container) {
@@ -27,22 +40,14 @@
                 : '';
             const content = `<i data-lucide="${item.icon}" class="w-6 h-6"></i>`;
             const classes = `${navClasses(active === item.id)} ${badge ? 'relative' : ''}`;
+            const tooltip = renderTooltip(item.title);
 
-            if (item.button) {
-                return `<button class="${classes}" title="${item.title}" type="button">${content}</button>`;
-            }
-
-            return `<a href="${item.href}" class="${classes}" title="${item.title}">${content}${badge}</a>`;
+            return `<a href="${item.href}" class="${classes}" title="${item.title}" aria-label="${item.title}">${content}${badge}${tooltip}</a>`;
         }).join('');
 
-        container.className = 'w-16 bg-slate-900 flex flex-col items-center py-6 gap-6 z-30';
+        container.className = 'w-16 shrink-0 bg-slate-900 flex flex-col items-center py-4 gap-4 z-30 overflow-visible';
         container.innerHTML = `
-            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white mb-4">
-                <a href="/index.html" aria-label="صفحه اصلی">
-                    <i data-lucide="layers" class="w-6 h-6"></i>
-                </a>
-            </div>
-            <nav class="flex flex-col gap-4">
+            <nav class="flex flex-col gap-3">
                 ${links}
             </nav>
         `;
