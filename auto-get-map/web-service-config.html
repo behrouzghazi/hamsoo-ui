@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پیکربندی وب سرویس شاخص | همسو</title>
+    <script src="/node_modules/@tailwindcss/browser/dist/index.global.js"></script>
+    <script src="/node_modules/lucide/dist/umd/lucide.min.js"></script>
+    <script src="/layout/shell.js" defer></script>
+    <link href="/node_modules/@fontsource/vazirmatn/index.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/worklist/styles.css">
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <div class="flex h-screen w-full overflow-hidden">
+        <aside data-hamsoo-primary-sidebar data-active="measure"></aside>
+
+        <main class="flex-1 flex flex-col min-w-0 bg-slate-50 overflow-hidden">
+            <header data-hamsoo-header data-action-text="بازگشت به پایش شاخص" data-action-href="/auto-get-map/index.html"></header>
+
+            <div class="flex-1 overflow-y-auto p-6">
+                <div class="max-w-7xl mx-auto space-y-6">
+                    <section class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="p-6 border-b border-slate-200 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-5">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0">
+                                    <i data-lucide="plug-zap" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <h1 class="text-xl font-extrabold text-slate-800">پیکربندی و مشاهده جزئیات وب سرویس</h1>
+                                    <p class="mt-2 text-sm text-slate-500 leading-7">
+                                        نرخ رضایت مشتریان از خدمات پس از فروش
+                                    </p>
+                                    <div class="mt-2 flex flex-wrap items-center gap-2 text-xs">
+                                        <span class="font-mono bg-slate-100 text-slate-600 px-2 py-1 rounded">KPI-MKT-001</span>
+                                        <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded font-bold">دوره پایش: ماهانه</span>
+                                        <span id="saved-status" class="bg-amber-50 text-amber-700 px-2 py-1 rounded font-bold">دارای تغییرات ذخیره‌نشده</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-3">
+                                <button type="button" id="test-service" class="px-4 py-2 rounded-lg border border-blue-200 text-blue-700 bg-blue-50 text-sm font-bold hover:bg-blue-100 transition-all flex items-center gap-2">
+                                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                                    تست وب سرویس
+                                </button>
+                                <button type="button" id="save-config" class="px-5 py-2 rounded-lg bg-blue-600 text-white text-sm font-bold shadow-sm shadow-blue-200 hover:bg-blue-700 transition-all flex items-center gap-2">
+                                    <i data-lucide="save" class="w-4 h-4"></i>
+                                    ذخیره پیکربندی
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="p-6 space-y-6">
+                            <section class="rounded-xl border border-slate-200 p-6">
+                                <div class="flex items-center justify-between gap-4 mb-6">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="settings-2" class="w-5 h-5 text-blue-600"></i>
+                                        <h2 class="text-base font-extrabold text-slate-800">پیکربندی وب سرویس</h2>
+                                    </div>
+                                    <span class="text-xs font-bold bg-emerald-50 text-emerald-700 rounded-full px-3 py-1">فراخوانی همیشه با POST انجام می‌شود</span>
+                                </div>
+
+                                <div class="grid grid-cols-1 xl:grid-cols-[1.25fr_0.75fr] gap-6">
+                                    <div class="space-y-6">
+                                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                                            <div class="lg:col-span-2">
+                                                <label class="form-label">آدرس وب سرویس دریافت مقدار شاخص <span class="required-star">*</span></label>
+                                                <input id="service-url" class="form-input ltr text-left" dir="ltr" value="https://api.example.com/kpi-monitoring/v1/data-fetch">
+                                            </div>
+                                            <div>
+                                                <label class="form-label">روش فراخوانی</label>
+                                                <input class="form-input readonly ltr text-left" dir="ltr" value="POST" readonly>
+                                            </div>
+                                            <div>
+                                                <label class="form-label">Timeout فراخوانی</label>
+                                                <select id="timeout" class="form-input">
+                                                    <option>۱۰ ثانیه</option>
+                                                    <option selected>۳۰ ثانیه</option>
+                                                    <option>۶۰ ثانیه</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label class="form-label">نوع محتوای ارسالی</label>
+                                                <input class="form-input readonly ltr text-left" dir="ltr" value="application/json" readonly>
+                                            </div>
+                                            <div>
+                                                <label class="form-label">مسیر مقدار در پاسخ سرویس <span class="required-star">*</span></label>
+                                                <input id="value-path" class="form-input readonly ltr text-left" dir="ltr" value="data.actualValue" readonly>
+                                            </div>
+                                        </div>
+
+                                        <div class="rounded-xl border border-slate-200 bg-slate-50 p-5">
+                                            <div class="flex items-center justify-between gap-4 mb-4">
+                                                <div class="flex items-center gap-2">
+                                                    <i data-lucide="braces" class="w-5 h-5 text-blue-600"></i>
+                                                    <h3 class="font-extrabold text-slate-800">Payload ارسالی همسو</h3>
+                                                </div>
+                                                <span class="text-xs font-bold text-slate-500">فیلدها ثابت هستند و با مقدار شاخص جاری ارسال می‌شوند</span>
+                                            </div>
+                                            <pre id="payload-preview" class="rounded-lg bg-slate-900 text-slate-100 p-4 text-xs leading-6 text-left overflow-x-auto" dir="ltr">{
+  "measureName": "نرخ رضایت مشتریان از خدمات پس از فروش",
+  "measureCode": "KPI-MKT-001",
+  "year": 1403,
+  "month": 10,
+  "monitoringPeriod": "ماهانه"
+}</pre>
+                                        </div>
+
+                                        <div class="rounded-xl border border-slate-200 bg-slate-50 p-5">
+                                            <div class="flex items-center justify-between gap-4 mb-4">
+                                                <div class="flex items-center gap-2">
+                                                    <i data-lucide="file-json-2" class="w-5 h-5 text-blue-600"></i>
+                                                    <h3 class="font-extrabold text-slate-800">فرمت پاسخ دریافتی وب سرویس</h3>
+                                                </div>
+                                                <span class="text-xs font-bold bg-blue-50 text-blue-700 rounded-full px-3 py-1">ساختار ثابت پاسخ</span>
+                                            </div>
+                                            <pre class="rounded-lg bg-slate-900 text-slate-100 p-4 text-xs leading-6 text-left overflow-x-auto" dir="ltr">{
+  "httpCode": 200,
+  "message": "SUCCESS",
+  "data": {
+    "planValue": 90,
+    "actualValue": 88.1
+  }
+}</pre>
+                                            <div class="option-description mt-4">
+                                                وقتی مقدار <span class="font-mono" dir="ltr">httpCode</span> برابر ۲۰۰ باشد فراخوانی موفق است و همسو مقدار برنامه‌ای و واقعی را از
+                                                <span class="font-mono" dir="ltr">data.planValue</span>
+                                                و
+                                                <span class="font-mono" dir="ltr">data.actualValue</span>
+                                                دریافت می‌کند. خطاهای بیزینسی نیز با مقدار متفاوت در
+                                                <span class="font-mono" dir="ltr">httpCode</span>
+                                                و متن قابل نمایش در
+                                                <span class="font-mono" dir="ltr">message</span>
+                                                برگردانده می‌شوند.
+                                            </div>
+                                        </div>
+
+                                        <div class="rounded-xl border border-slate-200 p-5">
+                                            <div class="flex items-center gap-2 mb-4">
+                                                <i data-lucide="workflow" class="w-5 h-5 text-blue-600"></i>
+                                                <h3 class="font-extrabold text-slate-800">نگاشت دریافت اتوماتیک مقادیر شاخص</h3>
+                                            </div>
+                                            <div class="overflow-x-auto rounded-xl border border-slate-200">
+                                                <table class="w-full text-sm">
+                                                    <thead class="bg-slate-50 text-slate-600">
+                                                        <tr>
+                                                            <th class="text-right p-3 font-extrabold">فیلد همسو</th>
+                                                            <th class="text-right p-3 font-extrabold">مسیر در پاسخ سرویس مبدا</th>
+                                                            <th class="text-right p-3 font-extrabold">نوع داده</th>
+                                                            <th class="text-right p-3 font-extrabold">نمونه مقدار</th>
+                                                            <th class="text-right p-3 font-extrabold">وضعیت</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="divide-y divide-slate-100">
+                                                        <tr>
+                                                            <td class="p-3 font-bold text-slate-800">مقدار واقعی</td>
+                                                            <td class="p-3">
+                                                                <input class="form-input readonly ltr text-left text-sm" dir="ltr" value="data.actualValue" readonly>
+                                                            </td>
+                                                            <td class="p-3">
+                                                                <select class="form-input text-sm">
+                                                                    <option selected>عدد اعشاری</option>
+                                                                    <option>عدد صحیح</option>
+                                                                    <option>متن</option>
+                                                                </select>
+                                                            </td>
+                                                            <td class="p-3">۸۷.۵</td>
+                                                            <td class="p-3"><span class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded text-xs font-bold">نگاشت شده</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="p-3 font-bold text-slate-800">مقدار برنامه‌ای</td>
+                                                            <td class="p-3">
+                                                                <input class="form-input readonly ltr text-left text-sm" dir="ltr" value="data.planValue" readonly>
+                                                            </td>
+                                                            <td class="p-3">
+                                                                <select class="form-input text-sm">
+                                                                    <option selected>عدد اعشاری</option>
+                                                                    <option>عدد صحیح</option>
+                                                                </select>
+                                                            </td>
+                                                            <td class="p-3">۹۰</td>
+                                                            <td class="p-3"><span class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded text-xs font-bold">نگاشت شده</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="p-3 font-bold text-slate-800">پیام وضعیت</td>
+                                                            <td class="p-3">
+                                                                <input class="form-input readonly ltr text-left text-sm" dir="ltr" value="message" readonly>
+                                                            </td>
+                                                            <td class="p-3">
+                                                                <select class="form-input text-sm">
+                                                                    <option selected>متن</option>
+                                                                </select>
+                                                            </td>
+                                                            <td class="p-3">SUCCESS</td>
+                                                            <td class="p-3"><span class="bg-slate-100 text-slate-600 px-2 py-1 rounded text-xs font-bold">سیستمی</span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <aside class="space-y-6">
+                                        <div class="rounded-xl border border-slate-200 p-5">
+                                            <div class="flex items-center gap-2 mb-4">
+                                                <i data-lucide="shield-check" class="w-5 h-5 text-blue-600"></i>
+                                                <h3 class="font-extrabold text-slate-800">Authorization سامانه مبدا</h3>
+                                            </div>
+                                            <div class="grid grid-cols-2 gap-3">
+                                                <label class="radio-card selected" data-auth-option="none">
+                                                    <input type="radio" name="auth_mode" class="text-blue-600" checked>
+                                                    <i data-lucide="unlock" class="w-4 h-4 text-blue-600"></i>
+                                                    <span class="text-sm font-bold text-blue-700">ندارد</span>
+                                                </label>
+                                                <label class="radio-card" data-auth-option="token">
+                                                    <input type="radio" name="auth_mode" class="text-slate-600">
+                                                    <i data-lucide="key-round" class="w-4 h-4 text-slate-500"></i>
+                                                    <span class="text-sm font-bold text-slate-600">دارد</span>
+                                                </label>
+                                            </div>
+                                            <div id="auth-fields" class="hidden mt-5 space-y-4">
+                                                <div>
+                                                    <label class="form-label">آدرس وب سرویس دریافت توکن</label>
+                                                    <input class="form-input ltr text-left" dir="ltr" value="https://api.example.com/auth/token">
+                                                </div>
+                                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                                    <div>
+                                                        <label class="form-label">نام کاربری</label>
+                                                        <input class="form-input ltr text-left" dir="ltr" value="hamsoo.kpi">
+                                                    </div>
+                                                    <div>
+                                                        <label class="form-label">رمز عبور</label>
+                                                        <input class="form-input ltr text-left" dir="ltr" type="password" value="12345678">
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label class="form-label">مسیر توکن در پاسخ احراز هویت</label>
+                                                    <input class="form-input ltr text-left" dir="ltr" value="data.accessToken">
+                                                </div>
+                                                <div>
+                                                    <label class="form-label">Header ارسال توکن</label>
+                                                    <input class="form-input ltr text-left" dir="ltr" value="Authorization: Bearer {{token}}">
+                                                </div>
+                                            </div>
+                                            <div class="option-description mt-4">
+                                                در صورت فعال بودن Authorization، همسو ابتدا سرویس دریافت توکن را با user/pass فراخوانی می‌کند و سپس سرویس مقدار شاخص را اجرا می‌کند.
+                                            </div>
+                                        </div>
+
+                                        <div class="rounded-xl border border-slate-200 p-5">
+                                            <div class="flex items-center gap-2 mb-4">
+                                                <i data-lucide="flask-conical" class="w-5 h-5 text-blue-600"></i>
+                                                <h3 class="font-extrabold text-slate-800">نتیجه تست وب سرویس</h3>
+                                            </div>
+                                            <div id="test-state" class="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm text-slate-500 leading-7">
+                                                هنوز تستی اجرا نشده است.
+                                            </div>
+                                            <pre id="test-output" class="hidden mt-4 rounded-lg bg-slate-900 text-slate-100 p-4 text-xs leading-6 text-left overflow-x-auto" dir="ltr"></pre>
+                                        </div>
+
+                                    </aside>
+                                </div>
+                            </section>
+
+                            <section class="rounded-xl border border-slate-200 p-6">
+                                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-5">
+                                    <div class="flex items-center gap-2">
+                                        <i data-lucide="history" class="w-5 h-5 text-blue-600"></i>
+                                        <h2 class="text-base font-extrabold text-slate-800">تاریخچه فراخوانی‌ها</h2>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-xs">
+                                        <span class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded font-bold">۳ موفق</span>
+                                        <span class="bg-rose-50 text-rose-700 px-2 py-1 rounded font-bold">۱ خطا دار</span>
+                                    </div>
+                                </div>
+
+                                <div class="overflow-x-auto rounded-xl border border-slate-200">
+                                    <table class="w-full text-sm">
+                                        <thead class="bg-slate-50 text-slate-600">
+                                            <tr>
+                                                <th class="text-right p-3 font-extrabold">تاریخ فراخوانی</th>
+                                                <th class="text-right p-3 font-extrabold">وضعیت</th>
+                                                <th class="text-right p-3 font-extrabold">Payload ارسالی</th>
+                                                <th class="text-right p-3 font-extrabold">Response دریافتی</th>
+                                                <th class="text-right p-3 font-extrabold">مدت زمان پاسخ</th>
+                                                <th class="text-right p-3 font-extrabold">عملیات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="history-body" class="divide-y divide-slate-100">
+                                            <tr>
+                                                <td class="p-3 whitespace-nowrap">۱۴۰۳/۱۰/۳۰ - ۱۰:۳۵</td>
+                                                <td class="p-3"><span class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded text-xs font-bold">موفق</span></td>
+                                                <td class="p-3">
+                                                    <pre class="rounded bg-slate-50 border border-slate-200 p-3 text-xs leading-5 text-left min-w-64" dir="ltr">{"measureName":"نرخ رضایت مشتریان از خدمات پس از فروش","measureCode":"KPI-MKT-001","year":1403,"month":10,"monitoringPeriod":"ماهانه"}</pre>
+                                                </td>
+                                                <td class="p-3">
+                                                    <pre class="rounded bg-slate-50 border border-slate-200 p-3 text-xs leading-5 text-left min-w-64" dir="ltr">{"httpCode":200,"message":"SUCCESS","data":{"planValue":90,"actualValue":87.5}}</pre>
+                                                </td>
+                                                <td class="p-3">۸۴۰ میلی‌ثانیه</td>
+                                                <td class="p-3">
+                                                    <button type="button" class="retry-call px-3 py-2 rounded-lg border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50 transition-all flex items-center gap-2 whitespace-nowrap">
+                                                        <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+                                                        فراخوانی مجدد
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="p-3 whitespace-nowrap">۱۴۰۳/۰۹/۳۰ - ۱۰:۳۱</td>
+                                                <td class="p-3"><span class="bg-rose-50 text-rose-700 px-2 py-1 rounded text-xs font-bold">خطا دار: PERIOD_CLOSED</span></td>
+                                                <td class="p-3">
+                                                    <pre class="rounded bg-slate-50 border border-slate-200 p-3 text-xs leading-5 text-left min-w-64" dir="ltr">{"measureName":"نرخ رضایت مشتریان از خدمات پس از فروش","measureCode":"KPI-MKT-001","year":1403,"month":9,"monitoringPeriod":"ماهانه"}</pre>
+                                                </td>
+                                                <td class="p-3">
+                                                    <pre class="rounded bg-rose-50 border border-rose-100 text-rose-700 p-3 text-xs leading-5 text-left min-w-64" dir="ltr">{"httpCode":422,"message":"PERIOD_CLOSED","data":null}</pre>
+                                                </td>
+                                                <td class="p-3">۱۲۰۰ میلی‌ثانیه</td>
+                                                <td class="p-3">
+                                                    <button type="button" class="retry-call px-3 py-2 rounded-lg border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50 transition-all flex items-center gap-2 whitespace-nowrap">
+                                                        <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+                                                        فراخوانی مجدد
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="p-3 whitespace-nowrap">۱۴۰۳/۰۸/۳۰ - ۱۰:۳۰</td>
+                                                <td class="p-3"><span class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded text-xs font-bold">موفق</span></td>
+                                                <td class="p-3">
+                                                    <pre class="rounded bg-slate-50 border border-slate-200 p-3 text-xs leading-5 text-left min-w-64" dir="ltr">{"measureName":"نرخ رضایت مشتریان از خدمات پس از فروش","measureCode":"KPI-MKT-001","year":1403,"month":8,"monitoringPeriod":"ماهانه"}</pre>
+                                                </td>
+                                                <td class="p-3">
+                                                    <pre class="rounded bg-slate-50 border border-slate-200 p-3 text-xs leading-5 text-left min-w-64" dir="ltr">{"httpCode":200,"message":"SUCCESS","data":{"planValue":88,"actualValue":84.2}}</pre>
+                                                </td>
+                                                <td class="p-3">۷۶۰ میلی‌ثانیه</td>
+                                                <td class="p-3">
+                                                    <button type="button" class="retry-call px-3 py-2 rounded-lg border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50 transition-all flex items-center gap-2 whitespace-nowrap">
+                                                        <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+                                                        فراخوانی مجدد
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="p-3 whitespace-nowrap">۱۴۰۳/۰۷/۳۰ - ۱۰:۳۰</td>
+                                                <td class="p-3"><span class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded text-xs font-bold">موفق</span></td>
+                                                <td class="p-3">
+                                                    <pre class="rounded bg-slate-50 border border-slate-200 p-3 text-xs leading-5 text-left min-w-64" dir="ltr">{"measureName":"نرخ رضایت مشتریان از خدمات پس از فروش","measureCode":"KPI-MKT-001","year":1403,"month":7,"monitoringPeriod":"ماهانه"}</pre>
+                                                </td>
+                                                <td class="p-3">
+                                                    <pre class="rounded bg-slate-50 border border-slate-200 p-3 text-xs leading-5 text-left min-w-64" dir="ltr">{"httpCode":200,"message":"SUCCESS","data":{"planValue":86,"actualValue":82.9}}</pre>
+                                                </td>
+                                                <td class="p-3">۹۱۰ میلی‌ثانیه</td>
+                                                <td class="p-3">
+                                                    <button type="button" class="retry-call px-3 py-2 rounded-lg border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50 transition-all flex items-center gap-2 whitespace-nowrap">
+                                                        <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+                                                        فراخوانی مجدد
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </section>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const authFields = document.getElementById('auth-fields');
+            const testState = document.getElementById('test-state');
+            const testOutput = document.getElementById('test-output');
+            const historyBody = document.getElementById('history-body');
+            const savedStatus = document.getElementById('saved-status');
+            let configSaved = false;
+            const currentPayload = {
+                measureName: 'نرخ رضایت مشتریان از خدمات پس از فروش',
+                measureCode: 'KPI-MKT-001',
+                year: 1403,
+                month: 10,
+                monitoringPeriod: 'ماهانه'
+            };
+
+            function markUnsaved() {
+                configSaved = false;
+                savedStatus.className = 'bg-amber-50 text-amber-700 px-2 py-1 rounded font-bold';
+                savedStatus.textContent = 'دارای تغییرات ذخیره‌نشده';
+            }
+
+            function addSuccessfulHistoryRow(label) {
+                const response = {
+                    httpCode: 200,
+                    message: 'SUCCESS',
+                    data: {
+                        planValue: 90,
+                        actualValue: 88.1
+                    }
+                };
+                const row = document.createElement('tr');
+                row.innerHTML = '<td class="p-3 whitespace-nowrap">' + label + '</td>' +
+                    '<td class="p-3"><span class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded text-xs font-bold">موفق</span></td>' +
+                    '<td class="p-3"><pre class="rounded bg-slate-50 border border-slate-200 p-3 text-xs leading-5 text-left min-w-64" dir="ltr">' + JSON.stringify(currentPayload) + '</pre></td>' +
+                    '<td class="p-3"><pre class="rounded bg-slate-50 border border-slate-200 p-3 text-xs leading-5 text-left min-w-64" dir="ltr">' + JSON.stringify(response) + '</pre></td>' +
+                    '<td class="p-3">۶۸۰ میلی‌ثانیه</td>' +
+                    '<td class="p-3"><button type="button" class="retry-call px-3 py-2 rounded-lg border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50 transition-all flex items-center gap-2 whitespace-nowrap"><i data-lucide="rotate-cw" class="w-4 h-4"></i>فراخوانی مجدد</button></td>';
+                historyBody.prepend(row);
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }
+
+            document.querySelectorAll('[data-auth-option]').forEach(function (card) {
+                card.addEventListener('click', function () {
+                    document.querySelectorAll('[data-auth-option]').forEach(function (item) {
+                        item.classList.remove('selected');
+                        item.querySelector('span').className = 'text-sm font-bold text-slate-600';
+                        item.querySelector('input').checked = false;
+                    });
+                    card.classList.add('selected');
+                    card.querySelector('span').className = 'text-sm font-bold text-blue-700';
+                    card.querySelector('input').checked = true;
+                    authFields.classList.toggle('hidden', card.dataset.authOption !== 'token');
+                    markUnsaved();
+                });
+            });
+
+            document.querySelectorAll('input, select, textarea').forEach(function (field) {
+                field.addEventListener('input', markUnsaved);
+                field.addEventListener('change', markUnsaved);
+            });
+
+            document.getElementById('save-config').addEventListener('click', function () {
+                configSaved = true;
+                savedStatus.className = 'bg-emerald-50 text-emerald-700 px-2 py-1 rounded font-bold';
+                savedStatus.textContent = 'ذخیره شده';
+            });
+
+            document.getElementById('test-service').addEventListener('click', function () {
+                if (!configSaved) {
+                    testState.className = 'rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-700 leading-7 font-bold';
+                    testState.textContent = 'برای اجرای تست، ابتدا پیکربندی وب سرویس را ذخیره کنید.';
+                    testOutput.classList.add('hidden');
+                    return;
+                }
+
+                const response = {
+                    httpCode: 200,
+                    message: 'SUCCESS',
+                    data: {
+                        planValue: 90,
+                        actualValue: 88.1
+                    }
+                };
+                testState.className = 'rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-700 leading-7 font-bold';
+                testState.textContent = 'فراخوانی تست با موفقیت انجام شد. مقدار برنامه‌ای از data.planValue و مقدار واقعی از data.actualValue خوانده شد.';
+                testOutput.classList.remove('hidden');
+                testOutput.textContent = JSON.stringify(response, null, 2);
+
+                addSuccessfulHistoryRow('اکنون');
+            });
+
+            historyBody.addEventListener('click', function (event) {
+                const button = event.target.closest('.retry-call');
+                if (!button) {
+                    return;
+                }
+                testState.className = 'rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-700 leading-7 font-bold';
+                testState.textContent = 'فراخوانی مجدد با موفقیت انجام شد و یک رکورد جدید به تاریخچه اضافه شد.';
+                testOutput.classList.remove('hidden');
+                testOutput.textContent = JSON.stringify({
+                    httpCode: 200,
+                    message: 'SUCCESS',
+                    data: {
+                        planValue: 90,
+                        actualValue: 88.1
+                    }
+                }, null, 2);
+                addSuccessfulHistoryRow('فراخوانی مجدد');
+            });
+
+            if (window.lucide) {
+                window.lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>

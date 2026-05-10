@@ -34,10 +34,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" class="px-4 py-2 rounded-lg border border-slate-200 text-slate-600 text-sm font-bold hover:bg-slate-50 transition-all flex items-center gap-2">
+                            <a href="/auto-get-map/web-service-config.html" class="px-4 py-2 rounded-lg border border-slate-200 text-slate-600 text-sm font-bold hover:bg-slate-50 transition-all flex items-center gap-2">
                                 <i data-lucide="refresh-cw" class="w-4 h-4"></i>
                                 تست فراخوانی
-                            </button>
+                            </a>
                         </div>
 
                         <div class="border-b border-slate-200 flex overflow-x-auto">
@@ -163,85 +163,12 @@
                                         </div>
 
                                         <div class="mt-6">
-                                            <a href="#mapping" class="inline-flex items-center gap-2 text-sm font-extrabold text-blue-600 hover:text-blue-800">
-                                                <i data-lucide="link" class="w-4 h-4"></i>
-                                                مشاهده جزئیات وب سرویس
+                                            <a href="/auto-get-map/web-service-config.html" class="inline-flex items-center gap-2 text-sm font-extrabold text-blue-600 hover:text-blue-800">
+                                                <i data-lucide="settings-2" class="w-4 h-4"></i>
+                                                پیکربندی و مشاهده جزئیات وب سرویس
                                             </a>
                                         </div>
                                     </div>
-                                </div>
-                            </section>
-
-                            <section id="mapping" class="rounded-xl border border-slate-200 p-6">
-                                <div class="flex items-center justify-between gap-4 mb-5">
-                                    <div class="flex items-center gap-2">
-                                        <i data-lucide="workflow" class="w-5 h-5 text-blue-600"></i>
-                                        <h2 class="text-base font-extrabold text-slate-800">نگاشت دریافت اتوماتیک مقادیر شاخص</h2>
-                                    </div>
-                                    <span class="text-xs font-bold bg-emerald-50 text-emerald-700 rounded-full px-3 py-1">آماده اتصال</span>
-                                </div>
-
-                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
-                                    <div>
-                                        <label class="form-label">آدرس وب سرویس</label>
-                                        <input class="form-input ltr text-left" dir="ltr" value="https://api.example.com/kpi-monitoring/v1/data-fetch">
-                                    </div>
-                                    <div>
-                                        <label class="form-label">روش فراخوانی</label>
-                                        <select class="form-input">
-                                            <option>GET</option>
-                                            <option>POST</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="form-label">کلید شناسایی شاخص</label>
-                                        <input class="form-input ltr text-left" dir="ltr" value="KPI-MKT-001">
-                                    </div>
-                                </div>
-
-                                <div class="overflow-x-auto rounded-xl border border-slate-200">
-                                    <table class="w-full text-sm">
-                                        <thead class="bg-slate-50 text-slate-600">
-                                            <tr>
-                                                <th class="text-right p-3 font-extrabold">فیلد همسو</th>
-                                                <th class="text-right p-3 font-extrabold">فیلد سامانه مبدا</th>
-                                                <th class="text-right p-3 font-extrabold">نوع داده</th>
-                                                <th class="text-right p-3 font-extrabold">نمونه مقدار</th>
-                                                <th class="text-right p-3 font-extrabold">وضعیت</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="divide-y divide-slate-100">
-                                            <tr>
-                                                <td class="p-3 font-bold text-slate-800">مقدار شاخص</td>
-                                                <td class="p-3 font-mono text-left" dir="ltr">response.score</td>
-                                                <td class="p-3">عدد اعشاری</td>
-                                                <td class="p-3">۸۷.۵</td>
-                                                <td class="p-3"><span class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded text-xs font-bold">نگاشت شده</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="p-3 font-bold text-slate-800">تاریخ پایش</td>
-                                                <td class="p-3 font-mono text-left" dir="ltr">response.periodDate</td>
-                                                <td class="p-3">تاریخ</td>
-                                                <td class="p-3">۱۴۰۲/۱۰/۳۰</td>
-                                                <td class="p-3"><span class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded text-xs font-bold">نگاشت شده</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="p-3 font-bold text-slate-800">تعداد نمونه</td>
-                                                <td class="p-3 font-mono text-left" dir="ltr">response.sampleCount</td>
-                                                <td class="p-3">عدد صحیح</td>
-                                                <td class="p-3">۱۲۴۰</td>
-                                                <td class="p-3"><span class="bg-amber-50 text-amber-700 px-2 py-1 rounded text-xs font-bold">نیازمند تایید</span></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <div class="mt-6 flex justify-end gap-3">
-                                    <button type="button" class="px-5 py-2.5 rounded-lg border border-slate-300 text-slate-600 font-bold hover:bg-slate-50 transition-all">انصراف</button>
-                                    <button type="button" class="px-6 py-2.5 rounded-lg bg-blue-600 text-white font-bold shadow-sm shadow-blue-200 hover:bg-blue-700 transition-all flex items-center gap-2">
-                                        <i data-lucide="save" class="w-4 h-4"></i>
-                                        ذخیره نگاشت
-                                    </button>
                                 </div>
                             </section>
                         </div>
