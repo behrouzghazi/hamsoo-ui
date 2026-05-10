@@ -1,4 +1,50 @@
-<div class="identity-panel">
-    <h2 class="font-bold text-slate-800 mb-2">ریسک‌ها</h2>
-    <p class="text-sm text-slate-500">محتوای این تب در مرحله بعد به صورت اختصاصی بازطراحی می‌شود.</p>
+<div id="risk-workspace" class="risk-workspace">
+    <section class="risk-toolbar">
+        <div>
+            <div class="flex items-center gap-2 text-xs font-extrabold text-rose-600 mb-2">
+                <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                پایش ریسک‌های فرایند
+            </div>
+            <h2 class="text-lg font-extrabold text-slate-900">ریسک‌ها و ماتریس ارزیابی</h2>
+            <p class="text-xs leading-6 text-slate-500 mt-1">هر ریسک همراه با موقعیتش روی ماتریس نمایش داده می‌شود تا برای تحلیل، نیازی به باز کردن فرم ایجاد/ویرایش نباشد.</p>
+        </div>
+        <div class="risk-toolbar-actions">
+            <div class="risk-filter" aria-label="فیلتر سطح ریسک">
+                <button type="button" class="active" data-risk-filter="all">همه</button>
+                <button type="button" data-risk-filter="critical">بحرانی</button>
+                <button type="button" data-risk-filter="high">بالا</button>
+                <button type="button" data-risk-filter="medium">متوسط</button>
+            </div>
+            <button type="button" class="sipoc-primary-btn" data-add-risk>
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                ایجاد ریسک
+            </button>
+        </div>
+    </section>
+
+    <section class="risk-overview">
+        <div id="risk-stats" class="risk-stats"></div>
+        <div class="risk-overview-matrix">
+            <div class="risk-section-title">
+                <div>
+                    <span>ماتریس کلی ریسک‌ها</span>
+                    <strong>کلیک روی هر خانه، لیست را فیلتر می‌کند.</strong>
+                </div>
+                <button type="button" class="sipoc-secondary-btn" data-risk-filter="all">پاک کردن فیلتر</button>
+            </div>
+            <div id="risk-summary-matrix" class="risk-matrix risk-matrix-large"></div>
+        </div>
+    </section>
+
+    <section class="risk-list-shell">
+        <div class="risk-section-title">
+            <div>
+                <span>لیست ریسک‌ها</span>
+                <strong id="risk-list-caption">نمایش همه ریسک‌های ثبت‌شده</strong>
+            </div>
+        </div>
+        <div id="risk-list" class="risk-list"></div>
+    </section>
+
+    <aside id="risk-editor" class="risk-editor hidden" aria-label="ایجاد و ویرایش ریسک"></aside>
 </div>
