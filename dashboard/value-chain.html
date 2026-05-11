@@ -10,16 +10,61 @@
     <link href="/node_modules/@fontsource/vazirmatn/index.css" rel="stylesheet" type="text/css" />
     <style>
         body { font-family: Vazirmatn, sans-serif; }
-        .panel, .metric-card, .chain-node { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04); }
-        .chain-lane { display: grid; grid-template-columns: repeat(5, minmax(180px, 1fr)); gap: 12px; min-width: 980px; }
-        .chain-node { min-height: 170px; padding: 14px; position: relative; }
-        .chain-node::after { content: ""; position: absolute; top: 50%; left: -14px; width: 14px; border-top: 2px dashed #cbd5e1; }
-        .chain-node:first-child::after { display: none; }
-        .node-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
-        .node-item { border-radius: 7px; padding: 8px 10px; font-size: 12px; line-height: 1.7; border: 1px solid var(--node-border); background: var(--node-bg); color: var(--node-text); }
-        .progress-track { height: 8px; border-radius: 999px; background: #e2e8f0; overflow: hidden; }
-        .progress-fill { height: 100%; border-radius: inherit; }
-        .mini-step { border-radius: 8px; border: 1px solid #e2e8f0; background: #f8fafc; padding: 10px; }
+        .panel { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04); }
+        .chain-row-btn.active { background: #eff6ff; }
+        .composer-board {
+            min-height: 330px;
+            background-color: #fff;
+            background-image: linear-gradient(#eef2f7 1px, transparent 1px), linear-gradient(90deg, #eef2f7 1px, transparent 1px);
+            background-size: 18px 18px;
+            border: 1px solid #d7dee8;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+        .value-chain-map { display: flex; align-items: center; gap: 10px; min-width: max-content; padding: 46px 36px 64px; direction: ltr; }
+        .vc-step {
+            width: 166px;
+            height: 118px;
+            border: 3px solid #49696b;
+            background: #a9d7d3;
+            color: #183335;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 12px 22px 12px 14px;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.45;
+            cursor: pointer;
+            clip-path: polygon(0 0, 86% 0, 100% 50%, 86% 100%, 0 100%, 12% 50%);
+            transition: transform .16s, filter .16s, box-shadow .16s;
+        }
+        .vc-step.start { background: #c9f0ee; clip-path: polygon(0 0, 86% 0, 100% 50%, 86% 100%, 0 100%); }
+        .vc-step.end { background: #86c9c3; }
+        .vc-step.active { transform: translateY(-3px); filter: saturate(1.15); box-shadow: 0 10px 22px rgba(15, 23, 42, .18); }
+        .vc-connector { width: 58px; min-width: 58px; height: 118px; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; direction: rtl; }
+        .vc-connector::before { content: ""; width: 100%; border-top: 3px solid #49696b; }
+        .vc-connector::after { content: ""; position: absolute; right: 2px; border-top: 7px solid transparent; border-bottom: 7px solid transparent; border-left: 10px solid #49696b; }
+        .vc-connector-label {
+            position: absolute;
+            top: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            border: 1px solid #cbd5e1;
+            background: #fff;
+            color: #475569;
+            border-radius: 999px;
+            padding: 3px 8px;
+            font-size: 11px;
+            font-weight: 800;
+            opacity: 0;
+            transition: opacity .16s;
+            pointer-events: none;
+        }
+        .vc-connector.active .vc-connector-label, .vc-connector:hover .vc-connector-label { opacity: 1; }
+        .detail-pill { border: 1px solid #e2e8f0; background: #f8fafc; border-radius: 999px; padding: 6px 10px; font-size: 12px; color: #475569; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
@@ -32,62 +77,58 @@
                     <div>
                         <div class="flex items-center gap-2 text-xs font-extrabold text-blue-600 mb-2">
                             <i data-lucide="route" class="w-4 h-4"></i>
-                            زنجیره ارزش تولیدشده از SIPOC
+                            اسکن زنجیره‌های ارزش از روی SIPOC
                         </div>
-                        <h1 class="text-2xl font-black text-slate-900">زنجیره ارزش فرایند مدیریت تدارکات داخلی</h1>
-                        <p class="text-sm text-slate-500 mt-2">نمای تجمیعی جریان ارزش از تامین‌کننده تا مشتری، بر اساس داده‌های ثبت‌شده در SIPOC فرایند.</p>
+                        <h1 class="text-2xl font-black text-slate-900">زنجیره‌های ارزش استخراج‌شده</h1>
+                        <p class="text-sm text-slate-500 mt-2">هر زنجیره از فرایندی شروع می‌شود که ورودی فرایندی ندارد و به فرایندی ختم می‌شود که خروجی فرایندی ندارد.</p>
                     </div>
-                    <div class="flex flex-wrap items-center gap-2 text-xs">
-                        <span class="px-3 py-2 rounded-lg bg-white border border-slate-200 text-slate-500">منبع داده: SIPOC</span>
-                        <span class="px-3 py-2 rounded-lg bg-emerald-50 border border-emerald-100 text-emerald-700">امتیاز سلامت: ۸۴٪</span>
-                    </div>
+                    <div class="text-xs px-3 py-2 rounded-lg bg-white border border-slate-200 text-slate-500">برای دیدن نقشه، یک زنجیره را انتخاب کنید.</div>
                 </header>
 
-                <section id="value-metrics" class="grid grid-cols-2 xl:grid-cols-6 gap-3"></section>
-
-                <section class="panel p-4">
-                    <div class="flex items-center justify-between mb-4">
-                        <div>
-                            <h2 class="font-extrabold text-slate-900">جریان ارزش انتها به انتها</h2>
-                            <p class="text-xs text-slate-400 mt-1">هر ستون از یکی از ابعاد SIPOC ساخته شده و نقش آن در خلق ارزش مشخص شده است.</p>
-                        </div>
-                        <i data-lucide="workflow" class="w-5 h-5 text-blue-500"></i>
+                <section class="panel overflow-hidden">
+                    <div class="px-4 py-3 border-b border-slate-200 flex items-center justify-between">
+                        <h2 class="font-extrabold text-slate-900">فهرست زنجیره‌های ارزش</h2>
+                        <span id="chain-count" class="text-xs font-bold text-blue-600"></span>
                     </div>
-                    <div class="overflow-x-auto pb-2">
-                        <div id="chain-lane" class="chain-lane"></div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full min-w-[760px] text-sm">
+                            <thead class="bg-slate-50 text-xs text-slate-400 border-b border-slate-200">
+                                <tr>
+                                    <th class="text-right p-3 font-bold">عنوان زنجیره</th>
+                                    <th class="text-right p-3 font-bold">فرایند آغازین</th>
+                                    <th class="text-right p-3 font-bold">فرایند پایانی</th>
+                                    <th class="text-right p-3 font-bold">طول زنجیره</th>
+                                </tr>
+                            </thead>
+                            <tbody id="chains-table" class="divide-y divide-slate-100 bg-white"></tbody>
+                        </table>
                     </div>
                 </section>
 
-                <section class="grid grid-cols-1 2xl:grid-cols-3 gap-4">
-                    <div class="panel p-4 2xl:col-span-2">
-                        <div class="flex items-center justify-between mb-4">
-                            <div>
-                                <h2 class="font-extrabold text-slate-900">فعالیت‌های ارزش‌آفرین استخراج‌شده</h2>
-                                <p class="text-xs text-slate-400 mt-1">فعالیت‌ها از ارتباط ورودی، فرایند، خروجی و مشتری در SIPOC ساخته می‌شوند.</p>
-                            </div>
-                            <i data-lucide="sparkles" class="w-5 h-5 text-amber-500"></i>
+                <section class="panel p-4">
+                    <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3 mb-4">
+                        <div>
+                            <h2 id="selected-chain-title" class="font-extrabold text-slate-900">نقشه زنجیره ارزش</h2>
+                            <p class="text-xs text-slate-400 mt-1">باکس‌ها فقط عنوان فرایند را نشان می‌دهند. با کلیک روی فرایند یا اتصال، ورودی/خروجی مرتبط در پایین نقشه نمایش داده می‌شود.</p>
                         </div>
-                        <div id="generated-steps" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3"></div>
                     </div>
-
-                    <div class="panel p-4">
-                        <h2 class="font-extrabold text-slate-900 mb-4">گلوگاه‌های ارزش</h2>
-                        <div id="bottlenecks" class="space-y-3"></div>
+                    <div class="composer-board">
+                        <div id="value-chain-map" class="value-chain-map"></div>
                     </div>
                 </section>
 
                 <section class="grid grid-cols-1 xl:grid-cols-3 gap-4">
                     <div class="panel p-4">
-                        <h2 class="font-extrabold text-slate-900 mb-4">کنترل‌های کلیدی</h2>
-                        <div id="controls" class="space-y-3"></div>
+                        <h3 class="font-extrabold text-slate-900 mb-3">ورودی فرایند آغازین</h3>
+                        <div id="start-inputs" class="flex flex-wrap gap-2"></div>
                     </div>
                     <div class="panel p-4">
-                        <h2 class="font-extrabold text-slate-900 mb-4">شاخص‌های پیشنهادی</h2>
-                        <div id="suggested-kpis" class="space-y-3"></div>
+                        <h3 class="font-extrabold text-slate-900 mb-3">ارتباط انتخاب‌شده</h3>
+                        <div id="selected-link" class="text-sm text-slate-500 leading-7">روی یک اتصال یا فرایند کلیک کنید.</div>
                     </div>
                     <div class="panel p-4">
-                        <h2 class="font-extrabold text-slate-900 mb-4">کیفیت داده SIPOC</h2>
-                        <div id="data-quality" class="space-y-4"></div>
+                        <h3 class="font-extrabold text-slate-900 mb-3">خروجی فرایند پایانی</h3>
+                        <div id="end-outputs" class="flex flex-wrap gap-2"></div>
                     </div>
                 </section>
             </div>
@@ -95,156 +136,138 @@
     </div>
 
     <script>
-        const sipoc = {
-            suppliers: [
-                { title: 'واحد متقاضی', type: 'واحد داخلی', valueRole: 'منبع نیاز خرید' },
-                { title: 'تامین‌کننده کالا', type: 'سازمان خارجی', valueRole: 'منبع پیشنهاد و تامین' }
-            ],
-            inputs: [
-                { title: 'درخواست خرید', type: 'فرم سیستمی', control: 'کامل بودن اطلاعات نیاز' },
-                { title: 'تاییدیه بودجه', type: 'سند کنترلی', control: 'اعتبارسنجی بودجه' },
-                { title: 'پیش‌فاکتور', type: 'سند مالی', control: 'اعتبار قیمت و شرایط فروش' }
-            ],
-            process: [
-                { title: 'بررسی و صدور سفارش خرید', type: 'فرایند اصلی', owner: 'مدیر تدارکات' }
-            ],
-            outputs: [
-                { title: 'سفارش خرید', type: 'سند رسمی', valueRole: 'تعهد خرید قابل پیگیری' },
-                { title: 'به‌روزرسانی بودجه', type: 'رکورد سیستم', valueRole: 'شفافیت مصرف بودجه' }
-            ],
-            customers: [
-                { title: 'حسابداری', type: 'واحد مالی', need: 'پرداخت به‌موقع و قابل اتکا' },
-                { title: 'کنترل بودجه', type: 'واحد داخلی', need: 'پایش اعتبار مصوب' }
-            ]
+        const processes = {
+            need: { title: 'ثبت نیاز خرید', inputs: ['درخواست خرید از واحد متقاضی'], outputs: ['نیاز تاییدشده'] },
+            budget: { title: 'بررسی بودجه', inputs: ['نیاز تاییدشده'], outputs: ['تاییدیه بودجه'] },
+            sourcing: { title: 'استعلام و انتخاب تامین‌کننده', inputs: ['تاییدیه بودجه', 'پیش‌فاکتور از تامین‌کننده'], outputs: ['پیشنهاد منتخب'] },
+            order: { title: 'صدور سفارش خرید', inputs: ['پیشنهاد منتخب'], outputs: ['سفارش خرید'] },
+            receive: { title: 'دریافت کالا/خدمت', inputs: ['سفارش خرید'], outputs: ['رسید دریافت'] },
+            payment: { title: 'کنترل اسناد و پرداخت', inputs: ['رسید دریافت', 'سفارش خرید'], outputs: ['پرداخت', 'به‌روزرسانی بودجه'] },
+            spareRequest: { title: 'ثبت نیاز قطعه یدکی', inputs: ['اعلام خرابی از نگهداری و تعمیرات'], outputs: ['نیاز قطعه یدکی'] },
+            spareSource: { title: 'تامین قطعه یدکی', inputs: ['نیاز قطعه یدکی'], outputs: ['قطعه تامین‌شده'] },
+            spareReceive: { title: 'تحویل قطعه به تعمیرات', inputs: ['قطعه تامین‌شده'], outputs: ['تحویل قطعه'] }
         };
 
-        const columns = [
-            { key: 'suppliers', title: 'تامین ارزش', subtitle: 'Suppliers', icon: 'users', bg: '#eff6ff', border: '#bfdbfe', text: '#1d4ed8' },
-            { key: 'inputs', title: 'ورودی‌های ارزش', subtitle: 'Inputs', icon: 'file-input', bg: '#ecfeff', border: '#a5f3fc', text: '#0e7490' },
-            { key: 'process', title: 'تبدیل ارزش', subtitle: 'Core Process', icon: 'settings-2', bg: '#eef2ff', border: '#c7d2fe', text: '#4338ca' },
-            { key: 'outputs', title: 'خروجی ارزش', subtitle: 'Outputs', icon: 'file-output', bg: '#fffbeb', border: '#fde68a', text: '#b45309' },
-            { key: 'customers', title: 'مصرف ارزش', subtitle: 'Customers', icon: 'building-2', bg: '#fff1f2', border: '#fecdd3', text: '#be123c' }
+        const links = [
+            { from: 'need', to: 'budget', item: 'نیاز تاییدشده' },
+            { from: 'budget', to: 'sourcing', item: 'تاییدیه بودجه' },
+            { from: 'sourcing', to: 'order', item: 'پیشنهاد منتخب' },
+            { from: 'order', to: 'receive', item: 'سفارش خرید' },
+            { from: 'receive', to: 'payment', item: 'رسید دریافت' },
+            { from: 'spareRequest', to: 'spareSource', item: 'نیاز قطعه یدکی' },
+            { from: 'spareSource', to: 'spareReceive', item: 'قطعه تامین‌شده' }
         ];
 
-        const metrics = [
-            ['اجزای SIPOC', Object.values(sipoc).flat().length, 'blocks', 'text-blue-600', 'bg-blue-50'],
-            ['فعالیت ارزش‌آفرین', 5, 'route', 'text-fuchsia-600', 'bg-fuchsia-50'],
-            ['نقاط کنترل', 3, 'shield-check', 'text-emerald-600', 'bg-emerald-50'],
-            ['گلوگاه محتمل', 2, 'traffic-cone', 'text-amber-600', 'bg-amber-50'],
-            ['مشتری خروجی', sipoc.customers.length, 'building-2', 'text-rose-600', 'bg-rose-50'],
-            ['کیفیت داده', '۸۶٪', 'database', 'text-cyan-600', 'bg-cyan-50']
-        ];
+        function extractChains() {
+            const ids = Object.keys(processes);
+            const incoming = Object.fromEntries(ids.map((id) => [id, []]));
+            const outgoing = Object.fromEntries(ids.map((id) => [id, []]));
+            links.forEach((link) => {
+                outgoing[link.from].push(link.to);
+                incoming[link.to].push(link.from);
+            });
 
-        document.getElementById('value-metrics').innerHTML = metrics.map(([label, value, icon, text, bg]) => `
-            <article class="metric-card p-4">
-                <div class="flex items-center justify-between mb-4">
-                    <span class="text-xs font-bold text-slate-400">${label}</span>
-                    <span class="w-9 h-9 ${bg} ${text} rounded-lg flex items-center justify-center"><i data-lucide="${icon}" class="w-5 h-5"></i></span>
-                </div>
-                <strong class="text-2xl font-black text-slate-900">${value}</strong>
-            </article>
-        `).join('');
+            const starts = ids.filter((id) => incoming[id].length === 0);
+            const chains = [];
+            starts.forEach((start) => walk(start, [start]));
 
-        document.getElementById('chain-lane').innerHTML = columns.map((column) => `
-            <article class="chain-node">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h3 class="font-black text-slate-900">${column.title}</h3>
-                        <p class="text-[11px] text-slate-400 mt-1">${column.subtitle}</p>
-                    </div>
-                    <span class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:${column.bg}; color:${column.text}">
-                        <i data-lucide="${column.icon}" class="w-5 h-5"></i>
-                    </span>
-                </div>
-                <div class="node-list">
-                    ${sipoc[column.key].map((item) => `
-                        <div class="node-item" style="--node-bg:${column.bg}; --node-border:${column.border}; --node-text:${column.text}">
-                            <strong class="block">${item.title}</strong>
-                            <span>${item.type}</span>
+            function walk(current, path) {
+                if (!outgoing[current].length) {
+                    chains.push(path);
+                    return;
+                }
+                outgoing[current].forEach((next) => {
+                    if (!path.includes(next)) walk(next, [...path, next]);
+                });
+            }
+            return chains;
+        }
+
+        const chains = extractChains();
+        let selectedChainIndex = 0;
+
+        function chainTitle(chain) {
+            return `${processes[chain[0]].title} تا ${processes[chain.at(-1)].title}`;
+        }
+
+        function renderTable() {
+            document.getElementById('chain-count').textContent = `${chains.length} زنجیره استخراج شد`;
+            document.getElementById('chains-table').innerHTML = chains.map((chain, index) => `
+                <tr class="chain-row-btn cursor-pointer hover:bg-blue-50 ${index === selectedChainIndex ? 'active' : ''}" data-chain-index="${index}">
+                    <td class="p-3 font-bold text-slate-900">${chainTitle(chain)}</td>
+                    <td class="p-3 text-slate-600">${processes[chain[0]].title}</td>
+                    <td class="p-3 text-slate-600">${processes[chain.at(-1)].title}</td>
+                    <td class="p-3 text-slate-600">${chain.length} فرایند</td>
+                </tr>
+            `).join('');
+
+            document.querySelectorAll('[data-chain-index]').forEach((row) => {
+                row.addEventListener('click', () => {
+                    selectedChainIndex = Number(row.dataset.chainIndex);
+                    renderTable();
+                    renderSelectedChain();
+                });
+            });
+        }
+
+        function findLink(from, to) {
+            return links.find((link) => link.from === from && link.to === to);
+        }
+
+        function renderPills(targetId, items) {
+            document.getElementById(targetId).innerHTML = items.map((item) => `<span class="detail-pill">${item}</span>`).join('');
+        }
+
+        function renderSelectedChain() {
+            const chain = chains[selectedChainIndex];
+            document.getElementById('selected-chain-title').textContent = `نقشه زنجیره: ${chainTitle(chain)}`;
+            renderPills('start-inputs', processes[chain[0]].inputs);
+            renderPills('end-outputs', processes[chain.at(-1)].outputs);
+            document.getElementById('selected-link').textContent = 'روی یک اتصال یا فرایند کلیک کنید.';
+
+            document.getElementById('value-chain-map').innerHTML = chain.map((id, index) => {
+                const node = processes[id];
+                const stepClass = index === 0 ? 'start' : index === chain.length - 1 ? 'end' : '';
+                const nodeMarkup = `<button class="vc-step ${stepClass}" data-node-id="${id}">${node.title}</button>`;
+                if (index === chain.length - 1) return nodeMarkup;
+                const link = findLink(id, chain[index + 1]);
+                return `${nodeMarkup}<button class="vc-connector" data-link-from="${id}" data-link-to="${chain[index + 1]}"><span class="vc-connector-label">${link.item}</span></button>`;
+            }).join('');
+
+            document.querySelectorAll('[data-node-id]').forEach((button) => {
+                button.addEventListener('click', () => {
+                    const node = processes[button.dataset.nodeId];
+                    document.querySelectorAll('.vc-step, .vc-connector').forEach((item) => item.classList.remove('active'));
+                    button.classList.add('active');
+                    document.getElementById('selected-link').innerHTML = `
+                        <div class="space-y-2">
+                            <div><strong class="text-slate-800">${node.title}</strong></div>
+                            <div class="text-xs text-slate-500">ورودی‌ها: ${node.inputs.join('، ')}</div>
+                            <div class="text-xs text-slate-500">خروجی‌ها: ${node.outputs.join('، ')}</div>
                         </div>
-                    `).join('')}
-                </div>
-            </article>
-        `).join('');
+                    `;
+                });
+            });
 
-        const generatedSteps = [
-            ['ثبت و اعتبارسنجی نیاز', 'واحد متقاضی + درخواست خرید', 'کنترل کامل بودن داده نیاز'],
-            ['کنترل امکان تامین', 'پیش‌فاکتور + تامین‌کننده کالا', 'اعتبارسنجی قیمت و شرایط'],
-            ['کنترل مالی قبل از تعهد', 'تاییدیه بودجه', 'پیشگیری از مصرف خارج از اعتبار'],
-            ['تبدیل نیاز به تعهد خرید', 'بررسی و صدور سفارش خرید', 'تولید سند رسمی سفارش'],
-            ['انتقال ارزش به مشتری داخلی', 'سفارش خرید + حسابداری', 'آماده‌سازی پرداخت و پیگیری'],
-            ['بازتاب مالی در سیستم', 'به‌روزرسانی بودجه + کنترل بودجه', 'شفافیت مصرف اعتبار']
-        ];
+            document.querySelectorAll('[data-link-from]').forEach((button) => {
+                button.addEventListener('click', () => {
+                    const link = findLink(button.dataset.linkFrom, button.dataset.linkTo);
+                    document.querySelectorAll('.vc-step, .vc-connector').forEach((item) => item.classList.remove('active'));
+                    button.classList.add('active');
+                    document.getElementById('selected-link').innerHTML = `
+                        <div class="space-y-2">
+                            <div><strong class="text-slate-800">${processes[link.from].title}</strong> ← <strong class="text-slate-800">${processes[link.to].title}</strong></div>
+                            <div class="text-xs text-slate-500">خروجی منتقل‌شده: ${link.item}</div>
+                        </div>
+                    `;
+                });
+            });
 
-        document.getElementById('generated-steps').innerHTML = generatedSteps.map(([title, source, value], index) => `
-            <article class="mini-step">
-                <div class="flex items-center gap-2 mb-3">
-                    <span class="w-7 h-7 rounded-lg bg-blue-600 text-white flex items-center justify-center text-xs font-black">${index + 1}</span>
-                    <strong class="text-sm text-slate-900">${title}</strong>
-                </div>
-                <p class="text-xs text-slate-500 leading-6">${source}</p>
-                <p class="text-xs text-blue-700 bg-blue-50 rounded-lg p-2 mt-3">${value}</p>
-            </article>
-        `).join('');
+            window.lucide?.createIcons();
+        }
 
-        const bottlenecks = [
-            ['تاخیر تایید بودجه', 'ورودی کنترلی قبل از صدور سفارش', 'amber'],
-            ['ابهام معیار انتخاب تامین‌کننده', 'پیش‌فاکتور و شرایط فروش', 'rose'],
-            ['قطع ارتباط خروجی با مشتری مالی', 'سفارش خرید تا پرداخت', 'blue']
-        ];
-
-        const tone = {
-            amber: 'bg-amber-50 text-amber-700 border-amber-100',
-            rose: 'bg-rose-50 text-rose-700 border-rose-100',
-            blue: 'bg-blue-50 text-blue-700 border-blue-100',
-            emerald: 'bg-emerald-50 text-emerald-700 border-emerald-100'
-        };
-
-        document.getElementById('bottlenecks').innerHTML = bottlenecks.map(([title, desc, color]) => `
-            <article class="rounded-lg border p-3 ${tone[color]}">
-                <strong class="text-sm">${title}</strong>
-                <p class="text-xs leading-6 mt-1">${desc}</p>
-            </article>
-        `).join('');
-
-        document.getElementById('controls').innerHTML = sipoc.inputs.map((item) => `
-            <article class="rounded-lg border border-slate-200 p-3">
-                <strong class="text-sm text-slate-800">${item.title}</strong>
-                <p class="text-xs text-slate-500 mt-2">${item.control}</p>
-            </article>
-        `).join('');
-
-        const kpis = [
-            ['زمان چرخه درخواست تا سفارش', 'میانه زمان خلق تعهد خرید'],
-            ['درصد درخواست‌های دارای بودجه معتبر', 'کیفیت ورودی کنترلی'],
-            ['نرخ سفارش‌های برگشتی از حسابداری', 'کیفیت خروجی و مشتری داخلی'],
-            ['درصد تامین‌کنندگان دارای ارزیابی معتبر', 'سلامت upstream']
-        ];
-
-        document.getElementById('suggested-kpis').innerHTML = kpis.map(([title, desc]) => `
-            <article class="rounded-lg bg-slate-50 border border-slate-200 p-3">
-                <strong class="text-sm text-slate-800">${title}</strong>
-                <p class="text-xs text-slate-500 mt-2">${desc}</p>
-            </article>
-        `).join('');
-
-        const quality = [
-            ['پوشش تامین‌کننده و ورودی', 90],
-            ['پوشش خروجی و مشتری', 82],
-            ['ارتباطات بین آیتم‌ها', 76],
-            ['نقاط کنترل قابل سنجش', 68]
-        ];
-
-        document.getElementById('data-quality').innerHTML = quality.map(([label, value]) => `
-            <div>
-                <div class="flex items-center justify-between text-xs mb-2">
-                    <span class="font-bold text-slate-600">${label}</span>
-                    <span class="font-black text-slate-800">${value}%</span>
-                </div>
-                <div class="progress-track"><div class="progress-fill bg-cyan-500" style="width:${value}%"></div></div>
-            </div>
-        `).join('');
-
+        renderTable();
+        renderSelectedChain();
         window.addEventListener('DOMContentLoaded', () => window.lucide?.createIcons());
     </script>
 </body>
