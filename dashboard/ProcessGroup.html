@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داشبورد گروه فرایند | همسو</title>
+    <script src="/node_modules/@tailwindcss/browser/dist/index.global.js"></script>
+    <script src="/node_modules/lucide/dist/umd/lucide.min.js"></script>
+    <script src="/layout/shell.js" defer></script>
+    <link href="/node_modules/@fontsource/vazirmatn/index.css" rel="stylesheet" type="text/css" />
+    <style>
+        body { font-family: Vazirmatn, sans-serif; }
+        .metric-card, .panel { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04); }
+        .progress-track { height: 8px; border-radius: 999px; background: #e2e8f0; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: inherit; }
+        .matrix-cell { min-height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <div class="flex h-screen w-full overflow-hidden">
+        <aside data-hamsoo-primary-sidebar data-active="pcf-tree"></aside>
+
+        <main class="flex-1 min-w-0 overflow-y-auto">
+            <div class="p-5 md:p-6 space-y-5">
+                <header class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2 text-xs font-extrabold text-fuchsia-600 mb-2">
+                            <i data-lucide="network" class="w-4 h-4"></i>
+                            داشبورد گروه فرایند
+                        </div>
+                        <h1 id="group-title" class="text-2xl font-black text-slate-900">داشبورد گروه فرایند</h1>
+                        <p class="text-sm text-slate-500 mt-2">نمای تجمیعی فرایندهای زیرمجموعه بر اساس شناسنامه، SIPOC، ریسک، عارضه، شاخص و برنامه بهبود.</p>
+                    </div>
+                    <a href="/dashborad/enterprisemap.html" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200 bg-white text-xs font-bold text-slate-600 hover:bg-slate-50">
+                        <i data-lucide="map" class="w-4 h-4"></i>
+                        بازگشت به نقشه سازمان
+                    </a>
+                </header>
+
+                <section id="group-metrics" class="grid grid-cols-2 xl:grid-cols-6 gap-3"></section>
+
+                <section class="grid grid-cols-1 2xl:grid-cols-3 gap-4">
+                    <div class="panel p-4 2xl:col-span-2">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h2 class="font-extrabold text-slate-900">فرایندهای کسب و کار زیرمجموعه</h2>
+                                <p class="text-xs text-slate-400 mt-1">فشرده وضعیت هر فرایند برای تصمیم‌گیری مالک گروه</p>
+                            </div>
+                            <i data-lucide="workflow" class="w-5 h-5 text-blue-500"></i>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full min-w-[900px] text-sm">
+                                <thead class="text-xs text-slate-400 border-b border-slate-200">
+                                    <tr>
+                                        <th class="text-right py-3 font-bold">فرایند</th>
+                                        <th class="text-right py-3 font-bold">مالک</th>
+                                        <th class="text-right py-3 font-bold">تکمیل شناسنامه</th>
+                                        <th class="text-right py-3 font-bold">SIPOC</th>
+                                        <th class="text-right py-3 font-bold">ریسک</th>
+                                        <th class="text-right py-3 font-bold">شاخص</th>
+                                        <th class="text-right py-3 font-bold">اقدام بعدی</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="process-table" class="divide-y divide-slate-100"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="panel p-4">
+                        <h2 class="font-extrabold text-slate-900 mb-4">ماتریس ریسک گروه</h2>
+                        <div id="group-risk-matrix" class="grid grid-cols-5 gap-1"></div>
+                        <div class="mt-4 space-y-3" id="risk-actions"></div>
+                    </div>
+                </section>
+
+                <section class="grid grid-cols-1 xl:grid-cols-3 gap-4">
+                    <div class="panel p-4">
+                        <h2 class="font-extrabold text-slate-900 mb-4">پوشش شناسنامه</h2>
+                        <div id="identity-bars" class="space-y-4"></div>
+                    </div>
+                    <div class="panel p-4">
+                        <h2 class="font-extrabold text-slate-900 mb-4">جریان SIPOC گروه</h2>
+                        <div class="grid grid-cols-5 gap-2 text-center text-xs" id="sipoc-flow"></div>
+                    </div>
+                    <div class="panel p-4">
+                        <h2 class="font-extrabold text-slate-900 mb-4">عارضه‌ها و فرصت‌های بهبود</h2>
+                        <div id="improvement-list" class="space-y-3"></div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const groupName = params.get('group') || 'مدیریت تامین';
+        document.getElementById('group-title').textContent = `داشبورد گروه فرایند ${groupName}`;
+        document.title = `داشبورد گروه فرایند ${groupName} | همسو`;
+
+        const dataByGroup = {
+            'مدیریت تامین': {
+                owner: 'مدیر زنجیره تامین',
+                maturity: 3.4,
+                processes: [
+                    ['پیشنهاد خرید مصرفی و غیرمصرفی', 'رئیس برنامه‌ریزی خرید', 86, 92, 'بالا', 82, 'کاهش زمان تأیید استعلام'],
+                    ['پیشنهاد خرید قطعات یدکی', 'کارشناس ارشد تامین', 74, 78, 'متوسط', 76, 'تکمیل معیارهای ارزیابی'],
+                    ['سفارش خرید', 'مدیر تدارکات داخلی', 91, 88, 'بالا', 85, 'کنترل ریسک بودجه'],
+                    ['درخواست خرید', 'مالک درخواست', 68, 72, 'متوسط', 79, 'تکمیل ورودی‌های اجباری'],
+                    ['درخواست خرید تحویل مستقیم', 'هماهنگ‌کننده انبار', 63, 69, 'پایین', 73, 'تعریف مشتری خروجی'],
+                    ['سازماندهی خرید', 'مدیر عملیات خرید', 80, 84, 'بالا', 88, 'بازنگری نقش‌ها']
+                ]
+            },
+            'تهیه مواد': {
+                owner: 'مدیر تدارکات',
+                maturity: 3.1,
+                processes: [
+                    ['پیشنهاد خرید مصرفی و غیرمصرفی', 'رئیس برنامه‌ریزی خرید', 86, 92, 'بالا', 82, 'کاهش زمان تأیید استعلام'],
+                    ['پیشنهاد خرید قطعات یدکی', 'کارشناس ارشد تامین', 74, 78, 'متوسط', 76, 'تکمیل معیارهای ارزیابی'],
+                    ['سفارش خرید', 'مدیر تدارکات داخلی', 91, 88, 'بالا', 85, 'کنترل ریسک بودجه'],
+                    ['درخواست خرید', 'مالک درخواست', 68, 72, 'متوسط', 79, 'تکمیل ورودی‌های اجباری']
+                ]
+            }
+        };
+
+        const groupData = dataByGroup[groupName] || {
+            owner: 'مالک گروه فرایند',
+            maturity: 3.2,
+            processes: [
+                ['فرایند نمونه ۱', 'مالک فرایند', 78, 74, 'متوسط', 81, 'تکمیل شناسنامه'],
+                ['فرایند نمونه ۲', 'مالک فرایند', 84, 80, 'پایین', 86, 'پایش شاخص‌ها'],
+                ['فرایند نمونه ۳', 'مالک فرایند', 69, 71, 'بالا', 77, 'تحلیل ریسک']
+            ]
+        };
+
+        const avg = (index) => Math.round(groupData.processes.reduce((sum, row) => sum + Number(row[index]), 0) / groupData.processes.length);
+        const highRisks = groupData.processes.filter((row) => row[4] === 'بالا').length;
+        const mediumRisks = groupData.processes.filter((row) => row[4] === 'متوسط').length;
+
+        const metrics = [
+            ['فرایندها', groupData.processes.length, 'workflow', 'text-blue-600', 'bg-blue-50'],
+            ['مالک گروه', groupData.owner, 'user-check', 'text-slate-600', 'bg-slate-100'],
+            ['تکمیل شناسنامه', `${avg(2)}٪`, 'file-check', 'text-emerald-600', 'bg-emerald-50'],
+            ['پوشش SIPOC', `${avg(3)}٪`, 'arrow-right-left', 'text-cyan-600', 'bg-cyan-50'],
+            ['ریسک بالا', highRisks, 'siren', 'text-rose-600', 'bg-rose-50'],
+            ['بلوغ گروه', groupData.maturity, 'gauge', 'text-fuchsia-600', 'bg-fuchsia-50']
+        ];
+
+        document.getElementById('group-metrics').innerHTML = metrics.map(([label, value, icon, text, bg]) => `
+            <article class="metric-card p-4">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold text-slate-400">${label}</span>
+                    <span class="w-9 h-9 ${bg} ${text} rounded-lg flex items-center justify-center"><i data-lucide="${icon}" class="w-5 h-5"></i></span>
+                </div>
+                <strong class="text-xl font-black text-slate-900">${value}</strong>
+            </article>
+        `).join('');
+
+        const riskTone = { 'بالا': 'bg-rose-50 text-rose-700 border-rose-100', 'متوسط': 'bg-amber-50 text-amber-700 border-amber-100', 'پایین': 'bg-emerald-50 text-emerald-700 border-emerald-100' };
+        document.getElementById('process-table').innerHTML = groupData.processes.map((row) => `
+            <tr class="hover:bg-slate-50">
+                <td class="py-3 font-bold text-slate-800">${row[0]}</td>
+                <td class="py-3 text-slate-500">${row[1]}</td>
+                <td class="py-3"><div class="flex items-center gap-2"><div class="progress-track w-24"><div class="progress-fill bg-emerald-500" style="width:${row[2]}%"></div></div><span class="text-xs font-bold">${row[2]}%</span></div></td>
+                <td class="py-3">${row[3]}%</td>
+                <td class="py-3"><span class="px-2 py-1 rounded-full border text-[11px] font-bold ${riskTone[row[4]]}">${row[4]}</span></td>
+                <td class="py-3">${row[5]}%</td>
+                <td class="py-3 text-xs text-slate-500">${row[6]}</td>
+            </tr>
+        `).join('');
+
+        const matrix = [0, 0, 1, highRisks, 1, 0, 1, mediumRisks, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0];
+        document.getElementById('group-risk-matrix').innerHTML = matrix.map((count, index) => {
+            const score = ((index % 5) + 1) * (5 - Math.floor(index / 5));
+            const cls = score >= 16 ? 'bg-rose-100 text-rose-700' : score >= 10 ? 'bg-amber-100 text-amber-700' : score >= 5 ? 'bg-blue-50 text-blue-700' : 'bg-emerald-50 text-emerald-700';
+            return `<div class="matrix-cell ${cls}">${count || ''}</div>`;
+        }).join('');
+
+        document.getElementById('risk-actions').innerHTML = [
+            ['ریسک بحرانی', `${highRisks} فرایند نیازمند کنترل فوری`, 'rose'],
+            ['ریسک متوسط', `${mediumRisks} فرایند نیازمند برنامه پیشگیرانه`, 'amber']
+        ].map(([title, desc, tone]) => `
+            <article class="rounded-lg p-3 ${tone === 'rose' ? 'bg-rose-50 text-rose-700' : 'bg-amber-50 text-amber-700'}">
+                <strong class="text-sm">${title}</strong>
+                <p class="text-xs mt-1">${desc}</p>
+            </article>
+        `).join('');
+
+        function bars(id, rows, color) {
+            document.getElementById(id).innerHTML = rows.map(([label, value]) => `
+                <div>
+                    <div class="flex items-center justify-between text-xs mb-2"><span class="font-bold text-slate-600">${label}</span><span class="font-black">${value}%</span></div>
+                    <div class="progress-track"><div class="progress-fill ${color}" style="width:${value}%"></div></div>
+                </div>
+            `).join('');
+        }
+
+        bars('identity-bars', [['اطلاعات پایه', 92], ['نمودار BPMN', 78], ['مستندات', 70], ['منابع', 66], ['ریسک و عارضه', 84]], 'bg-emerald-500');
+
+        document.getElementById('sipoc-flow').innerHTML = [
+            ['تامین‌کننده', 2], ['ورودی', 5], ['فرایند', groupData.processes.length], ['خروجی', 4], ['مشتری', 3]
+        ].map(([label, value]) => `
+            <div class="rounded-lg bg-slate-50 border border-slate-200 p-3">
+                <strong class="block text-lg text-slate-900">${value}</strong>
+                <span class="text-slate-500">${label}</span>
+            </div>
+        `).join('');
+
+        document.getElementById('improvement-list').innerHTML = [
+            ['طولانی بودن زمان تأیید استعلام', 'ریشه: متمرکز بودن تأییدات', 'خیلی زیاد'],
+            ['عدم شفافیت معیارهای ارزیابی', 'ریشه: ناقص بودن آیین‌نامه معاملات', 'متوسط'],
+            ['نبود مالک مشخص برای برخی مراحل', 'اقدام: تکمیل RACI فرایندها', 'زیاد']
+        ].map(([title, desc, severity]) => `
+            <article class="rounded-lg border border-slate-200 p-3">
+                <div class="flex items-center justify-between gap-3">
+                    <strong class="text-sm text-slate-800">${title}</strong>
+                    <span class="text-[11px] font-bold px-2 py-1 rounded-full ${severity === 'متوسط' ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700'}">${severity}</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-2">${desc}</p>
+            </article>
+        `).join('');
+
+        window.addEventListener('DOMContentLoaded', () => window.lucide?.createIcons());
+    </script>
+</body>
+</html>
