@@ -9,9 +9,11 @@
 ## User Preferences
 
 - Do not create feature branches for this project unless the user explicitly asks for one.
+- For normal feature requests, implement and iterate in the current workspace; the user will review locally and request edits if needed.
 - Do not open or manage pull requests unless the user explicitly asks for PR work.
 - Never commit or push changes until the user explicitly reviews/approves that action in the current task.
-- When the user explicitly approves publishing, confirm the target branch and scope before running `git commit` or `git push`.
+- When the user says "بفرست بالا" or otherwise explicitly approves publishing, commit the approved changes on `main` and push `main` to `origin`.
+- Do not create a new branch for each feature. Use `main` as the publishing branch unless the user explicitly requests another branch.
 - Keep UI changes consistent with the existing Hamsoo prototype style and Persian RTL layout.
 - Preserve unrelated local changes and only touch files needed for the requested task.
 
