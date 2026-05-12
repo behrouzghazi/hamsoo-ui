@@ -19,7 +19,7 @@
 
 ## Working Assumptions
 
-- The local preview server is commonly expected at `http://127.0.0.1:5500/`.
+- The project may run on different ports, such as local `5500` and network `8081`; avoid hardcoded host/port URLs in app links and prefer root-relative paths.
 - Prefer small, focused commits with clear messages.
 - For prototype behavior, lightweight inline JavaScript is acceptable when it matches the surrounding files.
 

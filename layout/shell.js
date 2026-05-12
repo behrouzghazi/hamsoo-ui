@@ -1,6 +1,6 @@
 (function () {
     const navItems = [
-        { id: 'root', title: 'روت', href: 'http://127.0.0.1:5500/index.html', icon: 'layers' },
+        { id: 'root', title: 'روت', href: '/index.html', icon: 'layers' },
         { id: 'home', title: 'خانه', href: '#', icon: 'house' },
         { id: 'dashboard', title: 'داشبورد', href: '#', icon: 'layout-dashboard' },
         { id: 'worklist', title: 'کارتابل وظایف', href: '/worklist/index.html', icon: 'clipboard-list' },
