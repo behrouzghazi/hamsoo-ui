@@ -20,21 +20,82 @@
 
             <div class="flex-1 overflow-y-auto p-4 md:p-8 custom-scrollbar">
                 <div class="max-w-[1400px] mx-auto space-y-4">
-                    <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                        <div class="flex items-center gap-4">
-                            <div class="bg-blue-600 text-white p-2 rounded-lg">
-                                <i data-lucide="file-check" class="w-6 h-6"></i>
+                    <section class="process-summary-card">
+                        <div class="process-summary-main">
+                            <div class="process-summary-icon">
+                                <i data-lucide="workflow" class="w-6 h-6"></i>
                             </div>
-                            <div>
-                                <h1 class="font-bold text-sm text-slate-700">وضعیت تکمیل شناسنامه فرایند</h1>
-                                <p class="text-xs text-slate-400 mt-1">۷ تب از ۹ تب با موفقیت تکمیل شده است.</p>
+                            <div class="min-w-0">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <h1 class="process-summary-title" data-process-title>مدیریت تدارکات داخلی</h1>
+                                    <div class="process-version-switch" aria-label="وضعیت نسخه فرایند">
+                                        <button class="active" type="button" data-version-state="current">وضعیت موجود</button>
+                                        <button type="button" data-version-state="target">وضعیت مطلوب</button>
+                                    </div>
+                                    <span class="process-status-pill" data-version-pill>As-Is</span>
+                                </div>
+                                <div class="process-breadcrumb">
+                                    <span>نقشه سازمان</span>
+                                    <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
+                                    <span>مدیریت تأمین</span>
+                                    <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
+                                    <span>تهیه مواد</span>
+                                    <i data-lucide="chevron-left" class="w-3.5 h-3.5"></i>
+                                    <strong>مدیریت تدارکات داخلی</strong>
+                                </div>
                             </div>
                         </div>
-                        <div class="flex items-center gap-4 lg:w-1/3">
-                            <div class="flex-1 h-2 bg-slate-100 rounded-full overflow-hidden">
-                                <div class="h-full bg-blue-600" style="width: 78%"></div>
+
+                        <div class="process-summary-stats">
+                            <article class="process-summary-stat">
+                                <span>تکمیل شناسنامه</span>
+                                <strong>۷۸٪</strong>
+                                <div class="process-progress">
+                                    <div style="width: 78%"></div>
+                                </div>
+                            </article>
+
+                            <article class="process-summary-stat danger">
+                                <span>ریسک‌های بحرانی</span>
+                                <strong>۲</strong>
+                                <small>نیازمند اقدام فوری</small>
+                            </article>
+
+                            <article class="process-summary-stat success">
+                                <span>عملکرد شاخص‌ها</span>
+                                <strong>۸۵٪</strong>
+                                <small>انطباق با اهداف</small>
+                            </article>
+                        </div>
+
+                        <div class="process-summary-actions">
+                            <div class="process-access-list" aria-label="افراد دارای دسترسی">
+                                <button class="process-avatar bg-lime-100 text-lime-700" title="مالک فرایند">م‌ت</button>
+                                <button class="process-avatar bg-blue-100 text-blue-700" title="تحلیل‌گر فرایند">ت‌ف</button>
+                                <button class="process-avatar bg-slate-100 text-slate-500" title="افزودن دسترسی">
+                                    <i data-lucide="user-plus" class="w-4 h-4"></i>
+                                </button>
                             </div>
-                            <span class="text-sm font-bold text-blue-600">۷۸٪</span>
+
+                            <div class="process-menu-wrap">
+                                <button class="process-icon-btn" data-process-menu-toggle aria-label="منوی عملیات فرایند" aria-expanded="false">
+                                    <i data-lucide="more-vertical" class="w-5 h-5"></i>
+                                </button>
+                                <div class="process-action-menu hidden" data-process-menu>
+                                    <button type="button" data-open-history>
+                                        <i data-lucide="history" class="w-4 h-4"></i>
+                                        تاریخچه نسخه‌ها
+                                    </button>
+                                    <button type="button" data-rename-process>
+                                        <i data-lucide="edit-3" class="w-4 h-4"></i>
+                                        تغییر نام فرایند
+                                    </button>
+                                    <button type="button" class="danger" data-delete-process>
+                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                        حذف فرایند
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </section>
 
@@ -85,6 +146,57 @@
                 </div>
             </div>
         </main>
+
+        <div class="process-history-backdrop hidden" data-history-backdrop></div>
+        <aside class="process-history-drawer" data-history-drawer aria-hidden="true" aria-label="تاریخچه نسخه‌های فرایند">
+            <div class="process-history-header">
+                <button class="process-icon-btn" type="button" data-close-history aria-label="بستن تاریخچه">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+                <div>
+                    <h2>تاریخچه</h2>
+                    <p>نسخه‌های ثبت‌شده برای فرایند مدیریت تدارکات داخلی</p>
+                </div>
+            </div>
+
+            <div class="process-history-timeline">
+                <article class="process-history-item active">
+                    <div class="process-history-dot"></div>
+                    <div class="process-history-content">
+                        <div class="process-history-row">
+                            <strong>وضعیت موجود</strong>
+                            <span>نسخه جاری</span>
+                        </div>
+                        <p>مدل فعلی فرایند با شناسنامه، SIPOC و شاخص‌های فعال.</p>
+                        <small>۱۴۰۲/۰۵/۱۴ · توسط: بهروز قاضی</small>
+                    </div>
+                </article>
+
+                <article class="process-history-item">
+                    <div class="process-history-dot"></div>
+                    <div class="process-history-content">
+                        <div class="process-history-row">
+                            <strong>وضعیت مطلوب</strong>
+                            <span class="target">در حال طراحی</span>
+                        </div>
+                        <p>نسخه پیشنهادی To-Be برای کاهش زمان تأیید و شفاف‌سازی کنترل‌ها.</p>
+                        <small>۱۴۰۲/۰۶/۰۲ · توسط: تیم بهبود فرایند</small>
+                    </div>
+                </article>
+
+                <article class="process-history-item">
+                    <div class="process-history-dot"></div>
+                    <div class="process-history-content">
+                        <div class="process-history-row">
+                            <strong>بازبینی شناسنامه</strong>
+                            <span class="muted">آرشیو</span>
+                        </div>
+                        <p>تکمیل مالک فرایند، مأموریت، محدوده و درصد اجرای مکانیزه.</p>
+                        <small>۱۴۰۲/۰۴/۲۸ · توسط: مالک فرایند</small>
+                    </div>
+                </article>
+            </div>
+        </aside>
     </div>
 
     <script src="/identity-process/scripts.js"></script>

@@ -951,7 +951,95 @@ function loadIdentityTab(tabName) {
         });
 }
 
+function initProcessSummary() {
+    const menuToggle = document.querySelector('[data-process-menu-toggle]');
+    const menu = document.querySelector('[data-process-menu]');
+    const renameButton = document.querySelector('[data-rename-process]');
+    const deleteButton = document.querySelector('[data-delete-process]');
+    const historyButton = document.querySelector('[data-open-history]');
+    const historyDrawer = document.querySelector('[data-history-drawer]');
+    const historyBackdrop = document.querySelector('[data-history-backdrop]');
+    const closeHistoryButton = document.querySelector('[data-close-history]');
+    const versionButtons = document.querySelectorAll('[data-version-state]');
+    const versionPill = document.querySelector('[data-version-pill]');
+    const title = document.querySelector('[data-process-title]');
+    const breadcrumbCurrent = document.querySelector('.process-breadcrumb strong');
+
+    if (!menuToggle || !menu || !title) return;
+
+    function closeMenu() {
+        menu.classList.add('hidden');
+        menuToggle.setAttribute('aria-expanded', 'false');
+    }
+
+    function openHistory() {
+        historyDrawer?.classList.add('is-open');
+        historyDrawer?.setAttribute('aria-hidden', 'false');
+        historyBackdrop?.classList.remove('hidden');
+        closeMenu();
+    }
+
+    function closeHistory() {
+        historyDrawer?.classList.remove('is-open');
+        historyDrawer?.setAttribute('aria-hidden', 'true');
+        historyBackdrop?.classList.add('hidden');
+    }
+
+    menuToggle.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const isOpen = !menu.classList.contains('hidden');
+        menu.classList.toggle('hidden', isOpen);
+        menuToggle.setAttribute('aria-expanded', String(!isOpen));
+    });
+
+    versionButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            versionButtons.forEach((candidate) => candidate.classList.toggle('active', candidate === button));
+            if (!versionPill) return;
+            versionPill.textContent = button.dataset.versionState === 'target' ? 'To-Be' : 'As-Is';
+            versionPill.classList.toggle('target', button.dataset.versionState === 'target');
+        });
+    });
+
+    historyButton?.addEventListener('click', openHistory);
+    closeHistoryButton?.addEventListener('click', closeHistory);
+    historyBackdrop?.addEventListener('click', closeHistory);
+
+    renameButton?.addEventListener('click', () => {
+        const nextName = window.prompt('نام جدید فرایند را وارد کنید:', title.textContent.trim());
+        if (!nextName || !nextName.trim()) {
+            closeMenu();
+            return;
+        }
+
+        title.textContent = nextName.trim();
+        if (breadcrumbCurrent) breadcrumbCurrent.textContent = nextName.trim();
+        document.title = `${nextName.trim()} | شناسنامه فرایند | همسو`;
+        closeMenu();
+    });
+
+    deleteButton?.addEventListener('click', () => {
+        if (window.confirm('این فرایند حذف شود؟')) {
+            window.alert('در نسخه نمایشی، حذف واقعی فرایند انجام نمی‌شود.');
+        }
+        closeMenu();
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!event.target.closest('.process-menu-wrap')) closeMenu();
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            closeMenu();
+            closeHistory();
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    initProcessSummary();
+
     document.querySelectorAll('.identity-tab-btn').forEach((button) => {
         button.addEventListener('click', () => loadIdentityTab(button.dataset.tab));
     });
