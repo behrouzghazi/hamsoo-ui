@@ -960,6 +960,10 @@ function initProcessSummary() {
     const historyDrawer = document.querySelector('[data-history-drawer]');
     const historyBackdrop = document.querySelector('[data-history-backdrop]');
     const closeHistoryButton = document.querySelector('[data-close-history]');
+    const completionButton = document.querySelector('[data-open-completion-modal]');
+    const completionModal = document.querySelector('[data-completion-modal]');
+    const completionBackdrop = document.querySelector('[data-completion-backdrop]');
+    const closeCompletionButton = document.querySelector('[data-close-completion-modal]');
     const versionButtons = document.querySelectorAll('[data-version-state]');
     const versionPill = document.querySelector('[data-version-pill]');
     const title = document.querySelector('[data-process-title]');
@@ -985,6 +989,16 @@ function initProcessSummary() {
         historyBackdrop?.classList.add('hidden');
     }
 
+    function openCompletionModal() {
+        completionModal?.classList.remove('hidden');
+        completionBackdrop?.classList.remove('hidden');
+    }
+
+    function closeCompletionModal() {
+        completionModal?.classList.add('hidden');
+        completionBackdrop?.classList.add('hidden');
+    }
+
     menuToggle.addEventListener('click', (event) => {
         event.stopPropagation();
         const isOpen = !menu.classList.contains('hidden');
@@ -1004,6 +1018,9 @@ function initProcessSummary() {
     historyButton?.addEventListener('click', openHistory);
     closeHistoryButton?.addEventListener('click', closeHistory);
     historyBackdrop?.addEventListener('click', closeHistory);
+    completionButton?.addEventListener('click', openCompletionModal);
+    closeCompletionButton?.addEventListener('click', closeCompletionModal);
+    completionBackdrop?.addEventListener('click', closeCompletionModal);
 
     renameButton?.addEventListener('click', () => {
         const nextName = window.prompt('نام جدید فرایند را وارد کنید:', title.textContent.trim());
@@ -1033,6 +1050,7 @@ function initProcessSummary() {
         if (event.key === 'Escape') {
             closeMenu();
             closeHistory();
+            closeCompletionModal();
         }
     });
 }

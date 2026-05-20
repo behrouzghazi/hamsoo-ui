@@ -48,7 +48,12 @@
 
                         <div class="process-summary-stats">
                             <article class="process-summary-stat">
-                                <span>تکمیل شناسنامه</span>
+                                <div class="process-stat-heading">
+                                    <span>تکمیل شناسنامه</span>
+                                    <button class="process-help-btn" type="button" data-open-completion-modal aria-label="راهنمای محاسبه تکمیل شناسنامه">
+                                        <i data-lucide="circle-help" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
                                 <strong>۷۸٪</strong>
                                 <div class="process-progress">
                                     <div style="width: 78%"></div>
@@ -148,6 +153,110 @@
         </main>
 
         <div class="process-history-backdrop hidden" data-history-backdrop></div>
+        <div class="completion-modal-backdrop hidden" data-completion-backdrop></div>
+        <section class="completion-modal hidden" data-completion-modal role="dialog" aria-modal="true" aria-labelledby="completion-modal-title">
+            <div class="completion-modal-header">
+                <div>
+                    <h2 id="completion-modal-title">جزئیات محاسبه تکمیل شناسنامه</h2>
+                    <p>امتیاز کل از میانگین وزنی تب‌های شناسنامه محاسبه می‌شود. نبود ریسک یا عارضه فقط وقتی کامل محسوب می‌شود که به عنوان «عدم مصداق» ثبت و توسط مالک تأیید شده باشد.</p>
+                </div>
+                <button class="process-icon-btn" type="button" data-close-completion-modal aria-label="بستن راهنمای تکمیل شناسنامه">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="completion-score-panel">
+                <div>
+                    <span>درصد تکمیل فعلی</span>
+                    <strong>۷۸٪</strong>
+                </div>
+                <div class="completion-score-bar">
+                    <div style="width: 78%"></div>
+                </div>
+            </div>
+
+            <div class="completion-table-wrap">
+                <table class="completion-table">
+                    <thead>
+                        <tr>
+                            <th>تب شناسنامه</th>
+                            <th>وزن</th>
+                            <th>تکمیل تب</th>
+                            <th>سهم در امتیاز کل</th>
+                            <th>مبنای ارزیابی</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span class="completion-tab-name">
+                                    کلیات
+                                    <span class="completion-info" tabindex="0" aria-label="جزئیات محاسبه تب کلیات">
+                                        <i data-lucide="circle-help" class="w-4 h-4"></i>
+                                        <span class="completion-tooltip">
+                                            مالک فرایند ۲۰٪، نوع فرایند ۱۰٪، مأموریت ۲۰٪، محدوده ۲۰٪، درصد اجرای مکانیزه ۱۵٪، نام و کد فرایند ۱۵٪
+                                        </span>
+                                    </span>
+                                </span>
+                            </td>
+                            <td>۲۰٪</td>
+                            <td>۹۰٪</td>
+                            <td>۱۸</td>
+                            <td>نام، کد، مالک، نوع، مأموریت، محدوده و درصد اجرای مکانیزه</td>
+                        </tr>
+                        <tr>
+                            <td>نمودار</td>
+                            <td>۱۵٪</td>
+                            <td>۸۰٪</td>
+                            <td>۱۲</td>
+                            <td>وجود مدل BPMN و خوانایی گام‌ها، نقش‌ها و نقاط تصمیم</td>
+                        </tr>
+                        <tr>
+                            <td>SIPOC</td>
+                            <td>۱۵٪</td>
+                            <td>۷۵٪</td>
+                            <td>۱۱.۲۵</td>
+                            <td>تأمین‌کننده، ورودی، خروجی، مشتری و ارتباطات قابل ردیابی</td>
+                        </tr>
+                        <tr>
+                            <td>شاخص‌ها</td>
+                            <td>۱۵٪</td>
+                            <td>۸۵٪</td>
+                            <td>۱۲.۷۵</td>
+                            <td>تعریف شاخص، مالک، دوره پایش، هدف و مقدار فعلی</td>
+                        </tr>
+                        <tr>
+                            <td>مستندات</td>
+                            <td>۱۰٪</td>
+                            <td>۴۰٪</td>
+                            <td>۴</td>
+                            <td>دستورالعمل، فرم‌ها، پیوست‌ها و شواهد اجرایی</td>
+                        </tr>
+                        <tr>
+                            <td>منابع</td>
+                            <td>۱۰٪</td>
+                            <td>۷۰٪</td>
+                            <td>۷</td>
+                            <td>نقش‌ها، سیستم‌ها، داده‌ها و منابع پشتیبان فرایند</td>
+                        </tr>
+                        <tr>
+                            <td>عارضه</td>
+                            <td>۷.۵٪</td>
+                            <td>۱۰۰٪</td>
+                            <td>۷.۵</td>
+                            <td>ثبت عارضه‌های فعال یا اعلام عدم مصداق با تأیید مالک</td>
+                        </tr>
+                        <tr>
+                            <td>ریسک</td>
+                            <td>۷.۵٪</td>
+                            <td>۷۳٪</td>
+                            <td>۵.۵</td>
+                            <td>ثبت ریسک، سطح اثر/احتمال، کنترل و اقدام اصلاحی</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
         <aside class="process-history-drawer" data-history-drawer aria-hidden="true" aria-label="تاریخچه نسخه‌های فرایند">
             <div class="process-history-header">
                 <button class="process-icon-btn" type="button" data-close-history aria-label="بستن تاریخچه">
