@@ -8,12 +8,26 @@ const sipocColumns = [
     { key: 'customers', title: 'مشتری', subtitle: 'Customer', icon: 'building-2', color: '#e11d48', soft: '#fff1f2' }
 ];
 
+const sipocEndpointTypes = {
+    internal: { title: 'فرایند داخلی', score: 1 },
+    external: { title: 'فرایند خارجی', score: 1 },
+    other: { title: 'سایر', score: 0.45 }
+};
+
+const sipocSuggestions = {
+    inputs: ['درخواست خرید', 'تأییدیه بودجه', 'پیش‌فاکتور', 'درخواست اصلاح سفارش', 'مجوز خرید اضطراری'],
+    outputs: ['سفارش خرید', 'به‌روزرسانی بودجه', 'رسید دریافت کالا', 'درخواست پرداخت', 'گزارش مغایرت'],
+    suppliers: ['واحد متقاضی', 'تأمین‌کننده کالا', 'برنامه‌ریزی خرید', 'کنترل بودجه', 'انبار مرکزی'],
+    customers: ['حسابداری', 'کنترل بودجه', 'انبار مرکزی', 'واحد متقاضی', 'پرداخت‌ها']
+};
+
 const sipocDefaultItems = [
     {
         id: 's1',
         column: 'suppliers',
         title: 'واحد متقاضی',
-        category: 'واحد داخلی',
+        category: 'سایر',
+        endpointType: 'other',
         description: 'ثبت‌کننده نیاز خرید کالا یا خدمت.',
         links: ['i1', 'i2']
     },
@@ -21,7 +35,8 @@ const sipocDefaultItems = [
         id: 's2',
         column: 'suppliers',
         title: 'تأمین‌کننده کالا',
-        category: 'سازمان خارجی',
+        category: 'فرایند خارجی',
+        endpointType: 'external',
         description: 'ارائه‌دهنده پیش‌فاکتور و شرایط تأمین.',
         links: ['i3']
     },
@@ -77,7 +92,9 @@ const sipocDefaultItems = [
         id: 'c1',
         column: 'customers',
         title: 'حسابداری',
-        category: 'واحد مالی',
+        category: 'فرایند داخلی',
+        endpointType: 'internal',
+        reciprocalConfirmed: false,
         description: 'دریافت‌کننده سفارش برای فرایند پرداخت.',
         links: ['o1']
     },
@@ -85,7 +102,8 @@ const sipocDefaultItems = [
         id: 'c2',
         column: 'customers',
         title: 'کنترل بودجه',
-        category: 'واحد داخلی',
+        category: 'سایر',
+        endpointType: 'other',
         description: 'پایش اثر سفارش روی اعتبار مصوب.',
         links: ['o2']
     }
@@ -126,6 +144,147 @@ function getSipocRelatedIds(item, items) {
     return [...new Set([...item.links, ...backlinks])];
 }
 
+function getSipocItemsByColumn(items, columnKey) {
+    return items.filter((item) => item.column === columnKey);
+}
+
+function isSipocEndpoint(item) {
+    return item?.column === 'suppliers' || item?.column === 'customers';
+}
+
+function getSipocEndpointType(item) {
+    if (!isSipocEndpoint(item)) return null;
+    if (sipocEndpointTypes[item.endpointType]) return item.endpointType;
+
+    const category = `${item.category || ''} ${item.description || ''}`;
+    if (/فرایند خارجی|سازمان خارجی/.test(category)) return 'external';
+    if (/فرایند داخلی/.test(category)) return 'internal';
+    return 'other';
+}
+
+function getSipocEndpointTypeTitle(item) {
+    const type = getSipocEndpointType(item);
+    return type ? sipocEndpointTypes[type].title : item.category;
+}
+
+function isSipocOtherEndpoint(item) {
+    return getSipocEndpointType(item) === 'other';
+}
+
+function isSipocInternalProcess(item) {
+    return getSipocEndpointType(item) === 'internal';
+}
+
+function isLinkedToColumn(item, items, columnKey) {
+    const linkedIds = getSipocRelatedIds(item, items);
+    return linkedIds.some((id) => items.find((candidate) => candidate.id === id)?.column === columnKey);
+}
+
+function getSipocLinkedItemsByColumn(item, items, columnKey) {
+    const linkedIds = getSipocRelatedIds(item, items);
+    return linkedIds
+        .map((id) => items.find((candidate) => candidate.id === id))
+        .filter((candidate) => candidate?.column === columnKey);
+}
+
+function getSipocLinkCandidates(item, items) {
+    if (!item) return [];
+    const candidateColumns = {
+        suppliers: ['inputs'],
+        inputs: ['suppliers', 'process'],
+        outputs: ['process', 'customers'],
+        customers: ['outputs']
+    }[item.column] || ['suppliers', 'inputs', 'process', 'outputs', 'customers'];
+
+    return items.filter((candidate) => candidate.id !== item.id && candidateColumns.includes(candidate.column));
+}
+
+function getSipocCoverage(state) {
+    const items = state.items;
+    const suppliers = getSipocItemsByColumn(items, 'suppliers');
+    const inputs = getSipocItemsByColumn(items, 'inputs');
+    const processItems = getSipocItemsByColumn(items, 'process');
+    const outputs = getSipocItemsByColumn(items, 'outputs');
+    const customers = getSipocItemsByColumn(items, 'customers');
+    const warnings = [];
+
+    const structureScore = (inputs.length ? 15 : 0) + (outputs.length ? 15 : 0);
+
+    if (!inputs.length) warnings.push('ورودی ثبت نشده است؛ برای فرایندهای واقعی معمولا حداقل یک ورودی انتظار می‌رود.');
+    if (!outputs.length) warnings.push('خروجی ثبت نشده است؛ برای فرایندهای واقعی معمولا حداقل یک خروجی انتظار می‌رود.');
+
+    inputs
+        .filter((item) => !getSipocLinkedItemsByColumn(item, items, 'suppliers').length)
+        .forEach((item) => warnings.push(`ورودی «${item.title}» تأمین‌کننده مشخص ندارد.`));
+
+    outputs
+        .filter((item) => !getSipocLinkedItemsByColumn(item, items, 'customers').length)
+        .forEach((item) => warnings.push(`خروجی «${item.title}» مشتری مشخص ندارد.`));
+
+    const internalEndpoints = [...suppliers, ...customers].filter(isSipocInternalProcess);
+    const reciprocalIssues = internalEndpoints.filter((item) => !item.reciprocalConfirmed);
+
+    reciprocalIssues.forEach((item) => {
+        warnings.push(`ارتباط فرایند داخلی «${item.title}» نیازمند تطبیق با SIPOC فرایند متناظر است.`);
+    });
+
+    const otherEndpoints = [...suppliers, ...customers].filter(isSipocOtherEndpoint);
+    otherEndpoints.forEach((item) => {
+        warnings.push(`«${item.title}» از نوع سایر ثبت شده است؛ وجود حتی یک مورد سایر، امتیاز کیفیت نوع طرف ارتباط را صفر می‌کند.`);
+    });
+
+    const endpoints = [...suppliers, ...customers];
+    const endpointTypeScore = endpoints.length && !otherEndpoints.length ? 40 : 0;
+    const integrationScore = reciprocalIssues.length ? 0 : 30;
+    const score = Math.round(Math.min(100, structureScore + endpointTypeScore + integrationScore));
+
+    return {
+        score,
+        warnings,
+        structureScore: Math.round(structureScore),
+        traceabilityScore: Math.round(endpointTypeScore),
+        integrationScore: Math.round(integrationScore),
+        counts: {
+            suppliers: suppliers.length,
+            inputs: inputs.length,
+            process: processItems.length,
+            outputs: outputs.length,
+            customers: customers.length,
+            otherEndpoints: otherEndpoints.length
+        }
+    };
+}
+
+function renderSipocQuality(root, state) {
+    const panel = root.querySelector('#sipoc-quality-panel');
+    if (!panel) return;
+
+    const coverage = getSipocCoverage(state);
+    const visibleWarnings = coverage.warnings.slice(0, 4);
+
+    panel.innerHTML = `
+        <div class="sipoc-quality-score">
+            <span>پوشش SIPOC</span>
+            <strong>${coverage.score}%</strong>
+            <div class="sipoc-quality-bar"><div style="width:${coverage.score}%"></div></div>
+        </div>
+        <div class="sipoc-quality-parts">
+            <div><span>پایه: وجود ورودی و خروجی</span><strong>${coverage.structureScore}/30</strong></div>
+            <div><span>کیفیت نوع طرف ارتباط</span><strong>${coverage.traceabilityScore}/40</strong></div>
+            <div><span>یکپارچگی ارتباطات</span><strong>${coverage.integrationScore}/30</strong></div>
+        </div>
+        <div class="sipoc-quality-warnings">
+            <div class="sipoc-quality-title">
+                <i data-lucide="triangle-alert" class="w-4 h-4"></i>
+                <span>${coverage.warnings.length} هشدار کیفیت داده</span>
+            </div>
+            <ul>
+                ${visibleWarnings.map((warning) => `<li>${escapeHtml(warning)}</li>`).join('')}
+            </ul>
+        </div>
+    `;
+}
+
 function renderSipocSummary(root, state) {
     const summary = root.querySelector('#sipoc-summary');
     summary.innerHTML = sipocColumns.map((column) => {
@@ -151,6 +310,7 @@ function renderSipocBoard(root, state) {
             const isRelated = relatedIds.includes(item.id);
             const isDimmed = selected && !isSelected && !isRelated;
             const isLocked = Boolean(column.locked);
+            const relatedAddColumn = item.column === 'inputs' ? 'suppliers' : item.column === 'outputs' ? 'customers' : '';
 
         return `
                 <div class="sipoc-card ${isSelected ? 'selected' : ''} ${isRelated ? 'related' : ''} ${isDimmed ? 'dimmed' : ''} ${isLocked ? 'locked' : ''}"
@@ -159,14 +319,24 @@ function renderSipocBoard(root, state) {
                     <span class="sipoc-card-title">
                         <strong>${escapeHtml(item.title)}</strong>
                         ${isLocked ? '<i data-lucide="lock-keyhole" class="w-4 h-4"></i>' : `
-                            <button class="sipoc-icon-btn" data-edit-sipoc="${item.id}" title="ویرایش">
-                                <i data-lucide="edit-3" class="w-4 h-4"></i>
-                            </button>
+                            <span class="sipoc-card-actions">
+                                ${relatedAddColumn ? `
+                                    <button class="sipoc-relation-btn" data-add-sipoc="${relatedAddColumn}" data-linked-sipoc="${item.id}" title="${item.column === 'inputs' ? 'افزودن تأمین‌کننده' : 'افزودن مشتری'}">
+                                        <i data-lucide="${item.column === 'inputs' ? 'user-round-plus' : 'building-2'}" class="w-4 h-4"></i>
+                                    </button>
+                                ` : ''}
+                                <button class="sipoc-icon-btn" data-edit-sipoc="${item.id}" title="ویرایش">
+                                    <i data-lucide="edit-3" class="w-4 h-4"></i>
+                                </button>
+                                <button class="sipoc-icon-btn danger" data-delete-sipoc="${item.id}" title="حذف">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </span>
                         `}
                     </span>
                     ${isLocked ? '' : `
-                        <span class="sipoc-card-meta">${escapeHtml(item.category)}</span>
-                        <span class="sipoc-card-desc">${escapeHtml(item.description)}</span>
+                        <span class="sipoc-card-meta">${escapeHtml(isSipocEndpoint(item) ? getSipocEndpointTypeTitle(item) : item.category)}</span>
+                        ${item.description ? `<span class="sipoc-card-desc">${escapeHtml(item.description)}</span>` : ''}
                     `}
                 </div>
             `;
@@ -182,11 +352,12 @@ function renderSipocBoard(root, state) {
                             <span>${column.subtitle}</span>
                         </div>
                     </div>
-                    ${column.locked ? '' : `
-                        <button class="sipoc-icon-btn" data-add-sipoc="${column.key}" title="افزودن ${column.title}">
+                    ${['inputs', 'outputs'].includes(column.key) ? `
+                        <button class="sipoc-add-primary" data-add-sipoc="${column.key}" title="افزودن ${column.title}">
                             <i data-lucide="plus" class="w-4 h-4"></i>
+                            <span>افزودن ${column.title}</span>
                         </button>
-                    `}
+                    ` : ''}
                 </div>
                 <div class="sipoc-column-body">
                     ${cards || '<div class="text-xs text-slate-400 text-center py-8">موردی ثبت نشده است.</div>'}
@@ -223,7 +394,7 @@ function renderSipocTable(root, state) {
                             <tr>
                                 <td class="font-bold" style="color:${column.color}">${column.title}</td>
                                 <td class="font-bold text-slate-800">${escapeHtml(item.title)}</td>
-                                <td>${escapeHtml(item.category)}</td>
+                                <td>${escapeHtml(isSipocEndpoint(item) ? getSipocEndpointTypeTitle(item) : item.category)}</td>
                                 <td>${escapeHtml(item.description || '-')}</td>
                                 <td>${escapeHtml(linkedTitles || '-')}</td>
                                 <td>
@@ -245,9 +416,11 @@ function renderSipocTable(root, state) {
 
 function renderSipocDrawer(root, state) {
     const drawer = root.querySelector('#sipoc-drawer');
+    const backdrop = root.querySelector('#sipoc-form-backdrop');
     if (!state.drawer) {
         drawer.classList.add('hidden');
         drawer.innerHTML = '';
+        backdrop?.classList.add('hidden');
         return;
     }
 
@@ -259,16 +432,24 @@ function renderSipocDrawer(root, state) {
             column: state.drawer.column,
             title: '',
             category: '',
+            endpointType: state.drawer.column === 'suppliers' || state.drawer.column === 'customers' ? 'internal' : '',
+            reciprocalConfirmed: false,
             description: '',
-            links: []
+            links: state.drawer.linkedId ? [state.drawer.linkedId] : []
         };
     const column = getSipocColumn(item.column);
+    const isEndpoint = isSipocEndpoint(item);
+    const linkedItem = item.links
+        .map((linkId) => state.items.find((candidate) => candidate.id === linkId))
+        .find(Boolean);
+    const suggestionId = `sipoc-suggestions-${item.column}`;
 
     drawer.classList.remove('hidden');
+    backdrop?.classList.remove('hidden');
     drawer.innerHTML = `
         <div class="flex items-start justify-between gap-3 mb-5">
             <div>
-                <div class="text-[11px] font-bold text-slate-400 mb-1">${isEdit ? 'ویرایش آیتم' : 'افزودن آیتم'}</div>
+                <div class="text-[11px] font-bold text-slate-400 mb-1">${isEdit ? 'ویرایش' : 'افزودن'}</div>
                 <h3 class="text-base font-extrabold text-slate-800">${column.title}</h3>
             </div>
             <button class="sipoc-icon-btn" data-close-sipoc-drawer title="بستن">
@@ -277,42 +458,33 @@ function renderSipocDrawer(root, state) {
         </div>
 
         <form class="space-y-4" data-sipoc-form>
-            <div class="sipoc-form-field">
-                <label for="sipoc-title">عنوان</label>
-                <input id="sipoc-title" name="title" value="${escapeHtml(item.title)}" placeholder="مثلاً درخواست خرید" required>
-            </div>
+            ${isEndpoint ? `
+                <div class="sipoc-linked-label">
+                    <span>${item.column === 'suppliers' ? 'ورودی' : 'خروجی'}</span>
+                    <strong>${escapeHtml(linkedItem?.title || 'مورد انتخاب‌شده')}</strong>
+                </div>
+
+                <div class="sipoc-form-field">
+                    <label for="sipoc-category">نوع ${column.title}</label>
+                    <select id="sipoc-category" name="endpointType">
+                        ${Object.entries(sipocEndpointTypes).map(([key, config]) => `
+                            <option value="${key}" ${getSipocEndpointType(item) === key ? 'selected' : ''}>${config.title}</option>
+                        `).join('')}
+                    </select>
+                </div>
+            ` : ''}
 
             <div class="sipoc-form-field">
-                <label for="sipoc-category">نوع / دسته</label>
-                <input id="sipoc-category" name="category" value="${escapeHtml(item.category)}" placeholder="مثلاً سند رسمی">
-            </div>
-
-            <div class="sipoc-form-field">
-                <label for="sipoc-description">توضیح کوتاه</label>
-                <textarea id="sipoc-description" name="description" placeholder="شرح مختصر نقش این مورد در SIPOC">${escapeHtml(item.description)}</textarea>
-            </div>
-
-            <div class="sipoc-form-field">
-                <label for="sipoc-links">ارتباط با موارد دیگر</label>
-                <select id="sipoc-links" name="links" multiple>
-                    ${state.items.filter((candidate) => candidate.id !== item.id).map((candidate) => `
-                        <option value="${candidate.id}" ${item.links.includes(candidate.id) ? 'selected' : ''}>
-                            ${getSipocColumn(candidate.column).title} - ${escapeHtml(candidate.title)}
-                        </option>
-                    `).join('')}
-                </select>
+                <label for="sipoc-title">${isEndpoint ? `نام ${column.title}` : `نام ${column.title}`}</label>
+                <input id="sipoc-title" name="title" list="${suggestionId}" value="${escapeHtml(item.title)}" placeholder="${isEndpoint ? 'از فهرست انتخاب کنید' : 'نام مورد را انتخاب کنید'}" required>
+                <datalist id="${suggestionId}">
+                    ${(sipocSuggestions[item.column] || []).map((suggestion) => `<option value="${escapeHtml(suggestion)}"></option>`).join('')}
+                </datalist>
             </div>
 
             <div class="flex items-center justify-between gap-3 pt-2">
                 <button type="button" class="sipoc-secondary-btn" data-close-sipoc-drawer>انصراف</button>
-                <div class="flex items-center gap-2">
-                    ${isEdit ? `
-                        <button type="button" class="sipoc-secondary-btn text-rose-600" data-delete-sipoc="${item.id}">
-                            حذف
-                        </button>
-                    ` : ''}
-                    <button type="submit" class="sipoc-primary-btn">ذخیره</button>
-                </div>
+                <button type="submit" class="sipoc-primary-btn">ذخیره</button>
             </div>
         </form>
     `;
@@ -330,6 +502,7 @@ function renderSipoc(root) {
     board.classList.toggle('hidden', state.view !== 'board');
     table.classList.toggle('hidden', state.view !== 'table');
 
+    renderSipocQuality(root, state);
     renderSipocSummary(root, state);
     renderSipocBoard(root, state);
     renderSipocTable(root, state);
@@ -341,21 +514,34 @@ function renderSipoc(root) {
 function saveSipocForm(root, form) {
     const state = getSipocState();
     const formData = new FormData(form);
-    const links = formData.getAll('links');
+    const links = state.drawer.linkedId ? [state.drawer.linkedId] : formData.getAll('links');
 
     if (state.drawer.mode === 'edit') {
         const item = state.items.find((candidate) => candidate.id === state.drawer.itemId);
+        const column = getSipocColumn(item.column);
         item.title = formData.get('title').trim();
-        item.category = formData.get('category').trim() || 'بدون دسته';
-        item.description = formData.get('description').trim();
-        item.links = links;
+        if (isSipocEndpoint(item)) {
+            item.endpointType = formData.get('endpointType') || 'internal';
+            item.category = sipocEndpointTypes[item.endpointType].title;
+            item.reciprocalConfirmed = item.endpointType !== 'internal' ? true : item.reciprocalConfirmed;
+        } else {
+            item.category = item.column === 'inputs' ? 'ورودی فرایند' : item.column === 'outputs' ? 'خروجی فرایند' : 'بدون دسته';
+            if (column.locked) item.category = item.category || 'نام فرایند';
+        }
+        item.description = item.description || '';
     } else {
+        const columnKey = state.drawer.column;
+        const endpointType = columnKey === 'suppliers' || columnKey === 'customers'
+            ? formData.get('endpointType') || 'internal'
+            : '';
         state.items.push({
             id: `sipoc-${Date.now()}`,
-            column: state.drawer.column,
+            column: columnKey,
             title: formData.get('title').trim(),
-            category: formData.get('category').trim() || 'بدون دسته',
-            description: formData.get('description').trim(),
+            category: endpointType ? sipocEndpointTypes[endpointType].title : columnKey === 'inputs' ? 'ورودی فرایند' : columnKey === 'outputs' ? 'خروجی فرایند' : 'بدون دسته',
+            endpointType,
+            reciprocalConfirmed: endpointType !== 'internal',
+            description: '',
             links
         });
     }
@@ -388,8 +574,20 @@ function initSipocTab() {
         if (addButton) {
             const column = getSipocColumn(addButton.dataset.addSipoc);
             if (column.locked) return;
-            state.drawer = { mode: 'add', column: column.key };
-            state.selectedId = null;
+            const linkedId = addButton.dataset.linkedSipoc || null;
+            const linkedItem = linkedId ? state.items.find((item) => item.id === linkedId) : null;
+            const selectedItem = linkedItem || state.items.find((item) => item.id === state.selectedId);
+            if (column.key === 'suppliers' && selectedItem?.column !== 'inputs') {
+                window.alert('برای ثبت تأمین‌کننده، ابتدا یک ورودی را از برد SIPOC انتخاب کنید.');
+                return;
+            }
+            if (column.key === 'customers' && selectedItem?.column !== 'outputs') {
+                window.alert('برای ثبت مشتری، ابتدا یک خروجی را از برد SIPOC انتخاب کنید.');
+                return;
+            }
+            const shouldCarryLink = column.key === 'suppliers' || column.key === 'customers';
+            state.drawer = { mode: 'add', column: column.key, linkedId: shouldCarryLink ? selectedItem?.id || null : null };
+            if (selectedItem) state.selectedId = selectedItem.id;
             renderSipoc(root);
             return;
         }
@@ -964,6 +1162,10 @@ function initProcessSummary() {
     const completionModal = document.querySelector('[data-completion-modal]');
     const completionBackdrop = document.querySelector('[data-completion-backdrop]');
     const closeCompletionButton = document.querySelector('[data-close-completion-modal]');
+    const sipocGuideButton = document.querySelector('[data-open-sipoc-modal]');
+    const sipocGuideModal = document.querySelector('[data-sipoc-modal]');
+    const sipocGuideBackdrop = document.querySelector('[data-sipoc-backdrop]');
+    const closeSipocGuideButton = document.querySelector('[data-close-sipoc-modal]');
     const versionButtons = document.querySelectorAll('[data-version-state]');
     const versionPill = document.querySelector('[data-version-pill]');
     const title = document.querySelector('[data-process-title]');
@@ -999,6 +1201,16 @@ function initProcessSummary() {
         completionBackdrop?.classList.add('hidden');
     }
 
+    function openSipocGuideModal() {
+        sipocGuideModal?.classList.remove('hidden');
+        sipocGuideBackdrop?.classList.remove('hidden');
+    }
+
+    function closeSipocGuideModal() {
+        sipocGuideModal?.classList.add('hidden');
+        sipocGuideBackdrop?.classList.add('hidden');
+    }
+
     menuToggle.addEventListener('click', (event) => {
         event.stopPropagation();
         const isOpen = !menu.classList.contains('hidden');
@@ -1021,6 +1233,9 @@ function initProcessSummary() {
     completionButton?.addEventListener('click', openCompletionModal);
     closeCompletionButton?.addEventListener('click', closeCompletionModal);
     completionBackdrop?.addEventListener('click', closeCompletionModal);
+    sipocGuideButton?.addEventListener('click', openSipocGuideModal);
+    closeSipocGuideButton?.addEventListener('click', closeSipocGuideModal);
+    sipocGuideBackdrop?.addEventListener('click', closeSipocGuideModal);
 
     renameButton?.addEventListener('click', () => {
         const nextName = window.prompt('نام جدید فرایند را وارد کنید:', title.textContent.trim());
@@ -1051,6 +1266,7 @@ function initProcessSummary() {
             closeMenu();
             closeHistory();
             closeCompletionModal();
+            closeSipocGuideModal();
         }
     });
 }

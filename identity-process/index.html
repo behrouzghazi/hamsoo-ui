@@ -71,6 +71,17 @@
                                 <strong>۸۵٪</strong>
                                 <small>انطباق با اهداف</small>
                             </article>
+
+                            <article class="process-summary-stat info">
+                                <div class="process-stat-heading">
+                                    <span>پوشش SIPOC</span>
+                                    <button class="process-help-btn" type="button" data-open-sipoc-modal aria-label="راهنمای محاسبه پوشش SIPOC">
+                                        <i data-lucide="circle-help" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                                <strong>۸۵٪</strong>
+                                <small>۳ هشدار کیفیت</small>
+                            </article>
                         </div>
 
                         <div class="process-summary-actions">
@@ -154,6 +165,51 @@
 
         <div class="process-history-backdrop hidden" data-history-backdrop></div>
         <div class="completion-modal-backdrop hidden" data-completion-backdrop></div>
+        <div class="completion-modal-backdrop hidden" data-sipoc-backdrop></div>
+        <section class="completion-modal hidden" data-sipoc-modal role="dialog" aria-modal="true" aria-labelledby="sipoc-modal-title">
+            <div class="completion-modal-header">
+                <div>
+                    <h2 id="sipoc-modal-title">راهنمای محاسبه پوشش SIPOC</h2>
+                    <p>امتیاز SIPOC بر اساس سه معیار ساده محاسبه می‌شود تا کاربر و توسعه‌دهنده دقیق بدانند هر وضعیت چه اثری روی عدد نهایی دارد.</p>
+                </div>
+                <button class="process-icon-btn" type="button" data-close-sipoc-modal aria-label="بستن راهنمای پوشش SIPOC">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="completion-table-wrap">
+                <table class="completion-table">
+                    <thead>
+                        <tr>
+                            <th>معیار</th>
+                            <th>وزن</th>
+                            <th>قاعده امتیازدهی</th>
+                            <th>نمونه وضعیت</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>پایه: وجود ورودی و خروجی</td>
+                            <td>۳۰</td>
+                            <td>وجود حداقل یک ورودی ۱۵ امتیاز و وجود حداقل یک خروجی ۱۵ امتیاز دارد.</td>
+                            <td>فقط ورودی ثبت شده باشد: ۱۵ از ۳۰</td>
+                        </tr>
+                        <tr>
+                            <td>کیفیت نوع طرف ارتباط</td>
+                            <td>۴۰</td>
+                            <td>اگر همه تأمین‌کننده/مشتری‌ها از نوع فرایند داخلی یا فرایند خارجی باشند ۴۰ امتیاز؛ وجود حتی یک «سایر» یعنی صفر.</td>
+                            <td>واحد متقاضی به عنوان سایر ثبت شود: ۰ از ۴۰</td>
+                        </tr>
+                        <tr>
+                            <td>یکپارچگی ارتباطات</td>
+                            <td>۳۰</td>
+                            <td>اگر همه ارتباطات فرایند داخلی توسط فرایند متناظر تأیید شده باشند ۳۰ امتیاز؛ حتی یک عدم‌یکپارچگی یعنی صفر.</td>
+                            <td>یک فرایند داخلی بدون تأیید متناظر: ۰ از ۳۰</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
         <section class="completion-modal hidden" data-completion-modal role="dialog" aria-modal="true" aria-labelledby="completion-modal-title">
             <div class="completion-modal-header">
                 <div>

@@ -6,7 +6,7 @@
                 نقشه SIPOC فرایند
             </div>
             <h2 class="text-base font-extrabold text-slate-800">مدیریت تدارکات داخلی</h2>
-            <p class="text-xs text-slate-500 mt-1 leading-6">نمای فشرده برای مشاهده، افزودن و ویرایش تأمین‌کننده، ورودی، فعالیت، خروجی و مشتری.</p>
+            <p class="text-xs text-slate-500 mt-1 leading-6">ابتدا ورودی/خروجی را تعریف کنید، سپس تأمین‌کننده یا مشتری را از نوع فرایند داخلی، فرایند خارجی یا سایر به آن وصل کنید.</p>
         </div>
 
         <div class="sipoc-toolbar-actions">
@@ -20,17 +20,16 @@
                     جدول
                 </button>
             </div>
-            <button class="sipoc-primary-btn" data-add-sipoc="suppliers">
-                <i data-lucide="plus" class="w-4 h-4"></i>
-                افزودن مورد SIPOC
-            </button>
         </div>
     </section>
+
+    <section class="sipoc-quality-panel" id="sipoc-quality-panel"></section>
 
     <section class="sipoc-summary" id="sipoc-summary"></section>
 
     <section class="sipoc-board" id="sipoc-board"></section>
     <section class="sipoc-table hidden" id="sipoc-table"></section>
 
+    <div class="completion-modal-backdrop hidden" id="sipoc-form-backdrop" data-close-sipoc-drawer></div>
     <aside class="sipoc-drawer hidden" id="sipoc-drawer" aria-label="ویرایش آیتم SIPOC"></aside>
 </div>
